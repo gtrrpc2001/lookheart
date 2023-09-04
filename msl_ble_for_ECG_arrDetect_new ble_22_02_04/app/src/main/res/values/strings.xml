@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">LOOKHEART</string>
+    <string name="title_activity_overview">ECG</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_splash">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!--    Login Activity    -->
+    <string name="title_activity_login">LOOKHEART</string>
+    <string name="titleText">LOOKHEART</string>
+    <string name="loginLabel">로그인</string>
+    <string name="loginText">LOOKHEART 서비스 이용을 환영합니다.\n가입하신 아이디와 비밀번호를 입력하세요.</string>
+    <string name="email_Label">아이디</string>
+    <string name="email_Hint">이메일을 입력하세요</string>
+    <string name="password_Label">비밀번호</string>
+    <string name="password_Hint">비밀번호를 입력하세요</string>
+    <string name="autoLogin">자동로그인</string>
+    <string name="findEmailPassword">이메일/비밀번호 찾기</string>
+    <string name="loginButton">로그인</string>
+    <string name="signupHelpText">LOOKHEART 이용이 처음이신가요?</string>
+    <string name="signupButton">회원가입</string>
+    <string name="title_activity_signup_first">activity_signup_first</string>
+
+    <!--    SignUp first    -->
+    <string name="signup1">회원가입 1/4</string>
+    <string name="agree">동의하기</string>
+    <string name="back">뒤로가기</string>
+    <string name="next">다음으로</string>
+
+    <!--    SignUp Second    -->
+    <string name="signup2">회원가입 2/4</string>
+
+    <!--    SignUp third    -->x
+    <string name="signup3">회원가입 3/4</string>
+    <string name="id_Label">아이디 입력</string>
+    <string name="pw_Label">비밀번호 입력</string>
+    <string name="rpw_Label">비밀번호 재입력</string>
+    <string name="emailHelp">유효한 이메일을 입력해주세요</string>
+    <string name="passwordHelp">대문자, 소문자, 숫자, 특수문자를 포함한 10자리 이상의 비밀번호</string>
+    <string name="reEnterPasswordHelp">비밀번호가 일치하지 않습니다</string>
+
+    <!--    SignUp fourth    -->
+    <string name="signup4">회원가입 4/4</string>
+    <string name="name_Label">이름</string>
+    <string name="height_Label">신장(cm)</string>
+    <string name="weight_Label">몸무게(kg)</string>
+    <string name="male_Label">남자</string>
+    <string name="birthday_Label">생년월일</string>
+    <string name="female_Label">여자</string>
+    <string name="signup_complete">가입완료</string>
+    <string name="nameHelp">올바른 이름을 입력해주세요</string>
+    <string name="heightHelp">올바른 신장을 입력해주세요</string>
+    <string name="weightHelp">올바른 몸무게를 입력해주세요</string>
+
+    <!--    Home    -->
+    <string name="rest">휴식</string>
+    <string name="exercise">활동</string>
+    <string name="sleep">수면</string>
+    <string name="arr">비정상맥박</string>
+
+    <string name="eCal">활동 칼로리</string>
+    <string name="eCalValue">0 Kcal</string>
+
+    <string name="step">걸음수</string>
+    <string name="stepValue">0 걸음</string>
+
+    <string name="temperature">전극온도</string>
+    <string name="temperatureValue">- °C</string>
+
+    <string name="distance">걸음거리</string>
+    <string name="distanceValue">0.000 km</string>
+
+    <!--    summary    -->
+    <string name="summaryBpm">심박</string>
+    <string name="summaryArr">비정상맥박</string>
+    <string name="summaryCal">칼로리</string>
+    <string name="summaryStep">걸음</string>
+    <string name="summaryHRV">맥박변동률</string>
+
+    <string name="today">Today</string>
+    <string name="twoDays">2 Days</string>
+    <string name="threeDays">3 Days</string>
+
+</resources>
