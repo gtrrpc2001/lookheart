@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/setting"
+        android:title="Setting" >
+    </item>
+    <item android:id="@+id/setting_profile"
+        android:title="Profile" >
+    </item>
+
+       <item android:id="@+id/blescan"
+        android:title="BLE Scan" >
+    </item>
+
+    <item android:id="@+id/potcal"
+        android:title="POT Cal.">
+    </item>
+    <item android:id="@+id/server_send_test"
+        android:title="Server Send Test"
+        android:visible="false">
+    </item>
+
+    <item android:id="@+id/modeECG"
+        android:title="Mode ECG"
+        android:visible="true">
+    </item>
+    <item android:id="@+id/modePeak"
+        android:title="Mode Peak"
+        android:visible="true">
+    </item>
+
+    <item android:id="@+id/report"
+        android:title="Report"
+        android:visible="true">
+    </item>
+
+
+    <item android:id="@+id/dps"
+        android:title="DPS"
+        app:showAsAction="always">
+    </item>
+</menu>

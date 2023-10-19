@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layoutDialog"
+    android:layout_margin="20dp"
+    android:padding="20dp"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/dialog_background"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/heartattack_background">
+
+
+            <TextView
+                android:id="@+id/guardian_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/guardian_title"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/guardian_First_TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/profile3_guardianNumber1"
+
+                app:layout_constraintTop_toBottomOf="@+id/guardian_title"
+                app:layout_constraintStart_toStartOf="parent"
+
+                android:layout_marginStart="15dp"/>
+
+            <EditText
+                android:id="@+id/guardian_First_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/myBlue"
+                android:backgroundTint="@color/myBlue"
+
+                app:layout_constraintTop_toBottomOf="@+id/guardian_First_TextView"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <TextView
+                android:id="@+id/guardian_Second_TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/profile3_guardianNumber2"
+
+                app:layout_constraintTop_toBottomOf="@+id/guardian_First_EditText"
+                app:layout_constraintStart_toStartOf="parent"
+
+                android:layout_marginStart="15dp"/>
+
+            <EditText
+                android:id="@+id/guardian_Second_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/myBlue"
+                android:backgroundTint="@color/myBlue"
+
+                app:layout_constraintTop_toBottomOf="@+id/guardian_Second_TextView"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                />
+
+            <Button
+                android:id="@+id/guardian_Button"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:textSize="14dp"
+                android:background="@drawable/guardian_button"
+                android:textColor="@color/white"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                android:layout_marginBottom="10dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "819160260251",
+    "project_id": "medsyslab-170da",
+    "storage_bucket": "medsyslab-170da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819160260251:android:4e88b348658b252cba303e",
+        "android_client_info": {
+          "package_name": "com.msl.ble_for_ecg_new_ble"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABNZwWlXML8GVuNYHMxlO1pN5AnQA2bT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+<!--    android:fullBackupContent="false"-->
+<!--    tools:replace="android:allowBackup"-->
+
+    <application
+        android:allowBackup="true"
+
+        android:exported="true"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/ic_launcher_foreground"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_foreground"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <service
+            android:name=".ForegroundService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <activity
+            android:name=".profile.Profile_4"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".profile.Profile_3"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".profile.Profile_2"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".profile.Profile_1"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".signup.Activity_Signup_Fourth"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".signup.Activity_Signup_Third"
+            android:exported="false"
+            android:parentActivityName=".signup.Activity_Signup_Second"
+            android:windowSoftInputMode="adjustResize"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".signup.Activity_Signup_Second"
+            android:exported="false"
+            android:parentActivityName=".signup.Activity_Signup_First"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".signup.Activity_Signup_First"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/titleText"
+            android:parentActivityName=".activity.Activity_Login"
+            android:theme="@style/Theme.LookHeart.Fullscreen"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".activity.Activity_Login"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:label="@string/title_activity_login"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".auth.Find_PwChange"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".auth.Find_Pw"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".auth.Find_Email"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".auth.Find_Select"
+            android:exported="false"
+            android:resizeableActivity="false"/>
+        <activity
+            android:name=".activity.Activity_Main"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="false"/>
+    </application>
+
+</manifest>

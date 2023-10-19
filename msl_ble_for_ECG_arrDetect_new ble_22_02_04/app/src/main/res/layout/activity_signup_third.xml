@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".signup.Activity_Signup_Third">
+
+    <!--Toolbar-->
+    <include
+        layout="@layout/toolbar"/>
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F9FAFC"
+        tools:ignore="MissingConstraints"
+
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <!--회원가입 라벨-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signup3"
+                    android:textColor="#555555"
+                    android:textStyle="bold"
+                    android:textSize="24dp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:progressDrawable="@drawable/signup_progressbar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:progress="666"
+                    android:max="1000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="43dp"
+                        android:text="@string/id_guide"
+                        android:textColor="@color/LightGrey"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+
+
+                <!--아이디 라벨-->
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/id_Label"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16dp"
+                        android:textAlignment="viewStart"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginStart="43dp"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/emailCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="bottom|right"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!--이메일 입력창-->
+
+                    <EditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="11"
+                        android:textSize="16dp"
+
+                        android:inputType="textEmailAddress"
+                        android:theme="@style/editText"
+
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="20dp"
+                        android:autofillHints="emailAddress"
+                        tools:ignore="VisualLintTextFieldSize"
+                        />
+                    <!--이메일 도움말-->
+                    <TextView
+                        android:id="@+id/emailHelp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/emailHelp"
+                        android:textColor="#FF0000"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:textAlignment="viewStart"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="5dp"
+                        android:visibility="gone"
+                        />
+
+                    <Button
+                        android:id="@+id/signup_idcheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/login_signupbutton"
+                        android:outlineProvider="none"
+
+                        android:text="@string/check_Label"
+                        android:textColor="#555555"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="30dp"
+
+                        tools:ignore="TextContrastCheck"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberlayout"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/num_Label"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16dp"
+                            android:textAlignment="viewStart"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginStart="43dp"
+                            />
+
+                        <CheckBox
+                            android:id="@+id/numCheckBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_gravity="bottom|right"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!--인증번호 입력창-->
+                        <EditText
+                            android:id="@+id/editChecknum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="11"
+                            android:textSize="16dp"
+
+                            android:inputType="textEmailAddress"
+                            android:theme="@style/editText"
+
+                            android:layout_marginTop="5dp"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginEnd="20dp"
+                            android:autofillHints="emailAddress"
+                            tools:ignore="VisualLintTextFieldSize"
+                            />
+
+                        <Button
+                            android:id="@+id/signup_numcheck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/login_signupbutton"
+                            android:outlineProvider="none"
+
+                            android:text="@string/check_Label"
+                            android:textColor="#555555"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginEnd="30dp"
+
+                            tools:ignore="TextContrastCheck"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+                <!--비밀번호 라벨-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pw_Label"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:textAlignment="viewStart"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="43dp"
+                    />
+                <!--비밀번호 입력창-->
+                <EditText
+                    android:id="@+id/editPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:ems="10"
+                    android:textSize="16dp"
+                    android:inputType="textPassword"
+                    android:theme="@style/editText"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:autofillHints="password"
+                    tools:ignore="VisualLintTextFieldSize"
+                    />
+                <!--비밀번호 도움말-->
+                <TextView
+                    android:id="@+id/passwordHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/passwordHelp"
+                    android:textColor="#FF0000"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:textAlignment="viewStart"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="43dp"
+                    android:visibility="gone"
+                    />
+                <!--비밀번호 재입력 라벨-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rpw_Label"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:textAlignment="viewStart"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="43dp"
+                    />
+                <!--비밀번호 재입력 입력창-->
+                <EditText
+                    android:id="@+id/editReEnterPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:ems="10"
+                    android:textSize="16dp"
+                    android:inputType="textPassword"
+                    android:theme="@style/editText"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:autofillHints="password"
+                    tools:ignore="VisualLintTextFieldSize"
+
+                    />
+                <!--비밀번호 재입력 도움말-->
+                <TextView
+                    android:id="@+id/reEnterPasswordHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reEnterPasswordHelp"
+                    android:textColor="#FF0000"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:textAlignment="viewStart"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="43dp"
+                    android:visibility="gone"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp">
+                    <!-- 뒤로가기 -->
+                    <Button
+                        android:id="@+id/signup_third_back"
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/login_signupbutton"
+                        android:outlineProvider="none"
+
+                        android:text="@string/back"
+                        android:textColor="#555555"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="20dp"
+
+                        tools:ignore="TextContrastCheck" />
+                    <!-- 다음으로 -->
+                    <Button
+                        android:id="@+id/signup_third_next"
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/login_signupbutton"
+                        android:outlineProvider="none"
+
+                        android:text="@string/next"
+                        android:textColor="#555555"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="20dp"
+
+                        tools:ignore="TextContrastCheck"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="100dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
