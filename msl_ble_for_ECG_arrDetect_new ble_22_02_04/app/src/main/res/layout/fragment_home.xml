@@ -394,7 +394,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/eCal"
+                            android:text="@string/homeECal"
                             android:textSize="22dp"
                             android:textStyle="bold"
                             android:textColor="@color/darkGray"

@@ -2,6 +2,8 @@ package com.mcuhq.simplebluetooth.server;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +21,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitServerManager {
 
-    private static final String BASE_URL = "http://121.152.22.85:40081/";
+//    private static final String BASE_URL = "http://121.152.22.85:40081/"; // TEST
+    private static final String BASE_URL = "http://121.152.22.85:40080/"; // Real Address
+
     private static RetrofitServerManager instance;
     private static RetrofitService apiService;
 
@@ -71,9 +75,10 @@ public class RetrofitServerManager {
 
                 Map<String, Object> mapParam = new HashMap<>();
                 mapParam.put("kind", "updatePWD");
-                mapParam.put("아이디", email);
-                mapParam.put("패스워드키", pw);
-
+//                mapParam.put("아이디", email);
+//                mapParam.put("패스워드키", pw);
+                mapParam.put("eq", email);
+                mapParam.put("password", pw);
                 // API 호출
                 updatePWDFromAPI(mapParam, callback);
 
@@ -247,26 +252,49 @@ public class RetrofitServerManager {
     public void setSignupData(String email, String pw, String name, String gender, String height, String weight, String age, String birthday, ServerTaskCallback callback) {
         try {
             Map<String, Object> mapParam = new HashMap<>();
+
+            // TEST
+//            mapParam.put("kind", "checkReg");
+//            mapParam.put("아이디", email);
+//            mapParam.put("패스워드키", pw);
+//            mapParam.put("성명", name);
+//            mapParam.put("이메일", email);
+//            mapParam.put("핸드폰", "01012345678");
+//            mapParam.put("성별", gender);
+//            mapParam.put("신장", height);
+//            mapParam.put("몸무게", weight);
+//            mapParam.put("나이", age);
+//            mapParam.put("생년월일", birthday);
+//            mapParam.put("설정_수면시작", "23");
+//            mapParam.put("설정_수면종료", "7");
+//            mapParam.put("설정_활동BPM", "90");
+//            mapParam.put("설정_일걸음", "3000");
+//            mapParam.put("설정_일거리", "5");
+//            mapParam.put("설정_일활동칼로리", "500");
+//            mapParam.put("설정_일칼로리", "3000");
+//            mapParam.put("알림_sms", "0");
+//            mapParam.put("시간차이", "0");
+
             mapParam.put("kind", "checkReg");
-            mapParam.put("아이디", email);
-            mapParam.put("패스워드키", pw);
-            mapParam.put("성명", name);
-            mapParam.put("이메일", email);
-            mapParam.put("핸드폰", "01012345678");
-            mapParam.put("성별", gender);
-            mapParam.put("신장", height);
-            mapParam.put("몸무게", weight);
-            mapParam.put("나이", age);
-            mapParam.put("생년월일", birthday);
-            mapParam.put("설정_수면시작", "23");
-            mapParam.put("설정_수면종료", "7");
-            mapParam.put("설정_활동BPM", "90");
-            mapParam.put("설정_일걸음", "3000");
-            mapParam.put("설정_일거리", "5");
-            mapParam.put("설정_일활동칼로리", "500");
-            mapParam.put("설정_일칼로리", "3000");
-            mapParam.put("알림_sms", "0");
-            mapParam.put("시간차이", "0");
+            mapParam.put("eq", email);
+            mapParam.put("password", pw);
+            mapParam.put("eqname", name);
+            mapParam.put("email", email);
+            mapParam.put("phone", "01012345678");
+            mapParam.put("sex", gender);
+            mapParam.put("height", height);
+            mapParam.put("weight", weight);
+            mapParam.put("age", age);
+            mapParam.put("birth", birthday);
+            mapParam.put("sleeptime", "23");
+            mapParam.put("uptime", "7");
+            mapParam.put("bpm", "90");
+            mapParam.put("step", "3000");
+            mapParam.put("distanceKM", "5");
+            mapParam.put("calexe", "500");
+            mapParam.put("cal", "3000");
+            mapParam.put("alarm_sms", "0");
+            mapParam.put("differtime", "0");
 
             // API 호출
             setProfileFromAPI(mapParam, callback);
@@ -280,24 +308,45 @@ public class RetrofitServerManager {
         try {
             Map<String, Object> mapParam = new HashMap<>();
             mapParam.put("kind", "setProfile");
-            mapParam.put("아이디", email);
-            mapParam.put("성명", name);
-            mapParam.put("이메일", email);
-            mapParam.put("핸드폰", number);
-            mapParam.put("성별", gender);
-            mapParam.put("신장", height);
-            mapParam.put("몸무게", weight);
-            mapParam.put("나이", age);
-            mapParam.put("생년월일", birthday);
-            mapParam.put("설정_수면시작", sleep);
-            mapParam.put("설정_수면종료", wakeup);
-            mapParam.put("설정_활동BPM", targetBpm);
-            mapParam.put("설정_일걸음", targetStep);
-            mapParam.put("설정_일거리", targetDistance);
-            mapParam.put("설정_일활동칼로리", targetECal);
-            mapParam.put("설정_일칼로리", targetCal);
-            mapParam.put("알림_sms", "0");
-            mapParam.put("시간차이", "0");
+
+            // TEST
+//            mapParam.put("아이디", email);
+//            mapParam.put("성명", name);
+//            mapParam.put("이메일", email);
+//            mapParam.put("핸드폰", number);
+//            mapParam.put("성별", gender);
+//            mapParam.put("신장", height);
+//            mapParam.put("몸무게", weight);
+//            mapParam.put("나이", age);
+//            mapParam.put("생년월일", birthday);
+//            mapParam.put("설정_수면시작", sleep);
+//            mapParam.put("설정_수면종료", wakeup);
+//            mapParam.put("설정_활동BPM", targetBpm);
+//            mapParam.put("설정_일걸음", targetStep);
+//            mapParam.put("설정_일거리", targetDistance);
+//            mapParam.put("설정_일활동칼로리", targetECal);
+//            mapParam.put("설정_일칼로리", targetCal);
+//            mapParam.put("알림_sms", "0");
+//            mapParam.put("시간차이", "0");
+
+            mapParam.put("eq", email);
+            mapParam.put("eqname", name);
+            mapParam.put("email", email);
+            mapParam.put("phone", "01012345678");
+            mapParam.put("sex", gender);
+            mapParam.put("height", height);
+            mapParam.put("weight", weight);
+            mapParam.put("age", age);
+            mapParam.put("birth", birthday);
+            mapParam.put("sleeptime", "23");
+            mapParam.put("uptime", "7");
+            mapParam.put("bpm", "90");
+            mapParam.put("step", "3000");
+            mapParam.put("distanceKM", "5");
+            mapParam.put("calexe", "500");
+            mapParam.put("cal", "3000");
+            mapParam.put("alarm_sms", "0");
+            mapParam.put("differtime", "0");
 
             // API 호출
             setProfileFromAPI(mapParam, callback);
@@ -352,18 +401,8 @@ public class RetrofitServerManager {
             public void onSuccess(List<UserProfile> result) {
                 try {
                     if (!result.isEmpty()) {
-                        UserProfile profile = result.get(0);
-//                        StringBuilder guardianBuilder = new StringBuilder();
-
-//                        for(int i = 0; i < result.size(); i++) {
-//                            if(i != 0) {
-//                                guardianBuilder.append(" ");
-//                            }
-//                            guardianBuilder.append(result.get(i).getGuardian());
-//                        }
-//                        profile.setGuardian(guardianBuilder.toString());
-
-                        callback.userData(profile);  // 콜백 호출
+                        UserProfileManager.getInstance().setUserProfile(result.get(0));
+                        callback.userData(UserProfileManager.getInstance().getUserProfile());  // 콜백 호출
                     }
                 }catch (Exception ignored) {
                     callback.onFailure(ignored);
@@ -507,13 +546,14 @@ public class RetrofitServerManager {
 
 
 
-    public void sendArrData(String email, String writeTime, String arrData, String arrStatus, ServerTaskCallback callback) {
+    public void sendArrData(String email, String timezone, String writeTime, String arrData, String arrStatus, ServerTaskCallback callback) {
 
         try {
 
             Map<String, Object> mapParam = new HashMap<>();
             mapParam.put("kind", "arrEcgInsert");
             mapParam.put("eq", email);
+            mapParam.put("timezone", timezone);
             mapParam.put("writetime", writeTime);
             mapParam.put("ecgPacket", arrData);
             mapParam.put("arrStatus", arrStatus);
@@ -547,13 +587,14 @@ public class RetrofitServerManager {
 
 
 
-    public void sendEmergencyData(String email, String writeTime, String address, ServerTaskCallback callback) {
+    public void sendEmergencyData(String email, String timezone, String writeTime, String address, ServerTaskCallback callback) {
 
         try {
 
             Map<String, Object> mapParam = new HashMap<>();
             mapParam.put("kind", "arrEcgInsert");
             mapParam.put("eq", email);
+            mapParam.put("timezone", timezone);
             mapParam.put("writetime", writeTime);
             mapParam.put("ecgPacket", "");
             mapParam.put("arrStatus", "");
@@ -593,6 +634,10 @@ public class RetrofitServerManager {
             @Override
             public void onResponse(Call<T> call, retrofit2.Response<T> response) {
                 if (response.isSuccessful() && response.body() != null) {
+//                    Gson gson = new Gson();
+//                    String jsonBody = gson.toJson(response.body());
+//                    Log.e("callback", jsonBody);
+
                     callback.onSuccess(response.body());
                 } else {
                     String errorBody = "";

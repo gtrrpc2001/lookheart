@@ -1678,7 +1678,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
         String arrTime = currentDate + " " + currentTime;
 
-        retrofitServerManager.sendArrData(email, arrTime, sendArrData, arrStatus, new RetrofitServerManager.ServerTaskCallback() {
+        retrofitServerManager.sendArrData(email, utcOffsetAndCountry, arrTime, sendArrData, arrStatus, new RetrofitServerManager.ServerTaskCallback() {
 
             @Override
             public void onSuccess(String result) {
@@ -1879,14 +1879,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     userDetailsEditor.putString("o_distance", user.getDailyDistance());
                     userDetailsEditor.commit();
 
-                    eCalBPM = Integer.parseInt(user.getActivityBPM());
-
-                    String bGender = user.getGender();
-                    if (bGender.equals("남자"))
-                        iGender = 1;
-                    else
-                        iGender = 2;
-
+                    iGender = user.getGender().equals("남자") ? 1 : 2;
                     iAge = Integer.parseInt(user.getAge());
                     userName = user.getName();
                     dWeight = Integer.parseInt(user.getWeight());
@@ -1894,20 +1887,27 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     sleep = Integer.parseInt(user.getSleepStart());
                     wakeup = Integer.parseInt(user.getSleepEnd());
 
+                    eCalBPM = Integer.parseInt(user.getActivityBPM());
+
                     Log.i("loadUserProfile", "----------------- UserProfile -----------------");
-                    Log.i("UserProfile", "bGender : " + bGender + "iGender : " + iGender);
+                    Log.i("UserProfile", "iGender : " + iGender);
                     Log.i("UserProfile", "iAge : " + iAge);
                     Log.i("UserProfile", "userName : " + userName);
                     Log.i("UserProfile", "disheight : " + disheight);
                     Log.i("UserProfile", "dWeight : " + dWeight);
                     Log.i("UserProfile", "sleep : " + sleep);
                     Log.i("UserProfile", "wakeup : " + wakeup);
+                    Log.i("UserProfile", "JoinDate : " + user.getJoinDate());
+                    Log.i("UserProfile", "Tcal : " + user.getDailyCalorie());
+                    Log.i("UserProfile", "Ecal : " + user.getDailyActivityCalorie());
+                    Log.i("UserProfile", "Step : " + user.getDailyStep());
+                    Log.i("UserProfile", "Distance : " + user.getDailyDistance());
                 }
 
                 @Override
                 public void onFailure(Exception e) {
 
-                    safeGetActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "프로필 정보 서버 응답 없음 기본 정보 사용", Toast.LENGTH_SHORT).show());
+                    safeGetActivity().runOnUiThread(() -> Toast.makeText(getActivity(), getResources().getString(R.string.serverErr), Toast.LENGTH_SHORT).show());
                     e.printStackTrace();
 
                     // 기본(내부) 정보 사용
@@ -2138,7 +2138,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                 // LWS
                 // ECG
                 // SA_02
-                if (name.equals("KHJ")) {
+                if (name.equals("ECG")) {
                     // 연결 시도
                     if(safeGetActivity() != null && !firstBleConnect) {
                         bluetoothGatt = result.getDevice().connectGatt(safeGetActivity().getApplicationContext(), true, btleGattCallback);
@@ -2503,7 +2503,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
             HeartAttackCheck = true; // 중첩 알림이 안뜨게 하는 flag
 
             // 시스템 사운드 재생
-            MediaPlayer mediaPlayer = MediaPlayer.create(safeGetActivity(), R.raw.heartattacksound); // res/raw 폴더에 사운드 파일을 넣어주세요
+            MediaPlayer mediaPlayer = MediaPlayer.create(safeGetActivity(), R.raw.heartattacksound);
             mediaPlayer.setLooping(true); // 반복
             mediaPlayer.start();
 
@@ -2532,7 +2532,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     btnOk.setText(getResources().getString(R.string.sendEmergencyAlert));
                     String writeTime = currentUtcTime();
                     String address = getAddress();
-                    retrofitServerManager.sendEmergencyData(email, writeTime, address, new RetrofitServerManager.ServerTaskCallback() {
+                    retrofitServerManager.sendEmergencyData(email, utcOffsetAndCountry, writeTime, address, new RetrofitServerManager.ServerTaskCallback() {
                         @Override
                         public void onSuccess(String result) {
                             Log.i("sendEmergencyData", result);

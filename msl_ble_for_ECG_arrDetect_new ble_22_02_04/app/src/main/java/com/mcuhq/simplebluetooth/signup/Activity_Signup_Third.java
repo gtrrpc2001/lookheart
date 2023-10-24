@@ -326,7 +326,7 @@ public class Activity_Signup_Third extends AppCompatActivity {
                 } else {
                     // 포커스를 얻었을 때
                     ViewCompat.setBackgroundTintList(reEnterPasswordEditText, highlightColor);
-                    KeyboardUp(300);
+                    KeyboardUp(400);
                 }
             }
         });

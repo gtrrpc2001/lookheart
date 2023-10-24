@@ -1,0 +1,192 @@
+Chapter 1: General Provisions
+
+Article 1 (Purpose)
+
+1. This Agreement (hereinafter referred to as the "Agreement") is for the purpose of regulating the terms and procedures for using all services (hereinafter referred to as "Services") provided by MSL (hereinafter referred to as the "System"), as well as the rights, obligations, responsibilities of users and the System, and other necessary matters.
+2. This Agreement applies to the Basic Terms of Use.
+
+Article 2 (Effect and Amendment of the Agreement)
+
+1. The system shall publish the contents of this agreement, its address, the name of the administrator, the name of the personal information protection officer, and contact information (telephone, fax, email address, etc.) in a manner that is accessible to users.
+2. Within the scope of not violating the Personal Information Protection Act, the Act on Promotion of Information and Communications Network Utilization and Information Protection, the Act on Regulation of Terms of Contracts, the Basic Telecommunications Act, the Telecommunications Business Act, the regulations of the Information and Communications Ethics Committee, the Information and Communications Ethics Code, and the Program Protection Act, the System may amend this Agreement.
+3. In case of amending the Agreement, the System shall notify users in advance from 7 days before the effective date of the Agreement, specifying the effective date and the reason for the amendment, and post the current Agreement on the initial screen of the System. The amended Agreement takes effect on the effective date.
+4. The System shall not be responsible for any damages to members due to the change in the Agreement.
+5. If the member does not agree to the amended Agreement, they can withdraw (terminate) their membership. If the member continues to use the service without expressing their refusal within 7 days from the effective date of the amended Agreement, they will be deemed to have agreed to the amended Agreement.
+
+Article 3 (Definition of Terms)
+
+1. The definitions of the terms used in this Agreement are as follows:
+(1) User: The term "User" refers to an individual who receives services provided by the System in accordance with this Agreement.
+(2) Service Agreement: The contract between the System and the user for the use of services related to service use.
+(3) Member: A person who provides personal information to the System and intends to enter into a service contract with the System to use the service.
+(4) User ID: The combination of letters and numbers selected by the user and assigned by the System for identification and use of the user's service.
+(5) Password: The combination of letters and numbers selected by the user for self-identification and personal information protection.
+(6) Withdrawal (Termination): Refers to the cancellation of the service contract by the System or the user.
+2. Definitions of terms used in this Agreement, except those specified in paragraph 1, shall be as defined in related laws, separate service-specific agreements, and regulations.
+
+Chapter 2: Establishment and Termination of Service Contract
+
+Article 4 (Establishment of Service Agreement)
+
+1. The service contract is established upon the user's agreement to the contents of this Agreement and the user's application for use, followed by the System's acceptance.
+2. The agreement to this Agreement is made by the user expressing their intention to agree by selecting "Agree" on the relevant System's website at the time of application.
+3. The user agrees to comply with the various policies set by the System, such as "Personal Information Protection Policy" and "Copyright Policy," by applying for the service in accordance with this Agreement. (For more information on the "Personal Information Protection Policy" and "Copyright Policy," please refer to the System.)
+
+Article 5 (Protection and Use of Personal Information)
+
+1. The System shall make efforts to protect the personal information of users, including user registration information, in accordance with relevant laws and regulations.
+2. The personal information of users is subject to relevant laws and the System's privacy policy. However, when clicking on links or banners included on web pages operated by the System that lead to other sites, the System's privacy policy does not apply.
+3. The management and protection of user information by the System are as follows:
+   (1) Collection of personal information: The System collects information about users through the information provided by the user during registration. The System does not collect or retain unique identifiers such as resident registration numbers or foreign registration numbers without the user's consent.
+   (2) Use of personal information: Except in cases where requests are made in accordance with procedures specified by state agencies or other relevant laws, the System shall not disclose or distribute the personal information of members collected in connection with the provision of System services to third parties without the user's consent.
+   (3) Management of personal information: Users can modify or delete their personal information at any time for the protection and management of personal information. Unnecessary information received can also be modified or adjusted.
+   (4) Protection of personal information: User personal information can only be viewed, modified, and deleted by the user and is managed solely by the user's User ID and password. Therefore, users should not disclose their User ID and password to others. It is essential to log out and close the web browser window at the end of the session (this is necessary to protect user information, especially when using a computer in public places such as internet cafes or libraries that are shared with others).
+4. The user's application for service in accordance with the System's terms and conditions is considered to be an agreement to allow the System to collect and use the information provided in the application form in accordance with this Agreement.
+
+Article 6 (User Information Security)
+
+1. The System is not responsible for any information exposed due to the user's fault.
+2. If a user discovers that their User ID or password has been used improperly, they must immediately report it to the System. The user is solely responsible for any consequences resulting from failing to report it.
+3. Users must log out (log-out) accurately at the end of each session of using the System service. The System is not responsible for any losses or damages arising from the failure to log out, leading to a third party impersonating the user.
+
+Article 7 (Application for Use and Restriction)
+
+1. Membership registration is established when the applicant records the required information in the online application form provided by the System and completes the registration.
+2. The system allows children under the age of 14 to become members with the consent of their guardians.
+3. The System may refuse membership registration in the following cases:
+   (1) When applying using someone else's name.
+   (2) When false information is provided in the membership registration form.
+   (3) When applying with the intention of disrupting public order or good morals.
+   (4) When engaging in actions such as interfering with the use of the System by others or falsifying their information.
+   (5) When engaging in activities that violate laws and the terms of this Agreement.
+   (6) When the System's membership registration requirements are not met.
+4. The System may suspend the establishment of a service agreement until the reason is resolved in the following cases:
+   (1) When there is insufficient capacity for service-related aspects.
+   (2) When there is a technical reason for the delay.
+5. The System provides services through its own development or through collaboration with other organizations and may announce changes to the service and provide them to users with notice.
+
+Article 8 (Assignment and Modification of User ID)
+
+1. The System assigns a User ID to the user according to the Agreement.
+2. User IDs are generally not changeable, and in cases where it is necessary to change, the user must terminate the current ID and reapply. However, in the following cases, it may be changed at the request of the user or the System:
+   (1) When the User ID is registered as the user's phone number or poses a threat to privacy.
+   (2) When applied with the intention of causing disgust to others or disrupting public morals.
+   (3) In other reasonable cases.
+3. The responsibility for the management of User IDs and passwords for service use lies with the members. The System is not responsible for any damage or loss that may occur due to the user's neglect.
+4. Other matters related to the management and modification of user personal information will be determined by the System.
+
+Article 9 (Service Hours)
+
+1. The service is available 24 hours a day, 365 days a year, unless there is a special interruption due to system operations or technical reasons.
+2. Any days or times specified by the system for regular inspections or other necessary purposes in accordance with the first clause are exceptions.
+
+Article 10 (Service Suspension and Notice of Suspension)
+
+1. The System shall not be responsible if the contents of messages stored/transmitted by the user on the service are lost due to national emergencies, service equipment failures beyond the scope of system management, and other unavoidable circumstances.
+2. In cases where normal service provision is impossible due to force majeure, national emergencies, and other reasons beyond the control of the System, the System may temporarily restrict or suspend the service, and shall notify members in advance of the reasons for the suspension and the duration.
+3. In cases where it is necessary to permanently discontinue the service due to circumstances on the part of the System, the advance notice period shall be one month.
+4. The System may temporarily suspend the service without notice due to urgent system inspections, expansions, replacements, or other unavoidable reasons. The System may also completely discontinue the current service and replace it with a new service if the System deems it appropriate.
+5. The System may specify separate usage hours for specific service areas in the form of split service hours. In this case, the details will be announced.
+6. In cases of service interruption due to circumstances beyond the control of the System (e.g., intentional actions of a system administrator with no intention or fault, disk failures, system downtime, etc.), prior notice may not be possible, and in cases of service interruption caused by the intent or fault of others (e.g., PC communications companies, period communications service providers, etc.), no notice shall be given.
+7. The System may restrict and suspend the use of services or terminate user agreements without the user's consent if a user violates the contents of this Agreement, such as specified in Article 16 (User Obligations). In this case, the System may also prohibit the user's access.
+
+Article 11 (Restrictions on Service Usage)
+
+1. If the content of the information provided by a user is found to be false, or if there are reasonable grounds to suspect that it may be false, the System may partially or completely suspend the user's use of the service. The System shall not be responsible for any disadvantages resulting from this.
+2. If a user violates the contents of this Agreement, such as Article 16, the System may restrict or suspend the use of the service without notice. In this case, the System may prohibit the user's access. However, if the System intends to deprive the user of the right to use, prior notice must be given, and the member must be given an opportunity to rectify or provide an explanation.
+
+Article 12 (Management of Posts)
+
+1. The copyright of the posts made by the user belongs to the user, and the System has the right to post them within the service.
+2. The System may delete, move, or refuse to post the following materials or data without notice:
+   (1) Posts that violate this Agreement, are considered commercial or illegal, obscene, or indecent.
+   (2) Content that severely insults another member or a third party, or damages their reputation.
+   (3) Content that violates public order and good morals or is disseminated or linked.
+   (4) Content that encourages illegal duplication or hacking.
+   (5) Content that serves a commercial purpose.
+   (6) Content that is objectively determined to be related to criminal activities.
+   (7) Content that infringes on other users' or third parties' copyrights and other rights.
+   (8) Content that violates the posting principles defined by the System or is not suitable for the nature of the bulletin board.
+   (9) Content that is deemed to violate other relevant laws.
+
+Article 13 (Copyright on Posts)
+
+1. The copyright of the posts made by the user belongs to the user. The System cannot use the posts for commercial purposes without the user's consent. However, this does not apply to non-profit purposes, and the System has posting rights within the service.
+2. The user cannot use information acquired through the service for commercial purposes, such as processing or selling, without the System's prior consent.
+3. The System may delete, move, or refuse to post content that falls under the categories specified in Article 12 without prior notice.
+
+Article 14 (Information Provision and Publication of Promotional Materials)
+
+1. The System may provide various information to members through methods such as posting on the website, sending emails or postal mail.
+2. The System may post promotional materials that are deemed appropriate or have public interest within the service.
+
+Article 15 (System's Responsibilities)
+
+1. The System shall not engage in actions prohibited by law or contrary to public morals or make efforts to provide continuous and stable service.
+2. The System shall not disclose or distribute the user's personal information to third parties without the user's consent, except in cases required by government agencies or requests from the Information and Communication Ethics Committee under legal procedures as stipulated by relevant laws.
+3. The System shall make immediate repairs or recoveries without delay unless there is a justifiable reason if the facilities suffer a breakdown or loss for reasons beyond its control to provide continuous and stable service.
+4. If a user's opinions or complaints are objectively recognized as legitimate, the System shall process them promptly through appropriate procedures. In cases where immediate processing is not possible, the reasons and processing schedule shall be communicated to the user.
+5. The System shall have a security system in place to protect the user's personal information.
+6. The System shall not be responsible for service disruptions caused by the user's own faults.
+
+Article 16 (User's Obligations)
+
+1. When applying for membership and updating membership information, users must provide accurate information based on facts. If false or another person's information is registered, the user cannot claim any rights.
+2. Users cannot copy, reproduce, modify, translate, publish, broadcast, or provide information obtained through the System's service to others without the System's prior approval.
+3. Users are not allowed to engage in the following actions related to the use of the System's service:
+   (1) Falsifying information when applying for membership or updating membership information or unauthorized use of another member's password and ID.
+   (2) Transmitting, posting, publishing, sending, or using methods such as email or any other method for content that is vulgar, obscene, offensive, threatening, or that may infringe on another person's privacy.
+   (3) Impersonating System administrators, employees, or related parties.
+   (4) Disguising the origin of content transmitted through the service.
+   (5) Posting, publishing, sending, or using other methods to transmit content that cannot be used under the law or by contract.
+   (6) Unauthorized modification of the System's client program or hacking servers, distribution of computer viruses, arbitrary alteration of parts or the entirety of websites or published information, without special rights granted by the System.
+   (7) Posting, publishing, sending, or using other methods to transmit content that infringes on others' patents, trademarks, trade secrets, copyrights, and other intellectual property rights.
+   (8) Posting, publishing, sending, or using other methods to transmit unauthorized advertising, promotional materials, spam emails, chain letters, pyramid schemes, or other forms of solicitation.
+   (9) Collecting, storing, or disclosing other users' personal information.
+   (10) Engaging in activities aimed at committing a crime or other activities related to criminal actions.
+   (11) Acts that disrupt public morals, violate social order, or are otherwise unlawful.
+   (12) Harming the honor of others or insulting them.
+   (13) Infringing on others' intellectual property rights or other rights.
+   (14) Continuously transmitting advertising information or other specific content against the user's will.
+   (15) Any action that may disrupt the stable operation of the service.
+   (16) Changing the information posted on the System.
+   (17) Violation of this Agreement, including all other regulations and conditions set by the System.
+   (18) Any action that violates relevant laws.
+
+Article 17 (Contract Changes and Termination)
+
+1. When a member wishes to terminate the user agreement, they must do so through the "Member Information Management > Withdrawal" menu on the System.
+2. In the event of a withdrawal request, collected personal information is typically destroyed when the purpose of collecting it or providing it is achieved.
+3. In cases of personal information subject to re-consent, as defined by relevant laws (such as the Industrial Technology Promotion Act and regulations regarding the management of national research and development projects), if there has been no login activity for one year from the date of investigation, the person will be considered as subject to re-consent. During the re-consent period, only those who log in to the website to re-consent will have their information maintained. For those who do not consent, their membership will be automatically terminated, and their information will be permanently destroyed. The System is not responsible for users who do not receive notifications due to non-registration or incorrect email addresses.
+
+Article 18 (Re-consent Process)
+
+1. Personal information subject to re-consent, which does not have a legal basis as per relevant laws (such as the Industrial Technology Promotion Act and regulations regarding the management of national research and development projects), is categorized on the day of investigation.
+
+Article 19 (System Copyright)
+
+1. The System owns the intellectual property rights and other rights related to services provided by the System, the necessary software, images, marks, logos, designs, service names, information, and trademarks, except when explicitly approved by the System.
+2. Except when explicitly approved by the System, users cannot modify, distribute, engage in commercial use, etc., of the property specified in the previous paragraph, in whole or in part, and cannot allow third parties to do such.
+
+Article 20 (Prohibition of Transfer)
+
+1. Members cannot transfer or donate their rights to use the service, or their other positions within the terms of use to others, and they cannot provide them as collateral.
+
+Article 21 (Compensation for Damages)
+
+1. If the System is unable to provide the service due to force majeure, war, or other circumstances equivalent to force majeure, the responsibility for providing the service is exempt.
+2. If a period communications operator discontinues or fails to provide regular communication services, the responsibility is exempt.
+3. The responsibility is exempt for damages arising from the maintenance, replacement, regular inspection, construction, or other unavoidable reasons of service equipment.
+4. The System does not bear responsibility if the user's computer errors result in damages, or if damages arise due to the user's inadequately provided personal information and email address.
+5. The System is not obliged to guarantee the accuracy and reliability of any opinions or information expressed in the service, and it does not approve, disapprove, or modify opinions expressed by users or third parties.
+6. The System does not guarantee the accuracy and reliability of the information posted by users or other related agencies on the service. Therefore, the System is not responsible for any losses or damages incurred by users using the information.
+7. The System is not responsible for compensating for mental damages incurred by users or others during service use.
+
+Article 22 (Jurisdiction)
+
+1. Matters not specified in this Agreement are governed by the applicable laws and customary practices.
+2. In the event of a lawsuit concerning disputes arising from the use of the service, the court having jurisdiction over the location of the System shall be the competent court.
+
+Supplementary Provision
+1. (Effective Date) This Agreement is effective from October 16, 2023.
+

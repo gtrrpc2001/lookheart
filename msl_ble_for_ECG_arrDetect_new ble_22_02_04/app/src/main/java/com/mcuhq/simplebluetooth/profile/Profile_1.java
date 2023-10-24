@@ -231,7 +231,7 @@ public class Profile_1 extends Fragment {
                 saveProfileData();
 
                 // 저장한 후, 필요한 작업 수행 (예: 토스트 메시지 표시 등)
-                Toast.makeText(getActivity(), getResources().getString(R.string.saveData), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), getResources().getString(R.string.saveData), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -364,13 +364,13 @@ public class Profile_1 extends Fragment {
                 @Override
                 public void onSuccess(String result) {
                     Log.i("save",result);
-                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "프로필 정보 저장 완료", Toast.LENGTH_SHORT).show());
+                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), getResources().getString(R.string.saveData), Toast.LENGTH_SHORT).show());
                 }
 
                 @Override
                 public void onFailure(Exception e) {
                     Log.e("err","err");
-                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "프로필 정보 저장 실패", Toast.LENGTH_SHORT).show());
+                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), getResources().getString(R.string.failSaveData), Toast.LENGTH_SHORT).show());
                     e.printStackTrace();
                 }
             });

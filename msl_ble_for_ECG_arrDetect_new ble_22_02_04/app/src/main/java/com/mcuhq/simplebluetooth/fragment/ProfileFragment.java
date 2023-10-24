@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mcuhq.simplebluetooth.R;
+import com.mcuhq.simplebluetooth.auth.Find_Pw;
 import com.mcuhq.simplebluetooth.profile.Profile_1;
 import com.mcuhq.simplebluetooth.profile.Profile_2;
 import com.mcuhq.simplebluetooth.profile.Profile_3;
@@ -30,7 +31,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView profile_name,profile_email,profile_day;
     private ScrollView sv;
-    private Button profile_logout;
+    private Button profile_logout, profile_changepw;;
     private String email;
 
     public ProfileFragment() {
@@ -51,7 +52,7 @@ public class ProfileFragment extends Fragment {
         sv = view.findViewById(R.id.profile_ScrollView);
 
         profile_logout = view.findViewById(R.id.profile_logout_btn);
-
+        profile_changepw = view.findViewById(R.id.profile_changepw);
 
         //sharedpreferneces에서 불러오기 (이름,이메일)
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(email, Context.MODE_PRIVATE);
@@ -82,9 +83,9 @@ public class ProfileFragment extends Fragment {
         btn2.setTextColor(Color.LTGRAY);
         btn3.setTextColor(Color.LTGRAY);
 //        btn4.setTextColor(Color.LTGRAY);
-        btn1.setTextSize(20);
-        btn2.setTextSize(20);
-        btn3.setTextSize(20);
+//        btn1.setTextSize(16);
+//        btn2.setTextSize(16);
+//        btn3.setTextSize(16);
 //        btn4.setTextSize(20);
 
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -102,9 +103,9 @@ public class ProfileFragment extends Fragment {
                 btn2.setTextColor(Color.LTGRAY);
                 btn3.setTextColor(Color.LTGRAY);
 //                btn4.setTextColor(Color.LTGRAY);
-                btn1.setTextSize(20);
-                btn2.setTextSize(20);
-                btn3.setTextSize(20);
+//                btn1.setTextSize(20);
+//                btn2.setTextSize(20);
+//                btn3.setTextSize(20);
 //                btn4.setTextSize(20);
 
 
@@ -125,9 +126,9 @@ public class ProfileFragment extends Fragment {
                 btn2.setTextColor(Color.BLACK);
                 btn3.setTextColor(Color.LTGRAY);
 //                btn4.setTextColor(Color.LTGRAY);
-                btn1.setTextSize(20);
-                btn2.setTextSize(20);
-                btn3.setTextSize(20);
+//                btn1.setTextSize(20);
+//                btn2.setTextSize(20);
+//                btn3.setTextSize(20);
 //                btn4.setTextSize(20);
 
             }
@@ -147,9 +148,9 @@ public class ProfileFragment extends Fragment {
                 btn2.setTextColor(Color.LTGRAY);
                 btn3.setTextColor(Color.BLACK);
 //                btn4.setTextColor(Color.LTGRAY);
-                btn1.setTextSize(20);
-                btn2.setTextSize(20);
-                btn3.setTextSize(20);
+//                btn1.setTextSize(20);
+//                btn2.setTextSize(20);
+//                btn3.setTextSize(20);
 //                btn4.setTextSize(20);
 
             }
@@ -176,6 +177,18 @@ public class ProfileFragment extends Fragment {
 //
 //            }
 //        });
+        profile_changepw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Find_Pw.class);
+
+                // 다른 데이터를 넘겨야 할 경우에는 Intent에 데이터를 추가할 수 있습니다.
+                // intent.putExtra("key", "value");
+
+                // 액티비티로 이동
+                startActivity(intent);
+            }
+        });
 
         profile_logout.setOnClickListener(new View.OnClickListener() {
             @Override

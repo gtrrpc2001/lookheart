@@ -1305,7 +1305,7 @@ public class SummaryCal extends Fragment {
     public void setTargetCal(){
         // o_cal 일일 목표 소비 총 칼로리
         // o_ecal 일일 목표 소비 활동 칼로리
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(email, Context.MODE_PRIVATE);
 
         targetTCal = Integer.parseInt(sharedPref.getString("o_cal", "3000")); // 총 칼로리
         targetECal = Integer.parseInt(sharedPref.getString("o_ecal", "500")); // 활동 칼로리

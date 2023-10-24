@@ -389,7 +389,8 @@ public class Activity_Signup_Fourth extends AppCompatActivity {
 
                             } else {
                                 // 회원가입 실패
-                                Log.e("실패", "실패");
+                                Log.e("signupResult", result);
+                                runOnUiThread(() -> Toast.makeText(Activity_Signup_Fourth.this, "회원가입 실패", Toast.LENGTH_SHORT).show());
                             }
                         }
 

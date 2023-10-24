@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mcuhq.simplebluetooth.LanguageCheck;
 import com.mcuhq.simplebluetooth.R;
 
 import java.io.IOException;
@@ -49,9 +50,20 @@ public class Activity_Signup_Second extends AppCompatActivity {
             agreeImageButton.setImageResource(R.drawable.login_autologin_press);
         }
 
+
         try {
-            // 메소드를 사용하고 읽어오고 싶은 텍스트 파일 읽어옴
-            InputStream in = getResources().openRawResource(R.raw.privacy);
+            InputStream in;
+            switch (LanguageCheck.checklanguage(this)){ // 메소드를 사용하고 읽어오고 싶은 텍스트 파일 읽어옴
+                case "en":
+                    in = getResources().openRawResource(R.raw.privacy_en);
+                    break;
+                case "ko":
+                    in = getResources().openRawResource(R.raw.privacy);
+                    break;
+                default:
+                    in = getResources().openRawResource(R.raw.privacy_en);
+                    break;
+            }
             // 현재 읽어올 수 있는 바이트 수 반환
             byte[] b = new byte[in.available()];
             // byte 만큼 데이터를 읽어 b에 저장

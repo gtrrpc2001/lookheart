@@ -81,7 +81,8 @@
     <string name="arr">I.H.R.</string>
 
     <string name="eCal">Activity calories</string>
-    <string name="eCalValue">0 Kcal</string>
+    <string name="homeECal">Activity cal</string>
+    <string name="eCalValue">0 kcal</string>
     <string name="step">Steps</string>
     <string name="stepValue">0 step</string>
     <string name="temperature">Skin temp</string>
@@ -146,14 +147,16 @@
     <string name="logout">LOGOUT</string>
     <string name="logoutHelp">Do you want to log out?</string>
     <string name="rejectLogout">Cancel</string>
-    <string name="sir">sir</string>
+    <string name="sir">""</string>
     <string name="basic">Profile</string>
     <string name="target">Target</string>
     <string name="setting">Setting</string>
+    <string name="ChangePw">Change Pw</string>
 
     <!--    profile1    -->
     <string name="age">age</string>
     <string name="saveData">Saved</string>
+    <string name="failSaveData">Failed to save data</string>
     <string name="profile_save">Save</string>
     <string name="profile_sleep">Bed time</string>
     <string name="profile_wakeup">Wake up time</string>
@@ -205,7 +208,7 @@
     <string name="notiTypeHeavyArr">Heavy I.H.R. detected!\n</string>
 
     <string name="notiTypeMyo">Myo-activity detected!\n</string>
-    <string name="notiTypeNonContact">Electrode detached detected!\n</string>
+    <string name="notiTypeNonContact">Electrode detached!\n</string>
 
     <string name="arrCnt50">I.H.R. occurred 50 times today!\n</string>
     <string name="arrCnt50Text"> Aren’t you a little tired?</string>
@@ -228,10 +231,10 @@
     <string name="notiHourlyArr20Text">Check for persistent fatigue or other symptoms.</string>
 
     <string name="notiHourlyArr30">Emergency: 30 I.H.R. detected!</string>
-    <string name="notiHourlyArr30Text">Consider consulting a professional.</string>
+    <string name="notiHourlyArr30Text">Consider consulting a medical staff.</string>
 
     <string name="notiHourlyArr50">Danger: 50 I.H.R. detected!</string>
-    <string name="notiHourlyArr50Text">Consider consulting a professional.</string>
+    <string name="notiHourlyArr50Text">Consider consulting a medical staff</string>
 
     <!--    emergency    -->
     <string name="emergency">Emergency</string>

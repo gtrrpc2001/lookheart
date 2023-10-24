@@ -66,6 +66,7 @@ public class Find_PwChange extends AppCompatActivity {
     String encPw = "";
     String email = "";
 
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -314,25 +315,31 @@ public class Find_PwChange extends AppCompatActivity {
     }
 
     public void completeLogin(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Find_PwChange.this);
-        builder.setTitle(getResources().getString(R.string.passwordComp))
+        alertDialog = new AlertDialog.Builder(Find_PwChange.this)
+                .setTitle(getResources().getString(R.string.passwordComp))
                 .setMessage(getResources().getString(R.string.returnLogin))
                 .setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        // 데이터 저장
-                        //SaveUserData();
-
                         // 기존 stack에 있는 activity 모두 종료 시키고 login Activity로 이동
-                        Intent intent = new Intent(Find_PwChange.this, Activity_Login.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(Find_PwChange.this, Activity_Login.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(intent);
+
                         dialog.cancel(); // 팝업창 닫기
+
+                        Intent intent = new Intent(getApplicationContext(), Activity_Login.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                        finish();
+
                     }
-                })
-                .show();
+                }).create();
+
+        alertDialog.show();
     }
+
     public void pwOnClickHandler() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.noti))
@@ -344,5 +351,13 @@ public class Find_PwChange extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
     }
 }

@@ -60,7 +60,7 @@
     <string name="twoDays">2 Days</string>
     <string name="threeDays">3 Days</string>
     <string name="idAndPwHelp">이메일과 비밀번호를 입력하세요</string>
-    <string name="loginSuccess">로그인 성공</string>
+    <string name="loginSuccess">로그인 성공!</string>
     <string name="loginFailed">로그인 실패</string>
     <string name="incorrectlyLogin">이메일 또는 비밀번호를 잘못 입력했습니다.</string>
     <string name="serverErr">서버에서 데이터를 확인하지 못했습니다.</string>
@@ -201,4 +201,7 @@
     <string name="guardianSeverErr">보호자 알림 전송 실패</string>
     <string name="setupGuardian">보호자 설정</string>
     <string name="setupGuardianTxt">핸드폰 번호를 정확하게 입력해주세요</string>
+    <string name="failSaveData">저장 실패</string>
+    <string name="ChangePw">비밀번호 변경</string>
+    <string name="homeECal">활동 칼로리</string>
 </resources>

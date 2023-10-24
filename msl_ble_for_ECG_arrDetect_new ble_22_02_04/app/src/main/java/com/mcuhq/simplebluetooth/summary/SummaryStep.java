@@ -1325,7 +1325,7 @@ public class SummaryStep extends Fragment {
     public void setTargetStep(){
         // o_cal 일일 목표 소비 총 칼로리
         // o_ecal 일일 목표 소비 활동 칼로리
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(email, Context.MODE_PRIVATE);
 
         targetStep = Integer.parseInt(sharedPref.getString("o_step", "2000"));
         targetDistance = Integer.parseInt(sharedPref.getString("o_distance", "5"));

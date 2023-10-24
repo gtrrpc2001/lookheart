@@ -14,8 +14,11 @@ public interface RetrofitService {
     // --------------------------- GET --------------------------- //
 
     // findID
+//    @GET("msl/findID?")
+//    Call<String> findID(@Query("성명") String name, @Query("핸드폰") String phoneNumber, @Query("생년월일") String birthday);
+
     @GET("msl/findID?")
-    Call<String> findID(@Query("성명") String name, @Query("핸드폰") String phoneNumber, @Query("생년월일") String birthday);
+    Call<String> findID(@Query("eqname") String name, @Query("phone") String phoneNumber, @Query("birth") String birthday);
 
     // checkLogin
     @GET("msl/CheckLogin")

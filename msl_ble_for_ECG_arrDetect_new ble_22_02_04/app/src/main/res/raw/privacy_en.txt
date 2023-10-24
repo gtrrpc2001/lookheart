@@ -1,0 +1,155 @@
+<(Company) MSL> (hereinafter referred to as 'lookheart') has established and disclosed this privacy policy to protect the personal information of data subjects in accordance with Article 30 of the "Personal Information Protection Act" and to promptly and smoothly process related complaints. LOOKHEART collects the location information of users for the purpose of transmitting their location in the event of cardiac arrest through the 'LH-100' series exclusive app, a cardiac monitoring device developed by <(Company) MSL>.
+
+○ This privacy policy will be effective starting from October 16, 2023.
+
+Article 1 (Purpose of Personal Information Processing)
+
+<(Company) MSL> (hereinafter referred to as 'lookheart') processes personal information for the following purposes. The personal information being processed will not be used for purposes other than the following, and if the purpose of use changes, necessary measures will be taken in accordance with Article 18 of the "Personal Information Protection Act," including obtaining separate consent.
+
+1. App membership registration and management
+Processing personal information for the purpose of verifying the intent of membership registration, verifying and authenticating the user's identity for providing member-only services, maintaining and managing member qualifications, managing user activity reports, preventing improper use of the service, confirming the consent of legal representatives for processing personal information of children under the age of 14, various notices and notifications, and complaint handling.
+
+2. Handling of complaints and inquiries
+Processing personal information for the purpose of verifying the identity of the complainant, confirming the details of the complaint, contacting and notifying for fact-finding, and communicating the results of the handling.
+
+Article 2 (Processing and Retention Period of Personal Information)
+
+① <(Company) MSL> processes and retains personal information within the retention and use period of personal information required by law or as agreed upon by data subjects at the time of collection.
+
+② The processing and retention periods for each type of personal information are as follows:
+
+1. <App membership registration and management>
+Personal information related to app membership registration and management is processed and retained for the purpose mentioned above from the date of consent to the end of the service usage agreement or the termination of membership.
+Grounds for retention: Customer registration and management
+Relevant law: Records of handling consumer complaints or disputes: 3 years
+Exceptions:
+
+Article 3 (Items of Personal Information Being Processed)
+
+① <(Company) MSL> processes the following personal information items:
+
+1<App membership registration and management>
+Mandatory items: Name, date of birth, gender, login ID, password, mobile phone number, email, physical information
+Optional items:
+
+Article 4 (Procedure and Method of Personal Information Destruction)
+
+① <(Company) MSL> promptly destroys personal information when it becomes unnecessary due to the expiration of the retention period, achievement of the processing purpose, etc.
+
+② If the personal information must continue to be retained under other laws, despite the expiration of the consent-based retention period or the achievement of the processing purpose, it will be transferred to a separate database (DB) or stored in a different location.
+
+1. Legal basis:
+2. Personal information items to be retained: Account information, transaction dates
+
+③ The procedure and method of personal information destruction are as follows:
+
+1. Destruction procedure:
+<(Company) MSL> selects personal information for destruction when the reasons for destruction occur and obtains approval from the data protection officer of <(Company) MSL> before destroying the personal information.
+2. Destruction method:
+Personal information in paper form is destroyed by shredding or incineration.
+Information in electronic file format is destroyed using technical methods that make it impossible to reproduce the records.
+
+Article 5 (Measures for the Destruction of Personal Information of Non-Users)
+
+① <(Company) MSL> is currently destroying the information of users who have not used the service for one year. However, until the retention period stipulated by other laws expires, it can be separately stored and managed from the personal information of other users.
+
+② <(Company) MSL> notifies users of the fact that personal information is destroyed, the expiration date, and the items of personal information to be destroyed through means such as email and text messages, which are capable of notifying users, up to 30 days before the destruction of personal information.
+
+③ If you do not wish for your personal information to be destroyed, you can simply log in to the service before the retention period expires.
+
+Article 6 (Rights, Duties, and Methods of Exercising the Rights of the Data Subject and Legal Representative)
+
+① Data subjects can exercise their rights, such as accessing, correcting, deleting, and requesting the cessation of the processing of their personal information, at any time with respect to <(Company) MSL>.
+
+② The exercise of rights according to the first clause can be done in writing, via email, facsimile (FAX), or other methods as prescribed in Article 41, Clause 1 of the Enforcement Decree of the "Personal Information Protection Act." <(Company) MSL> will promptly process such requests.
+
+③ The exercise of rights according to the first clause can also be done through a legal representative or a delegate appointed by the data subject. In such cases, the person making the request must submit a power of attorney in accordance with the format provided in Annex 11 of the "Guidelines for Personal Information Processing Methods (No. 2020-7)."
+
+④ Requests for accessing and requesting the cessation of processing of personal information may be subject to restrictions on data subject rights as stipulated in Article 35, Clause 4, and Article 37, Clause 2 of the "Personal Information Protection Act."
+
+⑤ Requests for the correction and deletion of personal information cannot be made if the personal information is specified as a collection target under other laws.
+
+⑥ <(Company) MSL> verifies whether the person requesting access, correction, deletion, or cessation of processing according to data subject rights is the data subject or a legitimate representative.
+
+Article 7 (Measures to Ensure the Security of Personal Information)
+
+<(Company) MSL> takes the following measures to ensure the security of personal information:
+
+1. Establishment and Implementation of an Internal Management Plan:
+To ensure the secure processing of personal information, <(Company) MSL> establishes and implements an internal management plan.
+
+2. Minimization and Education of Personal Information Handling Staff:
+<(Company) MSL> designates staff to handle personal information, limits them to authorized personnel, and takes measures to manage personal information.
+
+3. Regular Self-Audits:
+To ensure the security of personal information processing, <(Company) MSL> conducts self-audits on a regular basis (quarterly).
+
+4. Access Restriction to Personal Information:
+Access to the database system that processes personal information is restricted, managed, and controlled through the granting, changing, and revoking of access permissions. Intrusion prevention systems are used to control unauthorized access from outside.
+
+5. Retention and Prevention of Falsification of Access Records:
+Access records for the personal information processing system are retained and managed for a minimum of one year. However, for information subjects of more than 50,000 individuals or in cases where unique identification information or sensitive information is processed, they are retained and managed for more than two years. Security functions are used to ensure that access records are not falsified, stolen, or lost.
+
+6. Encryption of Personal Information:
+User's personal information is stored and managed with encrypted passwords, making it known only to the user. Important data is protected using additional security measures, such as file encryption and data transmission encryption.
+
+7. Technical Measures to Prepare for Hacking:
+<(Company) MSL>('lookheart') installs security programs, conducts regular updates and checks to prevent personal information leakage and damage due to hacking, computer viruses, and similar threats. The system is installed in controlled areas, and technical and physical surveillance and blocking are performed.
+
+8. Control of Unauthorized Access:
+<(Company) MSL> maintains physical storage of personal information separately and establishes procedures for entry and exit control.
+
+9. Use of Locking Devices for Document Security:
+Documents containing personal information, secondary storage media, etc., are stored in a secure location with locking devices.
+
+Article 8 (Installation, Operation, and Rejection of Devices for Automatically Collecting Personal Information)
+
+<(Company) MSL> does not use 'cookies' that store and retrieve the user's usage information at any time.
+
+Article 9 (Matters Concerning the Person Responsible for Personal Information Protection)
+
+① <(Company) MSL> is responsible for overall personal information processing and has designated a personal information protection manager for handling complaints, damage relief related to personal information processing, etc., as follows:
+
+▶ Personal Information Protection Manager:
+Name: Lee Seokjoo
+Position: Researcher
+Title: 1 year
+Contact: 010-2982-0713, sukjoo0713@medsyslab.co.kr
+※ You will be connected to the personal information protection department.
+
+▶ Personal Information Protection Department:
+Department: Research & Development
+Person in Charge: Kim Hyunjin
+Contact: 010-5665-4267, khj4267@medsyslab.co.kr
+
+② Information subjects can inquire about and request information regarding personal information protection matters, including complaints, damage relief, etc., related to <(Company) MSL>'s services (or business) by contacting the personal information protection manager and the responsible department. <(Company) MSL> will promptly respond and handle inquiries from information subjects.
+
+Article 10 (Department for Receiving and Processing Requests for Access to Personal Information)
+
+Information subjects can request access to personal information in accordance with Article 35 of the "Personal Information Protection Act" through the following department:
+<(Company) MSL> will make efforts to ensure that information subjects' requests for access to personal information are processed promptly.
+
+▶ Department for Receiving and Processing Requests for Access to Personal Information:
+Department: Research & Development
+Person in Charge: Lee Choongheon
+Contact: 010-9063-3548, choongheonmsl@medsyslab.co.kr
+Article 11 (Remedies for Infringement of Data Subject Rights)
+
+Data subjects can apply for dispute resolution, consultation, and other matters related to personal information protection through the Personal Information Dispute Resolution Committee, the Korea Internet & Security Agency Personal Information Infringement Reporting Center, and other related institutions in order to receive remedies for personal information infringement. For further inquiries regarding reporting or consultation on personal information infringement, please contact the following organizations:
+
+1. Personal Information Dispute Resolution Committee: 1833-6972 (www.kopico.go.kr)
+2. Personal Information Infringement Reporting Center: 118 (privacy.kisa.or.kr)
+3. Supreme Prosecutor's Office: 1301 (www.spo.go.kr)
+4. National Police Agency: 182 (ecrm.cyber.go.kr)
+Individuals who have suffered infringement of their rights or interests due to decisions made by the head of a public agency or acts committed by public officials in violation of the provisions of Article 35 (Access to Personal Information), Article 36 (Correction or Deletion of Personal Information), and Article 37 (Suspension of Personal Information Processing) of the "Personal Information Protection Act" may request administrative adjudication in accordance with the Administrative Adjudication Act.
+
+※ For details regarding administrative adjudication, please refer to the Central Administrative Adjudication Committee (www.simpan.go.kr) website.
+
+Article 12 (Changes to the Personal Information Processing Policy)
+
+① This personal information processing policy is effective from October 16, 2023.
+
+
+
+
+

@@ -68,6 +68,29 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/profile_logout"
                         android:layout_weight="1"
+                        android:orientation="horizontal"
+                        >
+
+                        <Button
+                            android:id="@+id/profile_changepw"
+                            android:layout_width="75dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text="@string/ChangePw"
+                            android:background="#00ff0000"
+                            android:textColor="@color/LightGrey"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/profile_logout"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <Button
@@ -95,7 +118,7 @@
 
                     <TextView
                         android:id="@+id/textView11"
-                        android:layout_width="wrap_content"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/email_Label"
@@ -122,7 +145,7 @@
 
                     <TextView
                         android:id="@+id/textView13"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/joinDate"
@@ -150,7 +173,7 @@
 
                 <Button
                     android:id="@+id/profile_information"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:background="#00ff0000"
                     android:enabled="true"

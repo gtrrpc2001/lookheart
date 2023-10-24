@@ -4,125 +4,130 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserProfile {
     // Gson 응답 파싱
-    @SerializedName("아이디")
+
+    // TEST
+//    @SerializedName("아이디")
+//    private String id;
+//
+//    @SerializedName("성명")
+//    private String name;
+//
+//    @SerializedName("이메일")
+//    private String email;
+//
+//    @SerializedName("핸드폰")
+//    private String phone;
+//
+//    @SerializedName("성별")
+//    private String gender;
+//
+//    @SerializedName("신장")
+//    private String height;
+//
+//    @SerializedName("몸무게")
+//    private String weight;
+//
+//    @SerializedName("나이")
+//    private String age;
+//
+//    @SerializedName("생년월일")
+//    private String birthday;
+//
+//    @SerializedName("가입일")
+//    private String joinDate;
+//
+//    @SerializedName("설정_수면시작")
+//    private String sleepStart;
+//
+//    @SerializedName("설정_수면종료")
+//    private String sleepEnd;
+//
+//    @SerializedName("설정_활동BPM")
+//    private String activityBPM;
+//
+//    @SerializedName("설정_일걸음")
+//    private String dailyStep;
+//
+//    @SerializedName("설정_일거리")
+//    private String dailyDistance;
+//
+//    @SerializedName("설정_일활동칼로리")
+//    private String dailyActivityCalorie;
+//
+//    @SerializedName("설정_일칼로리")
+//    private String dailyCalorie;
+//
+//    @SerializedName("알림_sms")
+//    private String smsNotification;
+//
+//    @SerializedName("시간차이")
+//    private String timeDifference;
+//
+//    @SerializedName("phone")
+//    private String guardian;
+
+//    // Real Address
+    @SerializedName("eq")
     private String id;
 
-    @SerializedName("성명")
+    @SerializedName("eqname")
     private String name;
 
-    @SerializedName("이메일")
+    @SerializedName("email")
     private String email;
 
-    @SerializedName("핸드폰")
+    @SerializedName("userphone")
     private String phone;
 
-    @SerializedName("성별")
+    @SerializedName("sex")
     private String gender;
 
-    @SerializedName("신장")
+    @SerializedName("height")
     private String height;
 
-    @SerializedName("몸무게")
+    @SerializedName("weight")
     private String weight;
 
-    @SerializedName("나이")
+    @SerializedName("age")
     private String age;
 
-    @SerializedName("생년월일")
+    @SerializedName("birth")
     private String birthday;
 
-    @SerializedName("가입일")
+    @SerializedName("signupdate")
     private String joinDate;
 
-    @SerializedName("설정_수면시작")
+    @SerializedName("sleeptime")
     private String sleepStart;
 
-    @SerializedName("설정_수면종료")
+    @SerializedName("uptime")
     private String sleepEnd;
 
-    @SerializedName("설정_활동BPM")
+    @SerializedName("bpm")
     private String activityBPM;
 
-    @SerializedName("설정_일걸음")
+    @SerializedName("step")
     private String dailyStep;
 
-    @SerializedName("설정_일거리")
+    @SerializedName("distanceKM")
     private String dailyDistance;
 
-    @SerializedName("설정_일활동칼로리")
+    @SerializedName("calexe")
     private String dailyActivityCalorie;
 
-    @SerializedName("설정_일칼로리")
+    @SerializedName("cal")
     private String dailyCalorie;
 
-    @SerializedName("알림_sms")
+    @SerializedName("alarm_sms")
     private String smsNotification;
 
-    @SerializedName("시간차이")
+    @SerializedName("differtime")
     private String timeDifference;
 
     @SerializedName("phone")
     private String guardian;
 
-//    @SerializedName("eq")
-//    private String id;
-//
-//    @SerializedName("eqname")
-//    private String name;
-//
-//    @SerializedName("email")
-//    private String email;
-//
-//    @SerializedName("phone")
-//    private String phone;
-//
-//    @SerializedName("sex")
-//    private String gender;
-//
-//    @SerializedName("height")
-//    private String height;
-//
-//    @SerializedName("weight")
-//    private String weight;
-//
-//    @SerializedName("age")
-//    private String age;
-//
-//    @SerializedName("birth")
-//    private String birthday;
-//
-//    @SerializedName("signupdate")
-//    private String joinDate;
-//
-//    @SerializedName("sleeptime")
-//    private String sleepStart;
-//
-//    @SerializedName("uptime")
-//    private String sleepEnd;
-//
-//    @SerializedName("bpm")
-//    private String activityBPM;
-//
-//    @SerializedName("step")
-//    private String dailyStep;
-//
-//    @SerializedName("distanceKM")
-//    private String dailyDistance;
-//
-//    @SerializedName("calexe")
-//    private String dailyActivityCalorie;
-//
-//    @SerializedName("cal")
-//    private String dailyCalorie;
-//
-//    @SerializedName("alarm_sms")
-//    private String smsNotification;
-//
-//    @SerializedName("differtime")
-//    private String timeDifference;
-
     // getters
-
     public String getId(){
         return id;
     }
@@ -187,9 +192,5 @@ public class UserProfile {
     }
     public String getGuardian(){
         return guardian;
-    }
-
-    public void setGuardian(String phone){
-        guardian = phone;
     }
 }

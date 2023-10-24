@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,10 +15,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mcuhq.simplebluetooth.LanguageCheck;
 import com.mcuhq.simplebluetooth.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 
 public class Activity_Signup_First extends AppCompatActivity {
@@ -51,9 +55,21 @@ public class Activity_Signup_First extends AppCompatActivity {
             agreeImageButton.setImageResource(R.drawable.login_autologin_press);
         }
 
+
         try {
-            // 메소드를 사용하고 읽어오고 싶은 텍스트 파일 읽어옴
-            InputStream in = getResources().openRawResource(R.raw.agree);
+            InputStream in;
+            switch (LanguageCheck.checklanguage(this)){ // 메소드를 사용하고 읽어오고 싶은 텍스트 파일 읽어옴
+                case "en":
+                    in = getResources().openRawResource(R.raw.agree_en);
+                    break;
+                case "ko":
+                    in = getResources().openRawResource(R.raw.agree);
+                    break;
+                default:
+                    in = getResources().openRawResource(R.raw.agree_en);
+                    break;
+            }
+
             // 현재 읽어올 수 있는 바이트 수 반환
             byte[] b = new byte[in.available()];
             // byte 만큼 데이터를 읽어 b에 저장
