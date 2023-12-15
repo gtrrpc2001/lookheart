@@ -51,98 +51,121 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class SummaryStep extends Fragment {
 
-    private SharedViewModel viewModel;
-
-    private BarChart stepChart;
-
+    /*currentTime*/
+    //region
     String currentYear;
     String currentMonth;
     String currentDay;
 
     String currentDate;
     String currentTime;
+    //endregion
 
+    /*targetTime*/
+    //region
     String targetYear;
     String targetMonth;
     String targetDay;
     String targetDate;
+    //endregion
 
+    /*preTargetTime*/
+    //region
     String preWeekTargetYear;
     String preWeekTargetMonth;
     String preWeekTargetDay;
-
     String preWeekTargetDate;
+    //endregion
 
-    // Week
+    /*Week*/
+    //region
     ArrayList<Double> weekStepArrayData = new ArrayList<>();
     ArrayList<Double> weekDistanceArrayData = new ArrayList<>();
     List<BarEntry> weekStepEntries = new ArrayList<>();
     List<BarEntry> weekDistanceEntries = new ArrayList<>();
 
     ArrayList<String> weekTimeData = new ArrayList<>();
-    Boolean weekDirCheck;
 
-    // Month
+    int weektargetStep = 0;
+    int weektargetDistance = 0;
+    Boolean weekDirCheck;
+    //endregion
+
+    /*Month*/
+    //region
     ArrayList<Double> monthStepData = new ArrayList<>();
     ArrayList<Double> monthDistanceData = new ArrayList<>();
     List<BarEntry> monthStepEntries = new ArrayList<>();
     List<BarEntry> monthDistanceEntries = new ArrayList<>();
 
     ArrayList<String> monthTimeData = new ArrayList<>();
-    Boolean monthDirCheck;
-
-    // Year
-    ArrayList<Double> yearStepData = new ArrayList<>();
-    ArrayList<Double> yearDistanceData = new ArrayList<>();
-    List<BarEntry> yearStepEntries = new ArrayList<>();
-    List<BarEntry> yearDistanceEntries = new ArrayList<>();
-
-    ArrayList<String> yearTimeData = new ArrayList<>();
-
-    Boolean yearDirCheck;
-    int numbersOfStepAndDistanceData = 0;
-
-    int targetStep = 0;
-    int targetDistance = 0;
-    int targetDistanceKm = 0;
-
-    int weektargetStep = 0;
-    int weektargetDistance = 0;
 
     int monthtargetStep = 0;
     int monthtargetDistance = 0;
 
+    Boolean monthDirCheck;
+    //endregion
+
+    /*Year*/
+    //region
+    ArrayList<Double> yearStepData = new ArrayList<>();
+    ArrayList<Double> yearDistanceData = new ArrayList<>();
+    List<BarEntry> yearStepEntries = new ArrayList<>();
+    List<BarEntry> yearDistanceEntries = new ArrayList<>();
     int yeartargetStep = 0;
     int yeartargetDistance = 0;
+    ArrayList<String> yearTimeData = new ArrayList<>();
+    //endregion
 
+    /*target*/
+    //region
+    int targetStep = 0;
+    int targetDistance = 0;
+    int targetDistanceKm = 0;
+    //endregion
+
+    /*SimpleDateFormat*/
+    //region
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
     SimpleDateFormat month = new SimpleDateFormat("MM");
     SimpleDateFormat day = new SimpleDateFormat("dd");
+    //endregion
 
+    /*DateTimeFormatter*/
+    //region
     DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
     DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("MM");
     DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("dd");
+    //endregion
 
+    /*check*/
+    //region
     Boolean dayCheck = true;
     Boolean weekCheck;
     Boolean monthCheck;
     Boolean yearCheck;
+    //endregion
 
-    View view;
-
+    /*button*/
+    //region
     Button dayButton;
     Button weekButton;
     Button monthButton;
     Button yearButton;
+    Button[] buttons;
+    //endregion
 
+    /*imagebutton*/
+    //region
     ImageButton yesterdayButton;
     ImageButton tomorrowButton;
+    //endregion
 
-    Button[] buttons;
-
+    /*textView*/
+    //region
     TextView dateDisplay;
 
     TextView stepValue;
@@ -151,10 +174,23 @@ public class SummaryStep extends Fragment {
     TextView tvTargetStep;
     TextView tvTargetDistance;
 
+    //endregion
+
+    /*ProgressBar*/
+    //region
     ProgressBar stepProgressBar;
     ProgressBar distanceProgressBar;
+    //endregion
 
+    private SharedViewModel viewModel;
+
+    private BarChart stepChart;
+
+    Boolean yearDirCheck;
+    int numbersOfStepAndDistanceData = 0;
+    View view;
     private String email;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -290,69 +326,47 @@ public class SummaryStep extends Fragment {
             stepChart.zoomOut();
         }
 
+        setDateButtonEvent(true);
+    }
+
+    void setDateButtonEvent(boolean check){
         if(dayCheck) {
-            dateCalculate(1, true);
+            dateCalculate(1, check);
             todayStepChartGraph();
         }
         else if(weekCheck) {
-            dateCalculate(7, true);
+            dateCalculate(7, check);
             weekStepChartGraph();;
         }
         else if(monthCheck) {
-            monthDateCalculate(true);
+            setTimeCalculate(check);
             monthStepChartGraph();;
         }
         else {
             // year
-            yearDateCalculate(true);
+            setTimeCalculate(check);
             yearStepChartGraph();
         }
     }
 
     public void yesterdayButtonEvent() {
-
-        if(dayCheck) {
-            dateCalculate(1, false);
-            todayStepChartGraph();
-        }
-        else if(weekCheck) {
-            dateCalculate(7, false);
-            weekStepChartGraph();;
-        }
-        else if(monthCheck) {
-            monthDateCalculate(false);
-            monthStepChartGraph();;
-        }
-        else {
-            // year
-            yearDateCalculate(false);
-            yearStepChartGraph();
-        }
+        setDateButtonEvent(false);
     }
-
 
     public void dateCalculate(int myDay, boolean check) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date;
+        LocalDate date = LocalDate.parse(targetDate, formatter);
 
         if(check){
             // tomorrow
-            date = LocalDate.parse(targetDate, formatter);
             date = date.plusDays(myDay);
-
-            targetDate = date.format(formatter);
-//            Log.d("targetDate", targetDate);
 
         } else{
             // yesterday
-            date = LocalDate.parse(targetDate, formatter);
             date = date.minusDays(myDay);
-
-            targetDate = date.format(formatter);
-//            Log.d("targetDate", targetDate);
         }
-
+        targetDate = date.format(formatter);
         date = LocalDate.parse(targetDate, formatter);
 
         targetYear = date.format(yearFormat);
@@ -361,7 +375,7 @@ public class SummaryStep extends Fragment {
 
     }
 
-    public void monthDateCalculate(boolean check) {
+    public void setTimeCalculate(boolean check) {
         LocalDate today = LocalDate.of(Integer.parseInt(targetYear), Integer.parseInt(targetMonth), Integer.parseInt(targetDay)); // Here you can specify the date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate resultDate;
@@ -371,36 +385,6 @@ public class SummaryStep extends Fragment {
         }
         else {
             resultDate = today.minusMonths(1);
-        }
-
-        targetDate = String.valueOf(resultDate);
-        targetYear = String.valueOf(resultDate.getYear());
-
-        if (resultDate.getMonthValue() < 10) {
-            targetMonth = "0" + String.valueOf(resultDate.getMonthValue());
-        }
-        else {
-            targetMonth = String.valueOf(resultDate.getMonthValue());
-        }
-
-        if (resultDate.getDayOfMonth() < 10) {
-            targetDay = "0" + String.valueOf(resultDate.getDayOfMonth());
-        }
-        else {
-            targetDay = String.valueOf(resultDate.getDayOfMonth());
-        }
-    }
-
-    public void yearDateCalculate(boolean check) {
-        LocalDate today = LocalDate.of(Integer.parseInt(targetYear), Integer.parseInt(targetMonth), Integer.parseInt(targetDay)); // Here you can specify the date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate resultDate;
-
-        if (check) {
-            resultDate = today.plusYears(1);
-        }
-        else {
-            resultDate = today.minusYears(1);
         }
 
         targetDate = String.valueOf(resultDate);
@@ -434,8 +418,7 @@ public class SummaryStep extends Fragment {
         numbersOfStepAndDistanceData = 0;
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File file = new File(directory, "CalAndDistanceData.csv");
@@ -495,61 +478,12 @@ public class SummaryStep extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(stepEntries, getResources().getString(R.string.step));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(stepEntries,getResources().getString(R.string.step),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(distanceEntries, getResources().getString(R.string.distanceM));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(distanceEntries,getResources().getString(R.string.distanceM),Color.BLUE);
 
-            float groupSpace = 0.3f;
-            float barSpace = 0.05f;
-            float barWidth = 0.3f;
-
-            BarData todaystepChartData = new BarData(tCaldataSet, eCaldataSet);
-            todaystepChartData.setBarWidth(barWidth);
-
-
-            stepChart.getXAxis().setAxisMinimum(0f);
-            stepChart.getXAxis().setAxisMaximum(0f + todaystepChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfStepAndDistanceData));  // group count : 2
-            todaystepChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = stepChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            stepChart.setNoDataText("");
-            stepChart.setData(todaystepChartData);
-            stepChart.getXAxis().setEnabled(true);
-            stepChart.getXAxis().setCenterAxisLabels(true);
-            stepChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(timeData));
-            stepChart.getXAxis().setGranularity(1f);
-            stepChart.getXAxis().setLabelCount(timeData.size(), false);
-            stepChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            stepChart.getXAxis().setDrawGridLines(false);
-            stepChart.getDescription().setEnabled(false);
-
-            stepChart.getAxisLeft().setGranularityEnabled(true);
-            stepChart.getAxisLeft().setGranularity(1.0f);
-            stepChart.getAxisLeft().setAxisMinimum(0f);
-            stepChart.getAxisRight().setEnabled(false);
-            stepChart.setDrawMarkers(false);
-            stepChart.setDragEnabled(true);
-            stepChart.setPinchZoom(false);
-            stepChart.setDoubleTapToZoomEnabled(false);
-            stepChart.setHighlightPerTapEnabled(false);
-            stepChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            stepChart.fitScreen();
-            stepChart.resetZoom();
-            stepChart.zoomOut();
-            stepChart.notifyDataSetChanged();
-            stepChart.getViewPortHandler().refresh(new Matrix(), stepChart, true);
-            stepChart.invalidate();
+            setStepChartOption(tCaldataSet,eCaldataSet,timeData);
         }
 
         else {
@@ -596,62 +530,12 @@ public class SummaryStep extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(weekStepEntries, getResources().getString(R.string.step));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(weekStepEntries,getResources().getString(R.string.step),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(weekDistanceEntries, getResources().getString(R.string.distanceM));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(weekDistanceEntries, getResources().getString(R.string.distanceM),Color.BLUE);
 
-            float groupSpace = 0.3f;
-            float barSpace = 0.05f;
-            float barWidth = 0.3f;
-
-            BarData todaystepChartData = new BarData(tCaldataSet, eCaldataSet);
-            todaystepChartData.setBarWidth(barWidth);
-
-
-            stepChart.getXAxis().setAxisMinimum(0f);
-            stepChart.getXAxis().setAxisMaximum(0f + todaystepChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfStepAndDistanceData));  // group count : 2
-            todaystepChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = stepChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            stepChart.setNoDataText("");
-            stepChart.setData(todaystepChartData);
-            stepChart.getXAxis().setEnabled(true);
-            stepChart.getXAxis().setCenterAxisLabels(true);
-            stepChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekTimeData));
-            stepChart.getXAxis().setGranularity(1f);
-            stepChart.getXAxis().setLabelCount(weekTimeData.size(), false);
-            stepChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            stepChart.getXAxis().setDrawGridLines(false);
-            stepChart.getDescription().setEnabled(false);
-
-            stepChart.getAxisLeft().setGranularityEnabled(true);
-            stepChart.getAxisLeft().setGranularity(1.0f);
-            stepChart.getAxisLeft().setAxisMinimum(0f);
-            stepChart.getAxisRight().setEnabled(false);
-            stepChart.setDrawMarkers(false);
-            stepChart.setDragEnabled(true);
-            stepChart.setPinchZoom(false);
-            stepChart.setDoubleTapToZoomEnabled(false);
-            stepChart.setHighlightPerTapEnabled(false);
-            stepChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            stepChart.fitScreen();
-            stepChart.resetZoom();
-            stepChart.zoomOut();
-            stepChart.notifyDataSetChanged();
-            stepChart.getViewPortHandler().refresh(new Matrix(), stepChart, true);
-            stepChart.invalidate();
-
+            setStepChartOption(tCaldataSet,eCaldataSet,weekTimeData);
         }
         else {
             // 파일 없음
@@ -712,10 +596,7 @@ public class SummaryStep extends Fragment {
         }
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPreTime();
 
         dateCalculate(searchMonday, false);
 
@@ -731,8 +612,7 @@ public class SummaryStep extends Fragment {
             sumStep = 0;
             sumDistance = 0;
 
-            String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-            File directory = new File(getActivity().getFilesDir(), directoryName);
+            File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
             // 파일 경로와 이름
             File file = new File(directory, "CalAndDistanceData.csv");
@@ -807,11 +687,7 @@ public class SummaryStep extends Fragment {
         distanceProgressBar.setProgress(distanceProgress);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setTargetTime();
     }
 
     public void monthStepChartGraph(){
@@ -840,61 +716,10 @@ public class SummaryStep extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(monthStepEntries, getResources().getString(R.string.step));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(monthStepEntries, getResources().getString(R.string.step),Color.RED);
+            BarDataSet eCaldataSet = getBarDataSet(monthDistanceEntries, getResources().getString(R.string.distanceM),Color.BLUE);
 
-            // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(monthDistanceEntries, getResources().getString(R.string.distanceM));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
-
-            float groupSpace = 0.3f;
-            float barSpace = 0.05f;
-            float barWidth = 0.3f;
-
-            BarData todaystepChartData = new BarData(tCaldataSet, eCaldataSet);
-            todaystepChartData.setBarWidth(barWidth);
-
-
-            stepChart.getXAxis().setAxisMinimum(0f);
-            stepChart.getXAxis().setAxisMaximum(0f + todaystepChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfStepAndDistanceData));  // group count : 2
-            todaystepChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = stepChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            stepChart.setNoDataText("");
-            stepChart.setData(todaystepChartData);
-            stepChart.getXAxis().setEnabled(true);
-            stepChart.getXAxis().setCenterAxisLabels(true);
-            stepChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(monthTimeData));
-            stepChart.getXAxis().setGranularity(1f);
-            stepChart.getXAxis().setLabelCount(monthTimeData.size(), false);
-            stepChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            stepChart.getXAxis().setDrawGridLines(false);
-            stepChart.getDescription().setEnabled(false);
-
-            stepChart.getAxisLeft().setGranularityEnabled(true);
-            stepChart.getAxisLeft().setGranularity(1.0f);
-            stepChart.getAxisLeft().setAxisMinimum(0f);
-            stepChart.getAxisRight().setEnabled(false);
-            stepChart.setDrawMarkers(false);
-            stepChart.setDragEnabled(true);
-            stepChart.setPinchZoom(false);
-            stepChart.setDoubleTapToZoomEnabled(false);
-            stepChart.setHighlightPerTapEnabled(false);
-            stepChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            stepChart.fitScreen();
-            stepChart.resetZoom();
-            stepChart.zoomOut();
-            stepChart.notifyDataSetChanged();
-            stepChart.getViewPortHandler().refresh(new Matrix(), stepChart, true);
-            stepChart.invalidate();
+            setStepChartOption(tCaldataSet,eCaldataSet,monthTimeData);
         }else {
             // 디렉토리 없음
 
@@ -911,16 +736,12 @@ public class SummaryStep extends Fragment {
         int resultDistance = 0;
 
         int timeData = 0;
-        int days = lastModifiedDirectory(); // 마지막으로 수정된 파일 넘버 찾기
+        int days = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth); // 마지막으로 수정된 파일 넘버 찾기
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPreTime();
 
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth);
 
         if (directory.exists()) {
             // 디렉토리가 있는 경우
@@ -933,8 +754,7 @@ public class SummaryStep extends Fragment {
                 sumStep = 0;
                 sumDistance = 0;
 
-                directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-                directory = new File(getActivity().getFilesDir(), directoryName);
+                directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
                 // 파일 경로와 이름
                 File file = new File(directory, "CalAndDistanceData.csv");
@@ -1009,42 +829,11 @@ public class SummaryStep extends Fragment {
         distanceProgressBar.setProgress(distanceProgress);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setTargetTime();
     }
 
-    public int lastModifiedDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
-        // 현재 디렉토리를 지정
-
-        // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
-        File[] files = directory.listFiles();
-
-        if (files != null && files.length > 0) {
-            Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-            // 디렉토리만 필터링
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    System.out.println("The last modified directory is: " + file.getName());
-
-                    return Integer.parseInt(file.getName());
-                }
-            }
-        } else {
-            System.out.println("The directory is empty or doesn't exist.");
-            return 0;
-        }
-        return 0;
-    }
-
-    public int lastModifiedYearDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+    public int lastModifiedDirectory(String name){
+        File directory = new File(getActivity().getFilesDir(), name);
         // 현재 디렉토리를 지정
 
         // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
@@ -1093,62 +882,12 @@ public class SummaryStep extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(yearStepEntries, getResources().getString(R.string.step));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(yearStepEntries, getResources().getString(R.string.step),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(yearDistanceEntries, getResources().getString(R.string.distanceM));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(yearDistanceEntries, getResources().getString(R.string.distanceM),Color.BLUE);
 
-            float groupSpace = 0.3f;
-            float barSpace = 0.05f;
-            float barWidth = 0.3f;
-
-            BarData todaystepChartData = new BarData(tCaldataSet, eCaldataSet);
-            todaystepChartData.setBarWidth(barWidth);
-
-
-            stepChart.getXAxis().setAxisMinimum(0f);
-            stepChart.getXAxis().setAxisMaximum(0f + todaystepChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfStepAndDistanceData));  // group count : 2
-            todaystepChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = stepChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            stepChart.setNoDataText("");
-            stepChart.setData(todaystepChartData);
-            stepChart.getXAxis().setEnabled(true);
-            stepChart.getXAxis().setCenterAxisLabels(true);
-            stepChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(yearTimeData));
-            stepChart.getXAxis().setGranularity(1f);
-            stepChart.getXAxis().setLabelCount(yearTimeData.size(), false);
-            stepChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            stepChart.getXAxis().setDrawGridLines(false);
-            stepChart.getDescription().setEnabled(false);
-
-            stepChart.getAxisLeft().setGranularityEnabled(true);
-            stepChart.getAxisLeft().setGranularity(1.0f);
-            stepChart.getAxisLeft().setAxisMinimum(0f);
-            stepChart.getAxisRight().setEnabled(false);
-            stepChart.setDrawMarkers(false);
-            stepChart.setDragEnabled(true);
-            stepChart.setPinchZoom(false);
-            stepChart.setDoubleTapToZoomEnabled(false);
-            stepChart.setHighlightPerTapEnabled(false);
-            stepChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            stepChart.fitScreen();
-            stepChart.resetZoom();
-            stepChart.zoomOut();
-            stepChart.notifyDataSetChanged();
-            stepChart.getViewPortHandler().refresh(new Matrix(), stepChart, true);
-            stepChart.invalidate();
-
+            setStepChartOption(tCaldataSet,eCaldataSet,yearTimeData);
         }else {
             // 디렉토리 없음
 
@@ -1171,14 +910,13 @@ public class SummaryStep extends Fragment {
         preWeekTargetMonth = targetMonth;
         preWeekTargetDay = targetDay;
 
-        int month = lastModifiedYearDirectory();
+        int month = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear);
 
         targetDate = targetYear + "-" + "01-01";
         targetMonth = "01";
         targetDay = "01";
 
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear);
 
         if (directory.exists()) {
             // 디렉토리가 있는 경우
@@ -1197,8 +935,7 @@ public class SummaryStep extends Fragment {
                 // day
                 for ( int j = 0 ; daysInMonth > j ; j++) {
 
-                    directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-                    directory = new File(getActivity().getFilesDir(), directoryName);
+                    directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
                     // 파일 경로와 이름
                     File file = new File(directory, "CalAndDistanceData.csv");
@@ -1264,12 +1001,82 @@ public class SummaryStep extends Fragment {
         distanceProgressBar.setProgress(distanceProgress);
 
         // 기존 날짜로 변경
+        setTargetTime();
+
+    }
+
+    void setPreTime(){
+        preWeekTargetDate = targetDate;
+        preWeekTargetYear = targetYear;
+        preWeekTargetMonth = targetMonth;
+        preWeekTargetDay = targetDay;
+    }
+
+    void setTargetTime(){
         targetYear = preWeekTargetYear;
         targetMonth = preWeekTargetMonth;
         targetDay = preWeekTargetDay;
-
         targetDate = preWeekTargetDate;
+    }
 
+    void setStepChartOption(BarDataSet tCaldataSet,BarDataSet eCaldataSet,ArrayList<String> timeData){
+        float groupSpace = 0.3f;
+        float barSpace = 0.05f;
+        float barWidth = 0.3f;
+
+        BarData todaystepChartData = new BarData(tCaldataSet, eCaldataSet);
+        todaystepChartData.setBarWidth(barWidth);
+
+        stepChart.getXAxis().setAxisMinimum(0f);
+        stepChart.getXAxis().setAxisMaximum(0f + todaystepChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfStepAndDistanceData));  // group count : 2
+        todaystepChartData.groupBars(0f, groupSpace, barSpace);
+
+        Legend legend = stepChart.getLegend();
+        legend.setFormSize(12f); // Font size
+        legend.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+        stepChart.setNoDataText("");
+        stepChart.setData(todaystepChartData);
+        stepChart.getXAxis().setEnabled(true);
+        stepChart.getXAxis().setCenterAxisLabels(true);
+        stepChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(timeData));
+        stepChart.getXAxis().setGranularity(1f);
+        stepChart.getXAxis().setLabelCount(timeData.size(), false);
+        stepChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        stepChart.getXAxis().setDrawGridLines(false);
+        stepChart.getDescription().setEnabled(false);
+
+        stepChart.getAxisLeft().setGranularityEnabled(true);
+        stepChart.getAxisLeft().setGranularity(1.0f);
+        stepChart.getAxisLeft().setAxisMinimum(0f);
+        stepChart.getAxisRight().setEnabled(false);
+        stepChart.setDrawMarkers(false);
+        stepChart.setDragEnabled(true);
+        stepChart.setPinchZoom(false);
+        stepChart.setDoubleTapToZoomEnabled(false);
+        stepChart.setHighlightPerTapEnabled(false);
+        stepChart.moveViewToX(0);
+
+        // 차트를 그릴 때 호출해야 합니다.
+        stepChart.fitScreen();
+        stepChart.resetZoom();
+        stepChart.zoomOut();
+        stepChart.notifyDataSetChanged();
+        stepChart.getViewPortHandler().refresh(new Matrix(), stepChart, true);
+        stepChart.invalidate();
+    }
+
+    BarDataSet getBarDataSet(List<BarEntry> data,String label,int Color){
+        BarDataSet dataSet = new BarDataSet(data, label);
+        dataSet.setColor(Color);
+        dataSet.setDrawValues(false);
+        return dataSet;
+    }
+
+    File getFileDirectory(String name){
+        String directoryName = name;
+        return new File(getActivity().getFilesDir(), directoryName);
     }
 
     public void setColor(Button button) {

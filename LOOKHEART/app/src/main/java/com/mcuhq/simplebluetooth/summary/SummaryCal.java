@@ -47,55 +47,72 @@ import java.util.List;
 
 public class SummaryCal extends Fragment {
 
-    private SharedViewModel viewModel;
-
-    private BarChart calChart;
-
+    /*currentTime*/
+    //region
     String currentYear;
     String currentMonth;
     String currentDay;
-
     String currentDate;
     String currentTime;
+    //endregion
 
+    /*targetTime*/
+    //region
     String targetYear;
     String targetMonth;
     String targetDay;
     String targetDate;
+    //endregion
 
+    /*preWeekTargetTime*/
+    //region
     String preWeekTargetYear;
     String preWeekTargetMonth;
     String preWeekTargetDay;
-
     String preWeekTargetDate;
+    //endregion
 
-    // Week
+    /*Week*/
+    //region
     ArrayList<Double> weekTCalArrayData = new ArrayList<>();
     ArrayList<Double> weekECalArrayData = new ArrayList<>();
     List<BarEntry> weekTCalEntries = new ArrayList<>();
     List<BarEntry> weekECalEntries = new ArrayList<>();
-
     ArrayList<String> weekCalTimeData = new ArrayList<>();
     Boolean weekDirCheck;
+    //endregion
 
-    // Month
+    /*Month*/
+    //region
     ArrayList<Double> monthTCalData = new ArrayList<>();
     ArrayList<Double> monthECalData = new ArrayList<>();
     List<BarEntry> monthTCalEntries = new ArrayList<>();
     List<BarEntry> monthECalEntries = new ArrayList<>();
-
     ArrayList<String> monthCalTimeData = new ArrayList<>();
     Boolean monthDirCheck;
-    // Year
+    //endregion
+
+    /*Year*/
+    //region
     ArrayList<Double> yearTCalData = new ArrayList<>();
     ArrayList<Double> yearECalData = new ArrayList<>();
     List<BarEntry> yearTCalEntries = new ArrayList<>();
     List<BarEntry> yearECalEntries = new ArrayList<>();
-
     ArrayList<String> yearCalTimeData = new ArrayList<>();
-    Boolean yearDirCheck;
-    int numbersOfHourlyCalorieData = 0;
+    //endregion
 
+    /*timeCheck*/
+    //region
+    Boolean yearDirCheck;
+
+    Boolean dayCheck = true;
+    Boolean weekCheck;
+    Boolean monthCheck;
+    Boolean yearCheck;
+    //endregion
+
+    /*targetCal*/
+    //region
     int targetTCal = 0;
     int targetECal = 0;
 
@@ -107,35 +124,42 @@ public class SummaryCal extends Fragment {
 
     int yeartargetTCal = 0;
     int yeartargetECal = 0;
+    //endregion
 
+    /*SimpleDateFormat*/
+    //region
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
     SimpleDateFormat month = new SimpleDateFormat("MM");
     SimpleDateFormat day = new SimpleDateFormat("dd");
+    //endregion
 
+    /*DateTimeFormatter*/
+    //region
     DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
     DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("MM");
     DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("dd");
+    //endregion
 
-    Boolean dayCheck = true;
-    Boolean weekCheck;
-    Boolean monthCheck;
-    Boolean yearCheck;
-
-    View view;
-
+    /*button*/
+    //region
     Button dayButton;
     Button weekButton;
     Button monthButton;
     Button yearButton;
+    Button[] buttons;
+    //endregion
 
+    /*imagebutton*/
+    //region
     ImageButton yesterdayButton;
     ImageButton tomorrowButton;
+    //endregion
 
-    Button[] buttons;
-
+    /*textview*/
+    //region
     TextView dateDisplay;
 
     TextView calValue;
@@ -143,9 +167,21 @@ public class SummaryCal extends Fragment {
 
     TextView tvTargetTCal;
     TextView tvTargetECal;
+    //endregion
 
+    /*ProgressBar*/
+    //region
     ProgressBar tCalProgressBar;
     ProgressBar eCalProgressBar;
+    //endregion
+
+    private SharedViewModel viewModel;
+
+    private BarChart calChart;
+
+    int numbersOfHourlyCalorieData = 0;
+
+    View view;
 
     private String email;
 
@@ -270,69 +306,27 @@ public class SummaryCal extends Fragment {
             calChart.zoomOut();
         }
 
-        if(dayCheck) {
-            dateCalculate(1, true);
-            todayCalChartGraph();
-        }
-        else if(weekCheck) {
-            dateCalculate(7, true);
-            weekCalChartGraph();;
-        }
-        else if(monthCheck) {
-            monthDateCalculate(true);
-            monthCalChartGraph();;
-        }
-        else {
-            // year
-            yearDateCalculate(true);
-            yearCalChartGraph();
-        }
+        setDateCheck(true);
     }
 
     public void yesterdayButtonEvent() {
-
-        if(dayCheck) {
-            dateCalculate(1, false);
-            todayCalChartGraph();
-        }
-        else if(weekCheck) {
-            dateCalculate(7, false);
-            weekCalChartGraph();;
-        }
-        else if(monthCheck) {
-            monthDateCalculate(false);
-            monthCalChartGraph();;
-        }
-        else {
-            // year
-            yearDateCalculate(false);
-            yearCalChartGraph();
-        }
+        setDateCheck(false);
     }
 
 
     public void dateCalculate(int myDay, boolean check) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date;
+        LocalDate date = LocalDate.parse(targetDate, formatter);
 
         if(check){
             // tomorrow
-            date = LocalDate.parse(targetDate, formatter);
             date = date.plusDays(myDay);
-
-            targetDate = date.format(formatter);
-//            Log.d("targetDate", targetDate);
-
         } else{
             // yesterday
-            date = LocalDate.parse(targetDate, formatter);
             date = date.minusDays(myDay);
-
-            targetDate = date.format(formatter);
-//            Log.d("targetDate", targetDate);
         }
-
+        targetDate = date.format(formatter);
         date = LocalDate.parse(targetDate, formatter);
 
         targetYear = date.format(yearFormat);
@@ -341,7 +335,7 @@ public class SummaryCal extends Fragment {
 
     }
 
-    public void monthDateCalculate(boolean check) {
+    public void setTimeCalculate(boolean check) {
         LocalDate today = LocalDate.of(Integer.parseInt(targetYear), Integer.parseInt(targetMonth), Integer.parseInt(targetDay)); // Here you can specify the date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate resultDate;
@@ -351,36 +345,6 @@ public class SummaryCal extends Fragment {
         }
         else {
             resultDate = today.minusMonths(1);
-        }
-
-        targetDate = String.valueOf(resultDate);
-        targetYear = String.valueOf(resultDate.getYear());
-
-        if (resultDate.getMonthValue() < 10) {
-            targetMonth = "0" + String.valueOf(resultDate.getMonthValue());
-        }
-        else {
-            targetMonth = String.valueOf(resultDate.getMonthValue());
-        }
-
-        if (resultDate.getDayOfMonth() < 10) {
-            targetDay = "0" + String.valueOf(resultDate.getDayOfMonth());
-        }
-        else {
-            targetDay = String.valueOf(resultDate.getDayOfMonth());
-        }
-    }
-
-    public void yearDateCalculate(boolean check) {
-        LocalDate today = LocalDate.of(Integer.parseInt(targetYear), Integer.parseInt(targetMonth), Integer.parseInt(targetDay)); // Here you can specify the date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate resultDate;
-
-        if (check) {
-            resultDate = today.plusYears(1);
-        }
-        else {
-            resultDate = today.minusYears(1);
         }
 
         targetDate = String.valueOf(resultDate);
@@ -414,8 +378,7 @@ public class SummaryCal extends Fragment {
         numbersOfHourlyCalorieData = 0;
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File file = new File(directory, "CalAndDistanceData.csv");
@@ -472,14 +435,10 @@ public class SummaryCal extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(tCalEntries, getResources().getString(R.string.summaryTCal));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(tCalEntries,getResources().getString(R.string.summaryTCal),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(eCalEntries, getResources().getString(R.string.summaryECal));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(eCalEntries,getResources().getString(R.string.summaryECal),Color.BLUE);
 
             float groupSpace = 0.3f;
             float barSpace = 0.05f;
@@ -488,55 +447,14 @@ public class SummaryCal extends Fragment {
             BarData todayCalChartData = new BarData(tCaldataSet, eCaldataSet);
             todayCalChartData.setBarWidth(barWidth);
 
-
-            calChart.getXAxis().setAxisMinimum(0f);
-            calChart.getXAxis().setAxisMaximum(0f + todayCalChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfHourlyCalorieData));  // group count : 2
-            todayCalChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = calChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            calChart.setNoDataText("");
-            calChart.setData(todayCalChartData);
-            calChart.getXAxis().setEnabled(true);
-            calChart.getXAxis().setCenterAxisLabels(true);
-            calChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(timeData));
-            calChart.getXAxis().setGranularity(1f);
-            calChart.getXAxis().setLabelCount(timeData.size(), false);
-            calChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            calChart.getXAxis().setDrawGridLines(false);
-            calChart.getDescription().setEnabled(false);
-
-            calChart.getAxisLeft().setGranularityEnabled(true);
-            calChart.getAxisLeft().setGranularity(1.0f);
-            calChart.getAxisLeft().setAxisMinimum(0f);
-            calChart.getAxisRight().setEnabled(false);
-            calChart.setDrawMarkers(false);
-            calChart.setDragEnabled(true);
-            calChart.setPinchZoom(false);
-            calChart.setDoubleTapToZoomEnabled(false);
-            calChart.setHighlightPerTapEnabled(false);
-            calChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            calChart.fitScreen();
-            calChart.resetZoom();
-            calChart.zoomOut();
-            calChart.notifyDataSetChanged();
-            calChart.getViewPortHandler().refresh(new Matrix(), calChart, true);
-            calChart.invalidate();
+            setBarChartOption(todayCalChartData,timeData,groupSpace,barSpace);
         }
 
         else {
             // 파일이 없는 경우
         }
 
-        calValue.setText(resultTCal + " " + getResources().getString(R.string.eCalValue2));
-        eCalValue.setText(resultECal + " " + getResources().getString(R.string.eCalValue2));
-        tvTargetTCal.setText(targetTCal + " " + getResources().getString(R.string.eCalValue2));
-        tvTargetECal.setText(targetECal + " " + getResources().getString(R.string.eCalValue2));
+        setValueText(resultTCal,resultECal);
 
         int tCalProgress = (int) ((double) resultTCal / targetTCal * 100);
         int eCalProgress = (int) ((double) resultECal / targetECal * 100);
@@ -573,14 +491,10 @@ public class SummaryCal extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(weekTCalEntries, getResources().getString(R.string.summaryTCal));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(weekTCalEntries,getResources().getString(R.string.summaryTCal),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(weekECalEntries, getResources().getString(R.string.summaryECal));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(weekECalEntries, getResources().getString(R.string.summaryECal),Color.BLUE);
 
             float groupSpace = 0.3f;
             float barSpace = 0.05f;
@@ -589,46 +503,7 @@ public class SummaryCal extends Fragment {
             BarData todayCalChartData = new BarData(tCaldataSet, eCaldataSet);
             todayCalChartData.setBarWidth(barWidth);
 
-
-            calChart.getXAxis().setAxisMinimum(0f);
-            calChart.getXAxis().setAxisMaximum(0f + todayCalChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfHourlyCalorieData));  // group count : 2
-            todayCalChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = calChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            calChart.setNoDataText("");
-            calChart.setData(todayCalChartData);
-            calChart.getXAxis().setEnabled(true);
-            calChart.getXAxis().setCenterAxisLabels(true);
-            calChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekCalTimeData));
-            calChart.getXAxis().setGranularity(1f);
-            calChart.getXAxis().setLabelCount(weekCalTimeData.size(), false);
-            calChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            calChart.getXAxis().setDrawGridLines(false);
-            calChart.getDescription().setEnabled(false);
-
-            calChart.getAxisLeft().setGranularityEnabled(true);
-            calChart.getAxisLeft().setGranularity(1.0f);
-            calChart.getAxisLeft().setAxisMinimum(0f);
-            calChart.getAxisRight().setEnabled(false);
-            calChart.setDrawMarkers(false);
-            calChart.setDragEnabled(true);
-            calChart.setPinchZoom(false);
-            calChart.setDoubleTapToZoomEnabled(false);
-            calChart.setHighlightPerTapEnabled(false);
-            calChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            calChart.fitScreen();
-            calChart.resetZoom();
-            calChart.zoomOut();
-            calChart.notifyDataSetChanged();
-            calChart.getViewPortHandler().refresh(new Matrix(), calChart, true);
-            calChart.invalidate();
-
+            setBarChartOption(todayCalChartData,weekCalTimeData,groupSpace,barSpace);
         }
         else {
             // 파일 없음
@@ -687,10 +562,7 @@ public class SummaryCal extends Fragment {
         }
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPrevDate();
 
         dateCalculate(searchMonday, false);
 
@@ -706,8 +578,7 @@ public class SummaryCal extends Fragment {
             sumTCal = 0;
             sumECal = 0;
 
-            String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-            File directory = new File(getActivity().getFilesDir(), directoryName);
+            File directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
             // 파일 경로와 이름
             File file = new File(directory, "CalAndDistanceData.csv");
@@ -766,11 +637,8 @@ public class SummaryCal extends Fragment {
         }
 
         dateDisplay.setText(displayMonth+"." + displayDay + " ~ " + targetMonth + "." + targetDay);
-        calValue.setText(resultTCal + " " + getResources().getString(R.string.eCalValue2));
-        eCalValue.setText(resultECal + " " + getResources().getString(R.string.eCalValue2));
 
-        tvTargetTCal.setText(targetTCal + " " + getResources().getString(R.string.eCalValue2));
-        tvTargetECal.setText(targetECal + " " + getResources().getString(R.string.eCalValue2));
+        setValueText(resultTCal,resultECal);
 
         int tCalProgress = (int) ((double) resultTCal / weektargetTCal * 100);
         int eCalProgress = (int) ((double) resultECal / weektargetECal * 100);
@@ -782,11 +650,7 @@ public class SummaryCal extends Fragment {
         eCalProgressBar.setProgress(eCalProgress);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setTargetDate();
     }
 
     public void monthCalChartGraph(){
@@ -815,14 +679,10 @@ public class SummaryCal extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(monthTCalEntries, getResources().getString(R.string.summaryTCal));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(monthTCalEntries, getResources().getString(R.string.summaryTCal),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(monthECalEntries, getResources().getString(R.string.summaryECal));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(monthECalEntries, getResources().getString(R.string.summaryECal),Color.BLUE);
 
             float groupSpace = 0.3f;
             float barSpace = 0.05f;
@@ -831,45 +691,7 @@ public class SummaryCal extends Fragment {
             BarData todayCalChartData = new BarData(tCaldataSet, eCaldataSet);
             todayCalChartData.setBarWidth(barWidth);
 
-
-            calChart.getXAxis().setAxisMinimum(0f);
-            calChart.getXAxis().setAxisMaximum(0f + todayCalChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfHourlyCalorieData));  // group count : 2
-            todayCalChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = calChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            calChart.setNoDataText("");
-            calChart.setData(todayCalChartData);
-            calChart.getXAxis().setEnabled(true);
-            calChart.getXAxis().setCenterAxisLabels(true);
-            calChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(monthCalTimeData));
-            calChart.getXAxis().setGranularity(1f);
-            calChart.getXAxis().setLabelCount(monthCalTimeData.size(), false);
-            calChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            calChart.getXAxis().setDrawGridLines(false);
-            calChart.getDescription().setEnabled(false);
-
-            calChart.getAxisLeft().setGranularityEnabled(true);
-            calChart.getAxisLeft().setGranularity(1.0f);
-            calChart.getAxisLeft().setAxisMinimum(0f);
-            calChart.getAxisRight().setEnabled(false);
-            calChart.setDrawMarkers(false);
-            calChart.setDragEnabled(true);
-            calChart.setPinchZoom(false);
-            calChart.setDoubleTapToZoomEnabled(false);
-            calChart.setHighlightPerTapEnabled(false);
-            calChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            calChart.fitScreen();
-            calChart.resetZoom();
-            calChart.zoomOut();
-            calChart.notifyDataSetChanged();
-            calChart.getViewPortHandler().refresh(new Matrix(), calChart, true);
-            calChart.invalidate();
+            setBarChartOption(todayCalChartData,monthCalTimeData,groupSpace,barSpace);
         }else {
             // 디렉토리 없음
 
@@ -886,7 +708,7 @@ public class SummaryCal extends Fragment {
         int resultECal = 0;
 
         int timeData = 0;
-        int days = lastModifiedDirectory(); // 마지막으로 수정된 파일 넘버 찾기
+        int days = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth); // 마지막으로 수정된 파일 넘버 찾기
 
         // 기존 Date
         preWeekTargetDate = targetDate;
@@ -894,8 +716,7 @@ public class SummaryCal extends Fragment {
         preWeekTargetMonth = targetMonth;
         preWeekTargetDay = targetDay;
 
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth);
 
         if (directory.exists()) {
             // 디렉토리가 있는 경우
@@ -908,8 +729,7 @@ public class SummaryCal extends Fragment {
                 sumTCal = 0;
                 sumECal = 0;
 
-                directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-                directory = new File(getActivity().getFilesDir(), directoryName);
+                directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
                 // 파일 경로와 이름
                 File file = new File(directory, "CalAndDistanceData.csv");
@@ -966,14 +786,11 @@ public class SummaryCal extends Fragment {
         }
 
         dateDisplay.setText(preWeekTargetYear + "." + preWeekTargetMonth);
-        calValue.setText(resultTCal + " " + getResources().getString(R.string.eCalValue2));
-        eCalValue.setText(resultECal + " " + getResources().getString(R.string.eCalValue2));
 
         monthtargetTCal = targetTCal * daysInMonth;
         monthtargetECal = targetECal * daysInMonth;
 
-        tvTargetTCal.setText(targetTCal + " " + getResources().getString(R.string.eCalValue2));
-        tvTargetECal.setText(targetECal + " " + getResources().getString(R.string.eCalValue2));
+        setValueText(resultTCal,resultECal);
 
         int tCalProgress = (int) ((double) resultTCal / monthtargetTCal * 100);
         int eCalProgress = (int) ((double) resultECal / monthtargetECal * 100);
@@ -985,42 +802,11 @@ public class SummaryCal extends Fragment {
         eCalProgressBar.setProgress(eCalProgress);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setTargetDate();
     }
 
-    public int lastModifiedDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
-        // 현재 디렉토리를 지정
-
-        // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
-        File[] files = directory.listFiles();
-
-        if (files != null && files.length > 0) {
-            Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-            // 디렉토리만 필터링
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    System.out.println("The last modified directory is: " + file.getName());
-
-                    return Integer.parseInt(file.getName());
-                }
-            }
-        } else {
-            System.out.println("The directory is empty or doesn't exist.");
-            return 0;
-        }
-        return 0;
-    }
-
-    public int lastModifiedYearDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+    public int lastModifiedDirectory(String Name){
+        File directory = getCalDirectory(Name);
         // 현재 디렉토리를 지정
 
         // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
@@ -1069,14 +855,10 @@ public class SummaryCal extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet tCaldataSet = new BarDataSet(yearTCalEntries, getResources().getString(R.string.summaryTCal));
-            tCaldataSet.setColor(Color.RED);
-            tCaldataSet.setDrawValues(false);
+            BarDataSet tCaldataSet = getBarDataSet(yearTCalEntries, getResources().getString(R.string.summaryTCal),Color.RED);
 
             // 그래프 Set
-            BarDataSet eCaldataSet = new BarDataSet(yearECalEntries, getResources().getString(R.string.summaryECal));
-            eCaldataSet.setColor(Color.BLUE);
-            eCaldataSet.setDrawValues(false);
+            BarDataSet eCaldataSet = getBarDataSet(yearECalEntries, getResources().getString(R.string.summaryECal),Color.BLUE);
 
             float groupSpace = 0.3f;
             float barSpace = 0.05f;
@@ -1085,46 +867,7 @@ public class SummaryCal extends Fragment {
             BarData todayCalChartData = new BarData(tCaldataSet, eCaldataSet);
             todayCalChartData.setBarWidth(barWidth);
 
-
-            calChart.getXAxis().setAxisMinimum(0f);
-            calChart.getXAxis().setAxisMaximum(0f + todayCalChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfHourlyCalorieData));  // group count : 2
-            todayCalChartData.groupBars(0f, groupSpace, barSpace);
-
-            Legend legend = calChart.getLegend();
-            legend.setFormSize(12f); // Font size
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-
-            calChart.setNoDataText("");
-            calChart.setData(todayCalChartData);
-            calChart.getXAxis().setEnabled(true);
-            calChart.getXAxis().setCenterAxisLabels(true);
-            calChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(yearCalTimeData));
-            calChart.getXAxis().setGranularity(1f);
-            calChart.getXAxis().setLabelCount(yearCalTimeData.size(), false);
-            calChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            calChart.getXAxis().setDrawGridLines(false);
-            calChart.getDescription().setEnabled(false);
-
-            calChart.getAxisLeft().setGranularityEnabled(true);
-            calChart.getAxisLeft().setGranularity(1.0f);
-            calChart.getAxisLeft().setAxisMinimum(0f);
-            calChart.getAxisRight().setEnabled(false);
-            calChart.setDrawMarkers(false);
-            calChart.setDragEnabled(true);
-            calChart.setPinchZoom(false);
-            calChart.setDoubleTapToZoomEnabled(false);
-            calChart.setHighlightPerTapEnabled(false);
-            calChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            calChart.fitScreen();
-            calChart.resetZoom();
-            calChart.zoomOut();
-            calChart.notifyDataSetChanged();
-            calChart.getViewPortHandler().refresh(new Matrix(), calChart, true);
-            calChart.invalidate();
-
+            setBarChartOption(todayCalChartData,yearCalTimeData,groupSpace,barSpace);
         }else {
             // 디렉토리 없음
 
@@ -1140,19 +883,15 @@ public class SummaryCal extends Fragment {
         int timeData = 0;
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPrevDate();
 
-        int month = lastModifiedYearDirectory();
+        int month = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear);
 
         targetDate = targetYear + "-" + "01-01";
         targetMonth = "01";
         targetDay = "01";
 
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear);
 
         if (directory.exists()) {
             // 디렉토리가 있는 경우
@@ -1170,8 +909,7 @@ public class SummaryCal extends Fragment {
                 // day
                 for ( int j = 0 ; daysInMonth > j ; j++) {
 
-                    directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-                    directory = new File(getActivity().getFilesDir(), directoryName);
+                    directory = getCalDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
                     // 파일 경로와 이름
                     File file = new File(directory, "CalAndDistanceData.csv");
@@ -1221,11 +959,7 @@ public class SummaryCal extends Fragment {
         }
 
         dateDisplay.setText(targetYear);
-        calValue.setText(resultTCal + " " + getResources().getString(R.string.eCalValue2));
-        eCalValue.setText(resultECal + " " + getResources().getString(R.string.eCalValue2));
-
-        tvTargetTCal.setText(targetTCal + " " + getResources().getString(R.string.eCalValue2));
-        tvTargetECal.setText(targetECal + " " + getResources().getString(R.string.eCalValue2));
+        setValueText(resultTCal,resultECal);
 
         int tCalProgress = (int) ((double) resultTCal / yeartargetTCal * 100);
         int eCalProgress = (int) ((double) resultECal / yeartargetECal * 100);
@@ -1237,12 +971,103 @@ public class SummaryCal extends Fragment {
         eCalProgressBar.setProgress(eCalProgress);
 
         // 기존 날짜로 변경
+        setTargetDate();
+    }
+
+    void setTargetDate(){
+        // 기존 날짜로 변경
         targetYear = preWeekTargetYear;
         targetMonth = preWeekTargetMonth;
         targetDay = preWeekTargetDay;
-
         targetDate = preWeekTargetDate;
+    }
 
+    void setPrevDate(){
+        // 기존 Date
+        preWeekTargetDate = targetDate;
+        preWeekTargetYear = targetYear;
+        preWeekTargetMonth = targetMonth;
+        preWeekTargetDay = targetDay;
+    }
+
+    void setValueText(int resultTCal,int resultECal){
+        calValue.setText(resultTCal + " " + getResources().getString(R.string.eCalValue2));
+        eCalValue.setText(resultECal + " " + getResources().getString(R.string.eCalValue2));
+        tvTargetTCal.setText(targetTCal + " " + getResources().getString(R.string.eCalValue2));
+        tvTargetECal.setText(targetECal + " " + getResources().getString(R.string.eCalValue2));
+    }
+
+    void setBarChartOption(BarData CalChartData,ArrayList<String> data,float groupSpace,float barSpace){
+        calChart.getXAxis().setAxisMinimum(0f);
+        calChart.getXAxis().setAxisMaximum(0f + CalChartData.getGroupWidth(groupSpace, barSpace) * (numbersOfHourlyCalorieData));  // group count : 2
+        CalChartData.groupBars(0f, groupSpace, barSpace);
+
+        Legend legend = calChart.getLegend();
+        legend.setFormSize(12f); // Font size
+        legend.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+        calChart.setNoDataText("");
+        calChart.setData(CalChartData);
+        calChart.getXAxis().setEnabled(true);
+        calChart.getXAxis().setCenterAxisLabels(true);
+        calChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(data));
+        calChart.getXAxis().setGranularity(1f);
+        calChart.getXAxis().setLabelCount(data.size(), false);
+        calChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        calChart.getXAxis().setDrawGridLines(false);
+        calChart.getDescription().setEnabled(false);
+
+        calChart.getAxisLeft().setGranularityEnabled(true);
+        calChart.getAxisLeft().setGranularity(1.0f);
+        calChart.getAxisLeft().setAxisMinimum(0f);
+        calChart.getAxisRight().setEnabled(false);
+        calChart.setDrawMarkers(false);
+        calChart.setDragEnabled(true);
+        calChart.setPinchZoom(false);
+        calChart.setDoubleTapToZoomEnabled(false);
+        calChart.setHighlightPerTapEnabled(false);
+        calChart.moveViewToX(0);
+
+        // 차트를 그릴 때 호출해야 합니다.
+        calChart.fitScreen();
+        calChart.resetZoom();
+        calChart.zoomOut();
+        calChart.notifyDataSetChanged();
+        calChart.getViewPortHandler().refresh(new Matrix(), calChart, true);
+        calChart.invalidate();
+    }
+
+    BarDataSet getBarDataSet(List<BarEntry> data,String label,int Color){
+        BarDataSet dataSet =  new BarDataSet(data,label);
+        dataSet.setColor(Color);
+        dataSet.setDrawValues(false);
+        return dataSet;
+    }
+
+    File getCalDirectory(String name){
+        String directoryName = name;
+        return new File(getActivity().getFilesDir(), directoryName);
+    }
+
+    void setDateCheck(boolean check){
+        if(dayCheck) {
+            dateCalculate(1, check);
+            todayCalChartGraph();
+        }
+        else if(weekCheck) {
+            dateCalculate(7, check);
+            weekCalChartGraph();;
+        }
+        else if(monthCheck) {
+            setTimeCalculate(check);
+            monthCalChartGraph();;
+        }
+        else {
+            // year
+            setTimeCalculate(check);
+            yearCalChartGraph();
+        }
     }
 
     public void setColor(Button button) {

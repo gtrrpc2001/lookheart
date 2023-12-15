@@ -45,6 +45,8 @@ public interface RetrofitService {
     @POST("mslecg/api_getdata")
     Call<String> sendEcgData(@Body Map<String, Object> data);
 
+//    @POST("mslecgbyte/api_getdata")
+//    Call<String> sendEcgData(@Body Map<String, Object> data);
     // ArrData
     @POST("mslecgarr/api_getdata")
     Call<String> sendArrData(@Body Map<String, Object> data);

@@ -1,7 +1,9 @@
 package com.mcuhq.simplebluetooth.controller;
 
+import android.util.Log;
+
 public class PeakController {
-    private float[] xx_ecg_outdata = new float[2];
+    private float[] xx_ecg_outdata = new float[9];
     private float xx_msl_mm = 0;
     private float xx_outdata_itw = 0;
     private float xx_outdata_S_M = 0;
@@ -10,11 +12,11 @@ public class PeakController {
     private long xx_real_finaloper = 0;
     private float xx_msl_pp = 0;
 
-    private float[] xx_itx_1 = new float[13];
-    private float[] xx_s_max = new float[13];
-    private float[] xx_m_min = new float[13];
-    private float[] xx_itx = new float[13];
-    private float[] xx_ecgarray = new float[13];
+    private float[] xx_itx_1 = new float[15];
+    private float[] xx_s_max = new float[15];
+    private float[] xx_m_min = new float[15];
+    private float[] xx_itx = new float[15];
+    private float[] xx_ecgarray = new float[15];
 
     public PeakController(float[] xx_ecg_outdata,float[] xx_ecgarray,float[] xx_itx,float[] xx_m_min,float[] xx_itx_1,float[] xx_s_max){
         this.xx_ecg_outdata = xx_ecg_outdata;
@@ -30,31 +32,39 @@ public class PeakController {
     }
 
    public double getPeackData(int ecg){
-        xx_ecg_outdata[1] = xx_ecg_outdata[0];
-        xx_ecg_outdata[0] = ecg;
 
-        xx_msl_mm = Math.abs(xx_ecg_outdata[0] - xx_ecg_outdata[1]);
-        xx_msl_pp = xx_maxsmin(xx_msl_mm);
-        xx_outdata_itw = xx_iten(xx_msl_pp)/2;
-        xx_outdata_S_M  = xx_sum_max(xx_outdata_itw);
-        xx_outdata_M_M = xx_max_min(xx_outdata_S_M);
-        xx_finaloper = (xx_outdata_S_M - xx_outdata_M_M);
-        xx_real_finaloper= (long) (xx_iten_1(xx_finaloper)/8);
-        if(xx_real_finaloper >=1024) xx_real_finaloper = 1024;
-        return xx_real_finaloper;
+       xx_ecg_outdata[8] = xx_ecg_outdata[7];
+       xx_ecg_outdata[7] = xx_ecg_outdata[6];
+       xx_ecg_outdata[6] = xx_ecg_outdata[5];
+       xx_ecg_outdata[5] = xx_ecg_outdata[4];
+       xx_ecg_outdata[4] = xx_ecg_outdata[3];
+       xx_ecg_outdata[3] = xx_ecg_outdata[2];
+       xx_ecg_outdata[2] = xx_ecg_outdata[1];
+       xx_ecg_outdata[1] = xx_ecg_outdata[0];
+       xx_ecg_outdata[0] = ecg;
+
+       xx_msl_mm = Math.abs(xx_ecg_outdata[0] - xx_ecg_outdata[8]);
+       xx_msl_pp = xx_maxsmin(xx_msl_mm);
+       xx_outdata_itw = xx_iten(xx_msl_pp)/10;
+       xx_outdata_S_M  = xx_sum_max(xx_outdata_itw);
+       xx_outdata_M_M = xx_max_min(xx_outdata_S_M);
+       xx_finaloper = (xx_outdata_S_M - xx_outdata_M_M);
+       xx_real_finaloper= (long) (xx_iten_1(xx_finaloper)/6);
+       if(xx_real_finaloper >=1024) xx_real_finaloper = 1024;
+       return xx_real_finaloper;
     }
 
     private float xx_maxsmin(float num) // ecg p to p 援ы븯뒗 븿닔
     {
-        for(int z=0; z<12; z++){
+        for(int z=0; z<14; z++){
             xx_ecgarray[z] =  xx_ecgarray[z+1];
         }
 
-        xx_ecgarray[12]=num;
+        xx_ecgarray[14]=num;
 
         float maxvalue = xx_ecgarray[0];
         float minvalue = xx_ecgarray[0];
-        for (int o=0; o<13; o++){
+        for (int o=0; o<15; o++){
             if (xx_ecgarray[o]>=maxvalue) maxvalue  = xx_ecgarray[o];
             if (xx_ecgarray[o]<=minvalue) minvalue  = xx_ecgarray[o];
         }
@@ -68,14 +78,14 @@ public class PeakController {
         int tx = 0;
         float sumit = 0;
 
-        xx_itx[12]= data;
+        xx_itx[14]= data;
 
-        for (tx=0;tx<13;tx++)  //諛곗뿴빀
+        for (tx=0;tx<15;tx++)  //諛곗뿴빀
         {
             sumit += xx_itx[tx];
         }
 
-        for (tx=0;tx<12;tx++)  //諛곗뿴 諛뼱꽌 젙젹
+        for (tx=0;tx<14;tx++)  //諛곗뿴 諛뼱꽌 젙젹
         {
             xx_itx[tx]= xx_itx[tx+1];
         }
@@ -85,14 +95,14 @@ public class PeakController {
 
     private float xx_sum_max(float num) // 理쒕媛 援ы븯뒗 븿닔
     {
-        for(int z=0; z<12; z++){
+        for(int z=0; z<14; z++){
             xx_s_max[z] =  xx_s_max[z+1];
         }
 
-        xx_s_max[12]=num;
+        xx_s_max[14]=num;
 
         float maxvalue = xx_s_max[0];
-        for (int o=0; o<13; o++){
+        for (int o=0; o<15; o++){
             if (xx_s_max[o]>=maxvalue) maxvalue  = xx_s_max[o];
         }
 
@@ -102,14 +112,14 @@ public class PeakController {
 
     private float xx_max_min(float num) // 理쒖냼媛 援ы븯뒗 븿닔
     {
-        for(int z=0; z<12; z++){
+        for(int z=0; z<14; z++){
             xx_m_min[z] =  xx_m_min[z+1];
         }
 
-        xx_m_min[12]=num;
+        xx_m_min[14]=num;
 
         float minvalue = xx_m_min[0];
-        for (int o=0; o<13; o++){
+        for (int o=0; o<15; o++){
             if (xx_m_min[o]<=minvalue) minvalue  = xx_m_min[o];
         }
 
@@ -122,14 +132,14 @@ public class PeakController {
         int tx1 = 0;
         float sumit1 = 0;
 
-        xx_itx_1[12]= data;  //34
+        xx_itx_1[14]= data;  //34
 
-        for (tx1=0;tx1<13;tx1++)  //諛곗뿴빀  //35
+        for (tx1=0;tx1<15;tx1++)  //諛곗뿴빀  //35
         {
             sumit1 += xx_itx_1[tx1];
         }
 
-        for (tx1=0;tx1<12;tx1++)  //諛곗뿴 諛뼱꽌 젙젹  34
+        for (tx1=0;tx1<14;tx1++)  //諛곗뿴 諛뼱꽌 젙젹  34
         {
             xx_itx_1[tx1]= xx_itx_1[tx1+1];
         }

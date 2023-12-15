@@ -55,74 +55,107 @@ public class SummaryArr extends Fragment {
 
     private BarChart arrChart;
     private String email;
+
+    /*currentTime*/
+    //region
     String currentYear;
     String currentMonth;
     String currentDay;
-
     String currentDate;
     String currentTime;
+    //endregion
 
+    /*targetTime*/
+    //region
     String targetYear;
     String targetMonth;
     String targetDay;
     String targetDate;
+    //endregion
 
+    /*preWeekTargetYear*/
+    //region
     String preWeekTargetYear;
     String preWeekTargetMonth;
     String preWeekTargetDay;
-
     String preWeekTargetDate;
+    //endregion
 
-    // Week
+    /*Week*/
+    //region
     ArrayList<Double> weekArrArrayData = new ArrayList<>();
     ArrayList<String> weekArrTimeData = new ArrayList<>();
     List<BarEntry> weekEntries = new ArrayList<>();
+    //endregion
 
-    // Month
+    /*month*/
+    //region
     ArrayList<Double> monthArrData = new ArrayList<>();
     ArrayList<String> monthArrTimeData = new ArrayList<>();
     List<BarEntry> monthEntries = new ArrayList<>();
+    //endregion
 
-    // Year
+    /*year*/
+    //region
     ArrayList<Double> yearArrData = new ArrayList<>();
     ArrayList<String> yearArrTimeData = new ArrayList<>();
     List<BarEntry> yearEntries = new ArrayList<>();
+    //endregion
 
-    int dailyArrCnt;
+   /*count*/
+    //region
+   int dailyArrCnt;
     int weekArrCnt;
     int monthArrCnt;
+    //endregion
 
+    /*SimpleDateFormat*/
+    //region
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
-
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
     SimpleDateFormat month = new SimpleDateFormat("MM");
     SimpleDateFormat day = new SimpleDateFormat("dd");
+    //endregion
 
+    /*DateTimeFormatter*/
+    //region
     DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
     DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("MM");
     DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("dd");
+    //endregion
 
+    /*check*/
+    //region
     Boolean dayCheck = true;
     Boolean weekCheck;
     Boolean monthCheck;
     Boolean yearCheck;
+    //endregion
 
-    View view;
+    /*ImageButton*/
+    //region
+    ImageButton yesterdayButton;
+    ImageButton tomorrowButton;
+    //endregion
 
+    /*Button*/
+    //region
     Button dayButton;
     Button weekButton;
     Button monthButton;
     Button yearButton;
-
-    ImageButton yesterdayButton;
-    ImageButton tomorrowButton;
-
     Button[] buttons;
+    //endregion
 
+    /*TextView*/
+    //region
     TextView dateDisplay;
     TextView arrCnt;
     TextView arrText;
+    //endregion
+
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,18 +165,7 @@ public class SummaryArr extends Fragment {
         SharedPreferences emailSharedPreferences = getActivity().getSharedPreferences("User", Context.MODE_PRIVATE);
         email = emailSharedPreferences.getString("email", "null");
 
-        arrChart = view.findViewById(R.id.arrChart);
-        dayButton = view.findViewById(R.id.summaryArrDayButton);
-        weekButton = view.findViewById(R.id.summaryArrWeekButton);
-        monthButton = view.findViewById(R.id.summaryArrMonthButton);
-        yearButton = view.findViewById(R.id.summaryArrYearButton);
-
-        yesterdayButton = view.findViewById(R.id.yesterdayButton);
-        tomorrowButton = view.findViewById(R.id.tomorrowButton);
-
-        dateDisplay = view.findViewById(R.id.dateDisplay);
-        arrCnt = view.findViewById(R.id.summaryArrCnt);
-        arrText = view.findViewById(R.id.myArrText);
+        setFindView();
 
         buttons = new Button[] {dayButton, weekButton, monthButton, yearButton};
 
@@ -230,44 +252,11 @@ public class SummaryArr extends Fragment {
             arrChart.zoomOut();
         }
 
-        if(dayCheck) {
-            dateCalculate(1, true);
-            todayArrChartGraph();
-        }
-        else if(weekCheck) {
-            dateCalculate(7, true);
-            weekArrChartGraph();;
-        }
-        else if(monthCheck) {
-            monthDateCalculate(true);
-            monthArrChartGraph();;
-        }
-        else {
-            // year
-            yearDateCalculate(true);
-            yearArrChartGraph();
-        }
+        setDayButtonEvent(true);
     }
 
     public void yesterdayButtonEvent() {
-
-        if(dayCheck) {
-            dateCalculate(1, false);
-            todayArrChartGraph();
-        }
-        else if(weekCheck) {
-            dateCalculate(7, false);
-            weekArrChartGraph();;
-        }
-        else if(monthCheck) {
-            monthDateCalculate(false);
-            monthArrChartGraph();;
-        }
-        else {
-            // year
-            yearDateCalculate(false);
-            yearArrChartGraph();
-        }
+        setDayButtonEvent(false);
     }
 
 
@@ -313,22 +302,7 @@ public class SummaryArr extends Fragment {
             resultDate = today.minusMonths(1);
         }
 
-        targetDate = String.valueOf(resultDate);
-        targetYear = String.valueOf(resultDate.getYear());
-
-        if (resultDate.getMonthValue() < 10) {
-            targetMonth = "0" + String.valueOf(resultDate.getMonthValue());
-        }
-        else {
-            targetMonth = String.valueOf(resultDate.getMonthValue());
-        }
-
-        if (resultDate.getDayOfMonth() < 10) {
-            targetDay = "0" + String.valueOf(resultDate.getDayOfMonth());
-        }
-        else {
-            targetDay = String.valueOf(resultDate.getDayOfMonth());
-        }
+        setMonthYear(resultDate);
     }
 
     public void yearDateCalculate(boolean check) {
@@ -343,22 +317,10 @@ public class SummaryArr extends Fragment {
             resultDate = today.minusYears(1);
         }
 
+        setMonthYear(resultDate);
+
         targetDate = String.valueOf(resultDate);
         targetYear = String.valueOf(resultDate.getYear());
-
-        if (resultDate.getMonthValue() < 10) {
-            targetMonth = "0" + String.valueOf(resultDate.getMonthValue());
-        }
-        else {
-            targetMonth = String.valueOf(resultDate.getMonthValue());
-        }
-
-        if (resultDate.getDayOfMonth() < 10) {
-            targetDay = "0" + String.valueOf(resultDate.getDayOfMonth());
-        }
-        else {
-            targetDay = String.valueOf(resultDate.getDayOfMonth());
-        }
     }
 
     public void todayArrChartGraph(){
@@ -369,8 +331,7 @@ public class SummaryArr extends Fragment {
         dailyArrCnt = 0;
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File file = new File(directory, "CalAndDistanceData.csv");
@@ -404,9 +365,7 @@ public class SummaryArr extends Fragment {
                 }
 
                 // 그래프에 들어갈 데이터 저장
-                for (int i = 0; i < arrArrayData.size(); i++) {
-                    entries.add((BarEntry) new BarEntry((float)i, arrArrayData.get(i).floatValue()));
-                }
+                entries = getChartData(arrArrayData);
 
                 br.close();
 
@@ -415,48 +374,7 @@ public class SummaryArr extends Fragment {
             }
 
             // 그래프 Set
-            BarDataSet dataSet = new BarDataSet(entries, getResources().getString(R.string.arr));
-            dataSet.setColor(Color.RED);
-            dataSet.setDrawValues(true);
-
-            dataSet.setValueFormatter(new CustomValueFormatter());
-
-            BarData hourlyArrChartData = new BarData(dataSet);
-            arrChart.setData(hourlyArrChartData);
-
-            arrChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            arrChart.getXAxis().setDrawGridLines(false);
-            arrChart.getXAxis().setGranularity(1f);
-            arrChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(arrTimeData));  // hourlyArrTimeData는 String 배열로 준비해야 합니다.
-            arrChart.getXAxis().setLabelCount(arrTimeData.size(), false);  // numbersOfHourlyArrData는 int형 변수여야 합니다.
-
-            arrChart.getAxisRight().setEnabled(false);
-            arrChart.setDragEnabled(false);  // 드래그 기능
-            arrChart.setPinchZoom(false);   // 줌 기능
-            arrChart.setScaleEnabled(false); // 터치 비활성화
-
-            arrChart.getAxisLeft().setGranularityEnabled(true);
-            arrChart.getAxisLeft().setGranularity(1f);
-            arrChart.getAxisLeft().setAxisMinimum(0);
-
-            Legend legend = arrChart.getLegend();
-            legend.setTextSize(15f);
-            legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-            arrChart.getDescription().setEnabled(false);
-            arrChart.setDragEnabled(false);
-            arrChart.setPinchZoom(false);
-            arrChart.setDoubleTapToZoomEnabled(false);
-            arrChart.setHighlightPerTapEnabled(false);
-            arrChart.moveViewToX(0);
-
-            // 차트를 그릴 때 호출해야 합니다.
-            arrChart.fitScreen();
-            arrChart.resetZoom();
-            arrChart.zoomOut();
-            arrChart.notifyDataSetChanged();
-            arrChart.getViewPortHandler().refresh(new Matrix(), arrChart, true);
-            arrChart.invalidate();
+            setChartOption(entries,arrTimeData,true,0,false);
         }
 
         else {
@@ -480,53 +398,10 @@ public class SummaryArr extends Fragment {
         calcWeek();
 
         // 그래프에 들어갈 데이터 저장
-        for (int i = 0; i < weekArrArrayData.size(); i++) {
-            weekEntries.add((BarEntry) new BarEntry((float)i, weekArrArrayData.get(i).floatValue()));
-        }
+        weekEntries = getChartData(weekArrArrayData);
 
         // 그래프 Set
-        BarDataSet dataSet = new BarDataSet(weekEntries, getResources().getString(R.string.arr));
-        dataSet.setColor(Color.RED);
-        dataSet.setDrawValues(true);
-
-        dataSet.setValueFormatter(new CustomValueFormatter());
-
-        BarData hourlyArrChartData = new BarData(dataSet);
-        arrChart.setData(hourlyArrChartData);
-
-        arrChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        arrChart.getXAxis().setDrawGridLines(false);
-        arrChart.getXAxis().setGranularity(1f);
-        arrChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekArrTimeData));  // hourlyArrTimeData는 String 배열로 준비해야 합니다.
-        arrChart.getXAxis().setLabelCount(weekArrTimeData.size(), false);  // numbersOfHourlyArrData는 int형 변수여야 합니다.
-
-        arrChart.getAxisRight().setEnabled(false);
-        arrChart.setDragEnabled(false);  // 드래그 기능
-        arrChart.setPinchZoom(false);   // 줌 기능
-        arrChart.setScaleEnabled(false); // 터치 비활성화
-
-        arrChart.getAxisLeft().setGranularityEnabled(true);
-        arrChart.getAxisLeft().setGranularity(1f);
-        arrChart.getAxisLeft().setAxisMinimum(0);
-
-        Legend legend = arrChart.getLegend();
-        legend.setTextSize(15f);
-        legend.setTypeface(Typeface.DEFAULT_BOLD);
-
-        arrChart.getDescription().setEnabled(false);
-        arrChart.setDragEnabled(false);
-        arrChart.setPinchZoom(false);
-        arrChart.setDoubleTapToZoomEnabled(false);
-        arrChart.setHighlightPerTapEnabled(false);
-        arrChart.moveViewToX(0);
-
-        // 차트를 그릴 때 호출해야 합니다.
-        arrChart.fitScreen();
-        arrChart.resetZoom();
-        arrChart.zoomOut();
-        arrChart.notifyDataSetChanged();
-        arrChart.getViewPortHandler().refresh(new Matrix(), arrChart, true);
-        arrChart.invalidate();
+        setChartOption(weekEntries,weekArrTimeData,true,0,false);
     }
 
     public void calcWeek(){
@@ -578,10 +453,7 @@ public class SummaryArr extends Fragment {
         }
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPrevDate();
 
         dateCalculate(searchMonday, false);
 
@@ -594,8 +466,7 @@ public class SummaryArr extends Fragment {
             // 경로
             weekArrCnt = 0;
 
-            String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-            File directory = new File(getActivity().getFilesDir(), directoryName);
+            File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
             // 파일 경로와 이름
             File file = new File(directory, "CalAndDistanceData.csv");
@@ -646,11 +517,7 @@ public class SummaryArr extends Fragment {
         arrCnt.setText(""+weekArrSum);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setOriginalTime();
     }
 
     public void monthArrChartGraph(){
@@ -664,56 +531,9 @@ public class SummaryArr extends Fragment {
         calcMonth();
 
         // 그래프에 들어갈 데이터 저장
-        for (int i = 0; i < monthArrData.size(); i++) {
-            monthEntries.add((BarEntry) new BarEntry((float)i, monthArrData.get(i).floatValue()));
-        }
+        monthEntries = getChartData(monthArrData);
 
-        BarDataSet dataSet = new BarDataSet(monthEntries, getResources().getString(R.string.arr));
-        dataSet.setColor(Color.RED);
-        dataSet.setDrawValues(true);
-
-        dataSet.setValueFormatter(new CustomValueFormatter());
-        // monthlyArrChartView 설정
-        arrChart.setNoDataText("");
-
-        BarData monthArrChartData = new BarData(dataSet);
-        arrChart.setData(monthArrChartData);
-        arrChart.getXAxis().setEnabled(true);
-
-        XAxis xAxis = arrChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(monthArrTimeData));
-        xAxis.setGranularity(1.0f);
-        xAxis.setLabelCount(monthArrTimeData.size(), false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-
-        arrChart.setVisibleXRangeMaximum(15); // 처음 보여지는 x축 범위
-        Legend legend = arrChart.getLegend();
-        legend.setTextSize(15f); // 설정할 폰트 크기에 따라 값 조절
-        legend.setTypeface(Typeface.DEFAULT_BOLD); // bold 설정
-
-        YAxis leftAxis = arrChart.getAxisLeft();
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setGranularity(1.0f);
-        leftAxis.setAxisMinimum(0);
-
-        arrChart.getAxisRight().setEnabled(false);
-        arrChart.setDrawMarkers(false);
-        arrChart.setDragEnabled(true);
-        arrChart.setPinchZoom(false);
-        arrChart.setDoubleTapToZoomEnabled(false);
-        arrChart.setHighlightPerTapEnabled(false);
-
-        arrChart.getData().notifyDataChanged();
-        arrChart.notifyDataSetChanged();
-        arrChart.moveViewToX(0); // 끝부터 보여지게
-
-        // 차트를 그릴 때 호출해야 합니다.
-        arrChart.resetZoom();
-        arrChart.zoomOut();
-        arrChart.notifyDataSetChanged();
-        arrChart.getViewPortHandler().refresh(new Matrix(), arrChart, true);
-        arrChart.invalidate();
+        setChartOption(monthEntries,monthArrTimeData,false,15,true);
     }
 
     public void calcMonth() {
@@ -722,13 +542,10 @@ public class SummaryArr extends Fragment {
 
         int monthArrSum = 0;
         int timeData = 0;
-        int days = lastModifiedDirectory(); // 마지막으로 수정된 파일 넘버 찾기
+        int days = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth); // 마지막으로 수정된 파일 넘버 찾기
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPrevDate();
 
         // 1일까지 날짜 이동
         dateCalculate(days - 1, false);
@@ -737,8 +554,7 @@ public class SummaryArr extends Fragment {
 
             monthArrCnt = 0;
 
-            String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-            File directory = new File(getActivity().getFilesDir(), directoryName);
+            File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
             // 파일 경로와 이름
             File file = new File(directory, "CalAndDistanceData.csv");
@@ -752,23 +568,13 @@ public class SummaryArr extends Fragment {
 
                 try {
                     // file read
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-
-                    while ((line = br.readLine()) != null) {
-                        String[] columns = line.split(","); // 데이터 구분
-                        Double arrDataRow = Double.parseDouble(columns[6]); // arr data
-
-                        monthArrCnt += Integer.parseInt(columns[6]);
-                        monthArrSum += Integer.parseInt(columns[6]);
-
-                    }
+                    setCalTimeLoop(file);
 
                     // 데이터 저장
                     monthArrData.add((double) monthArrCnt);
                     monthArrTimeData.add(String.valueOf(timeData));
 
-                    br.close();
+
 
                 }catch (IOException e) {
                     e.printStackTrace();
@@ -787,42 +593,11 @@ public class SummaryArr extends Fragment {
         arrCnt.setText(""+monthArrSum);
 
         // 기존 날짜로 변경
-        targetYear = preWeekTargetYear;
-        targetMonth = preWeekTargetMonth;
-        targetDay = preWeekTargetDay;
-
-        targetDate = preWeekTargetDate;
+        setOriginalTime();
     }
 
-    public int lastModifiedDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
-        // 현재 디렉토리를 지정
-
-        // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
-        File[] files = directory.listFiles();
-
-        if (files != null && files.length > 0) {
-            Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
-
-            // 디렉토리만 필터링
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    System.out.println("The last modified directory is: " + file.getName());
-
-                    return Integer.parseInt(file.getName());
-                }
-            }
-        } else {
-            System.out.println("The directory is empty or doesn't exist.");
-            return 0;
-        }
-        return 0;
-    }
-
-    public int lastModifiedYearDirectory(){
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+    public int lastModifiedDirectory(String fileName){
+        File directory = getFileDirectory(fileName);
         // 현재 디렉토리를 지정
 
         // 현재 디렉토리의 모든 파일과 디렉토리를 배열로 받아옴
@@ -857,67 +632,17 @@ public class SummaryArr extends Fragment {
         calcYear();
 
         // 그래프에 들어갈 데이터 저장
-        for (int i = 0; i < yearArrData.size(); i++) {
-            yearEntries.add((BarEntry) new BarEntry((float)i, yearArrData.get(i).floatValue()));
-        }
+        yearEntries = getChartData(yearArrData);
 
-        BarDataSet dataSet = new BarDataSet(yearEntries, getResources().getString(R.string.arr));
-        dataSet.setColor(Color.RED);
-        dataSet.setDrawValues(true);
-
-        dataSet.setValueFormatter(new CustomValueFormatter());
-        // monthlyArrChartView 설정
-        arrChart.setNoDataText("");
-
-        BarData yearArrChartData = new BarData(dataSet);
-        arrChart.setData(yearArrChartData);
-        arrChart.getXAxis().setEnabled(true);
-
-        XAxis xAxis = arrChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(yearArrTimeData));
-        xAxis.setGranularity(1.0f);
-        xAxis.setLabelCount(yearArrTimeData.size(), false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-
-        arrChart.setVisibleXRangeMaximum(15); // 처음 보여지는 x축 범위
-        Legend legend = arrChart.getLegend();
-        legend.setTextSize(15f); // 설정할 폰트 크기에 따라 값 조절
-        legend.setTypeface(Typeface.DEFAULT_BOLD); // bold 설정
-
-        YAxis leftAxis = arrChart.getAxisLeft();
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setGranularity(1.0f);
-        leftAxis.setAxisMinimum(0);
-
-        arrChart.getAxisRight().setEnabled(false);
-        arrChart.setDrawMarkers(false);
-        arrChart.setDragEnabled(true);
-        arrChart.setPinchZoom(false);
-        arrChart.setDoubleTapToZoomEnabled(false);
-        arrChart.setHighlightPerTapEnabled(false);
-
-        arrChart.getData().notifyDataChanged();
-        arrChart.notifyDataSetChanged();
-        arrChart.moveViewToX(0); // 끝부터 보여지게
-
-        // 차트를 그릴 때 호출해야 합니다.
-        arrChart.resetZoom();
-        arrChart.zoomOut();
-        arrChart.notifyDataSetChanged();
-        arrChart.getViewPortHandler().refresh(new Matrix(), arrChart, true);
-        arrChart.invalidate();
+        setChartOption(yearEntries,yearArrTimeData,false,15,true);
     }
 
     public void calcYear() {
 
         // 기존 Date
-        preWeekTargetDate = targetDate;
-        preWeekTargetYear = targetYear;
-        preWeekTargetMonth = targetMonth;
-        preWeekTargetDay = targetDay;
+        setPrevDate();
 
-        int month = lastModifiedYearDirectory();
+        int month = lastModifiedDirectory("LOOKHEART/" + email + "/" + targetYear);
         int yearArrSum = 0;
         int timeData = 0;
 
@@ -935,8 +660,7 @@ public class SummaryArr extends Fragment {
             // day
             for ( int j = 0 ; daysInMonth > j ; j++) {
 
-                String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-                File directory = new File(getActivity().getFilesDir(), directoryName);
+                File directory = getFileDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
                 // 파일 경로와 이름
                 File file = new File(directory, "CalAndDistanceData.csv");
@@ -949,19 +673,7 @@ public class SummaryArr extends Fragment {
                     // 파일이 있는 경우
                     try {
                         // file read
-                        BufferedReader br = new BufferedReader(new FileReader(file));
-                        String line;
-
-                        while ((line = br.readLine()) != null) {
-                            String[] columns = line.split(","); // 데이터 구분
-                            Double arrDataRow = Double.parseDouble(columns[6]); // arr data
-
-                            monthArrCnt += Integer.parseInt(columns[6]);
-                            yearArrSum += Integer.parseInt(columns[6]);
-                        }
-
-                        br.close();
-
+                        setCalTimeLoop(file);
                     }catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -980,12 +692,135 @@ public class SummaryArr extends Fragment {
         arrCnt.setText(""+yearArrSum);
 
         // 기존 날짜로 변경
+        setOriginalTime();
+    }
+
+    void setCalTimeLoop(File file) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] columns = line.split(","); // 데이터 구분
+            monthArrCnt += Integer.parseInt(columns[6]);
+        }
+        br.close();
+    }
+
+    void setPrevDate(){
+        preWeekTargetDate = targetDate;
+        preWeekTargetYear = targetYear;
+        preWeekTargetMonth = targetMonth;
+        preWeekTargetDay = targetDay;
+    }
+
+    List<BarEntry> getChartData(List<Double> arrArray){
+        List<BarEntry> data = new ArrayList<BarEntry>();
+        for (int i = 0; i < arrArray.size(); i++) {
+            data.add((BarEntry) new BarEntry((float)i, arrArray.get(i).floatValue()));
+        }
+        return data;
+    }
+
+    void setChartOption(List<BarEntry> data,ArrayList<String> arrTimeData,boolean fit,float XRangeMax,boolean drag){
+        BarDataSet dataSet = new BarDataSet(data, "I.H.R.");
+        dataSet.setColor(Color.RED);
+        dataSet.setDrawValues(true);
+        dataSet.setValueFormatter(new CustomValueFormatter());
+        BarData ArrChartData = new BarData(dataSet);
+        arrChart.setData(ArrChartData);
+        arrChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        arrChart.getXAxis().setDrawGridLines(false);
+        arrChart.getXAxis().setGranularity(1f);
+        arrChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(arrTimeData));  // hourlyArrTimeData는 String 배열로 준비해야 합니다.
+        arrChart.getXAxis().setLabelCount(arrTimeData.size(), false);  // numbersOfHourlyArrData는 int형 변수여야 합니다.
+        arrChart.getAxisRight().setEnabled(false);
+        arrChart.setDragEnabled(drag);  // 드래그 기능
+        arrChart.setPinchZoom(false);   // 줌 기능
+        arrChart.setScaleEnabled(false); // 터치 비활성화
+        arrChart.getAxisLeft().setGranularityEnabled(true);
+        arrChart.getAxisLeft().setAxisMinimum(0);
+        Legend legend = arrChart.getLegend();
+        if(XRangeMax != 0) arrChart.setVisibleXRangeMaximum(XRangeMax);
+        legend.setTextSize(15f);
+        legend.setTypeface(Typeface.DEFAULT_BOLD);
+        arrChart.getDescription().setEnabled(false);
+        arrChart.setDoubleTapToZoomEnabled(false);
+        arrChart.setHighlightPerTapEnabled(false);
+        arrChart.moveViewToX(0);
+
+        // 차트를 그릴 때 호출해야 합니다.
+        if(fit) arrChart.fitScreen();
+        arrChart.resetZoom();
+        arrChart.zoomOut();
+        arrChart.notifyDataSetChanged();
+        arrChart.getViewPortHandler().refresh(new Matrix(), arrChart, true);
+        arrChart.invalidate();
+    }
+
+    void setMonthYear(LocalDate resultDate){
+        targetDate = String.valueOf(resultDate);
+        targetYear = String.valueOf(resultDate.getYear());
+
+        if (resultDate.getMonthValue() < 10) {
+            targetMonth = "0" + String.valueOf(resultDate.getMonthValue());
+        }
+        else {
+            targetMonth = String.valueOf(resultDate.getMonthValue());
+        }
+
+        if (resultDate.getDayOfMonth() < 10) {
+            targetDay = "0" + String.valueOf(resultDate.getDayOfMonth());
+        }
+        else {
+            targetDay = String.valueOf(resultDate.getDayOfMonth());
+        }
+    }
+
+    void setDayButtonEvent(boolean check){
+        if(dayCheck) {
+            dateCalculate(1, check);
+            todayArrChartGraph();
+        }
+        else if(weekCheck) {
+            dateCalculate(7, check);
+            weekArrChartGraph();;
+        }
+        else if(monthCheck) {
+            monthDateCalculate(check);
+            monthArrChartGraph();;
+        }
+        else {
+            // year
+            yearDateCalculate(check);
+            yearArrChartGraph();
+        }
+    }
+
+    void setOriginalTime(){
         targetYear = preWeekTargetYear;
         targetMonth = preWeekTargetMonth;
         targetDay = preWeekTargetDay;
-
         targetDate = preWeekTargetDate;
+    }
 
+    File getFileDirectory(String name){
+        String directoryName = name;
+        return new File(getActivity().getFilesDir(), directoryName);
+    }
+
+    void setFindView(){
+        arrChart = view.findViewById(R.id.arrChart);
+        dayButton = view.findViewById(R.id.summaryArrDayButton);
+        weekButton = view.findViewById(R.id.summaryArrWeekButton);
+        monthButton = view.findViewById(R.id.summaryArrMonthButton);
+        yearButton = view.findViewById(R.id.summaryArrYearButton);
+
+        yesterdayButton = view.findViewById(R.id.yesterdayButton);
+        tomorrowButton = view.findViewById(R.id.tomorrowButton);
+
+        dateDisplay = view.findViewById(R.id.dateDisplay);
+        arrCnt = view.findViewById(R.id.summaryArrCnt);
+        arrText = view.findViewById(R.id.myArrText);
     }
 
     public void setColor(Button button) {

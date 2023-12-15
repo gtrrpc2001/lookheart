@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.mcuhq.simplebluetooth.R;
+import com.mcuhq.simplebluetooth.controller.LineChartController;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,78 +39,111 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class SummaryHRV extends Fragment {
 
-    private LineChart hrvChart;
-    TextView dateDisplay;
+    /*imagebutton*/
+    //region
     ImageButton yesterdayButton;
     ImageButton tomorrowButton;
+    //endregion
 
+    /*Button*/
+    //region
     Button[] buttons;
-
     Button todayButton;
     Button twoDaysButton;
     Button threeDaysButton;
+    //endregion
 
+    /*TextView*/
+    //region
+    TextView dateDisplay;
     TextView minHrv;
     TextView maxHrv;
     TextView avgHrv;
 
     TextView diffMinHrv;
     TextView diffMaxHrv;
+    //endregion
 
+    /*currentTime*/
+    //region
     String currentYear;
     String currentMonth;
     String currentDay;
 
     String currentDate;
     String currentTime;
+    //endregion
 
+    /*targetTime*/
+    //region
     String targetYear;
     String targetMonth;
     String targetDay;
     String targetDate;
+    //endregion
 
-    // tartget date를 기준으로 -1
+    /*tartget date를 기준으로 -1*/
+    //region
     String twoDaysHrvYear;
     String twoDaysHrvMonth;
     String twoDaysHrvDay;
     String twoDaysHrvDate;
+    //endregion
 
-    // tartget date를 기준으로 -2
+    /*tartget date를 기준으로 -2*/
+    //region
     String threeDaysHrvYear;
     String threeDaysHrvMonth;
     String threeDaysHrvDay;
     String threeDaysHrvDate;
+    //endregion
 
+    /*booleanDays*/
+    //region
     Boolean today = true;
     Boolean twoDays;
     Boolean threeDays;
+    //endregion
 
+    /*max_min_avg_cnt*/
+    //region
     int avg = 0;
     int avgSum = 0;
     int avgCnt = 0;
     int max = 0;
     int min = 70;
+    //endregion
 
-    View view;
-
+    /*SimpleDateFormat*/
+    //region
     SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
     SimpleDateFormat year = new SimpleDateFormat("yyyy");
     SimpleDateFormat month = new SimpleDateFormat("MM");
     SimpleDateFormat day = new SimpleDateFormat("dd");
+    //endregion
 
+    /*DateTimeFormatter*/
+    //region
     DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
     DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("MM");
     DateTimeFormatter dayFormat = DateTimeFormatter.ofPattern("dd");
+    //endregion
+
+    View view;
 
     private String email;
+
+    private LineChart hrvChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -214,21 +248,15 @@ public class SummaryHRV extends Fragment {
     }
 
     public void tomorrowButtonEvent() {
-        dateCalculate(1, true);
-
-        if(today) {
-            todayHrvChartGraph();
-        }
-        else if(twoDays) {
-            twoDaysHrvChartGraph();
-        }
-        else {
-            threeDaysHrvChartGraph();
-        }
+        setButtonEvent(true);
     }
 
     public void yesterdayButtonEvent() {
-        dateCalculate(1, false);
+        setButtonEvent(false);
+    }
+
+    void setButtonEvent(boolean check){
+        dateCalculate(1, check);
 
         if(today) {
             todayHrvChartGraph();
@@ -258,28 +286,19 @@ public class SummaryHRV extends Fragment {
 
     }
 
-
     public void dateCalculate(int myDay, boolean check) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate date;
+        LocalDate date = LocalDate.parse(targetDate, formatter);
 
         if(check){
             // tomorrow
-            date = LocalDate.parse(targetDate, formatter);
             date = date.plusDays(myDay);
-
-            targetDate = date.format(formatter);
-            System.out.println(targetDate);
-
         } else{
             // yesterday
-            date = LocalDate.parse(targetDate, formatter);
             date = date.minusDays(myDay);
-
-            targetDate = date.format(formatter);
-            System.out.println(targetDate);
         }
+        targetDate = date.format(formatter);
             /*
             java.util.Date와 java.time.LocalDate는 Java의
             서로 다른 날짜/시간 API를 나타내는 클래스로, 서로 호환되지 않음
@@ -292,23 +311,16 @@ public class SummaryHRV extends Fragment {
         targetDay = date.format(dayFormat);
 
         calcDate();
-
     }
 
     public void todayHrvChartGraph() {
 
         dateDisplay.setText(targetDate);
         hrvChart.clear();
-
-        avg = 0;
-        avgSum = 0;
-        avgCnt = 0;
-        max = 0;
-        min = 70;
+        Clear();
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getHrvDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File file = new File(directory, "BpmData.csv");
@@ -325,82 +337,28 @@ public class SummaryHRV extends Fragment {
 
             try {
                 // file read
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String line;
+                setHrvLoop(file,hrvTimeData,hrvArrayData);
 
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double hrvDataRow = Double.parseDouble(columns[4]); // hrv data
-                    int hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
 
-                    String[] hrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = hrvTimeCheck[0] + ":" + hrvTimeCheck[1]; // 초 단위 제거
-
-                    calcMinMax(hrv);
-
-                    // 데이터 저장
-                    hrvTimeData.add(myHrvTimeRow);
-                    hrvArrayData.add(hrvDataRow);
-                }
 
                 // 그래프에 들어갈 데이터 저장
-                for (int i = 0; i < hrvArrayData.size(); i++) {
-                    entries.add(new Entry((float)i, hrvArrayData.get(i).floatValue()));
-                }
+                LineChartController.setChartData(entries,hrvArrayData);
 
-                br.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             // 그래프 Set
-            LineDataSet dataSet = new LineDataSet(entries, "HRV");
-            dataSet.setDrawCircles(false);
-            dataSet.setColor(Color.BLUE);
-            dataSet.setLineWidth(0.5f);
-            dataSet.setDrawValues(true);
-
-            LineData lineData = new LineData(dataSet);
-            hrvChart.setData(lineData);
+            LineDataSet dataSet = LineChartController.getLineData(entries,"HRV",Color.BLUE);
 
             LineData hrvChartData = new LineData(dataSet);
-            hrvChart.setData(hrvChartData);  // 차트에 표시되는 데이터 설정
-            hrvChart.setNoDataText(""); // 데이터가 없는 경우 차트에 표시되는 텍스트 설정
-            hrvChart.getXAxis().setEnabled(true);   // x축 활성화(true)
-            hrvChart.getLegend().setTextSize(15f);  // 범례 텍스트 크기 설정("HRV" size)
-            hrvChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(hrvTimeData));    // x축의 값 설정
-            hrvChart.setVisibleXRangeMaximum(500);  // 한 번에 보여지는 x축 최대 값
-            hrvChart.getXAxis().setGranularity(1f); // 축의 최소 간격
-            hrvChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM); // x축 위치
-            hrvChart.getXAxis().setDrawGridLines(false);    // 축의 그리드 선
-            hrvChart.getDescription().setEnabled(false);    // 차트 설명
 
-            hrvChart.getAxisLeft().setAxisMaximum(150f); // y 축 최대값
-            hrvChart.getAxisLeft().setAxisMinimum(0f); // y 축 최소값
-            hrvChart.getAxisRight().setEnabled(false);  // 참조 반환
-            hrvChart.setDrawMarkers(false); // 값 마커
-            hrvChart.setDragEnabled(true);  // 드래그 기능
-            hrvChart.setPinchZoom(false);   // 줌 기능
-            hrvChart.setDoubleTapToZoomEnabled(false);  // 더블 탭 줌 기능
-            hrvChart.setHighlightPerDragEnabled(false); // 드래그 시 하이라이트
-
-            hrvChart.getData().notifyDataChanged(); // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.notifyDataSetChanged();    // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.moveViewToX(0);    // 주어진 x값의 위치로 뷰 이동
-
-            hrvChart.invalidate(); // 차트 다시 그림
+            LineChartController.setChartOption(hrvChart,hrvChartData,hrvTimeData);
 
             // 줌 인 상태에서 다른 그래프 봤을 경우 대비 줌 아웃
-            for(int i = 0 ; 20 > i ; i++) {
-                hrvChart.zoomOut();
-            }
+            LineChartController.setZoom(hrvChart);
 
-            maxHrv.setText(""+max);
-            minHrv.setText(""+min);
-            avgHrv.setText(""+avg);
-            diffMinHrv.setText("-"+(avg-min));
-            diffMaxHrv.setText("+"+(max-avg));
-
+            setHrvText();
         }
         else {
             // 파일이 없는 경우
@@ -412,29 +370,19 @@ public class SummaryHRV extends Fragment {
         hrvChart.clear();
         dateDisplay.setText(twoDaysHrvMonth + "-" + twoDaysHrvDay + " ~ " + targetMonth + "-" + targetDay);
 
-        avg = 0;
-        avgSum = 0;
-        avgCnt = 0;
-        max = 0;
-        min = 70;
-
+        Clear();
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getHrvDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File targetFile = new File(directory, "BpmData.csv");
 
         // 경로
-        directoryName = "LOOKHEART/" + email + "/" + twoDaysHrvYear + "/" + twoDaysHrvMonth + "/" + twoDaysHrvDay;
-        directory = new File(getActivity().getFilesDir(), directoryName);
+        directory = getHrvDirectory("LOOKHEART/" + email + "/" + twoDaysHrvYear + "/" + twoDaysHrvMonth + "/" + twoDaysHrvDay);
 
         // 파일 경로와 이름
         File twoDaysHrvFile = new File(directory, "BpmData.csv");
-
-//        Log.d("targetFile", String.valueOf(targetFile));
-//        Log.d("twoDaysHrvFile", String.valueOf(twoDaysHrvFile));
 
         if (targetFile.exists() && twoDaysHrvFile.exists()) {
             // 파일이 있는 경우
@@ -459,420 +407,65 @@ public class SummaryHRV extends Fragment {
             // target(기준일) 데이터 저장
             try {
                 // file read
-                BufferedReader br = new BufferedReader(new FileReader(targetFile));
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double hrvDataRow = Double.parseDouble(columns[4]); // hrv data
-                    int hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
-
-                    String[] hrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = hrvTimeCheck[0] + ":" + hrvTimeCheck[1] + ":" + hrvTimeCheck[2];
-
-                    calcMinMax(hrv);
-
-                    // 데이터 저장
-                    targetHrvTimeData.add(myHrvTimeRow);
-                    targetHrvArrayData.add(hrvDataRow);
-                }
-                br.close();
+                setHrvLoop(targetFile,targetHrvTimeData,targetHrvArrayData);
+                setHrvLoop(twoDaysHrvFile,twoDaysHrvTimeData,twoDaysHrvArrayData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // twoDays(이전일) 데이터 저장
+            int firstIndex = targetHrvTimeData.size()-1 ;
+            int secondIndex = twoDaysHrvTimeData.size()-1;
+            int totalIndex = firstIndex + secondIndex;
+
+            ArrayList<String> totalAXis = new ArrayList<>();
+            int j = 0;
+            for(int i = 0; i <= totalIndex; i++){
+                String Xlabel;
+                if(i <= firstIndex){
+                    Xlabel =  targetHrvTimeData.get(i);
+                }else{
+                    Xlabel =  twoDaysHrvTimeData.get(j);
+                    j++;
+                }
+                totalAXis.add(Xlabel);
+            }
+
+            //totalAXis.stream().map(d-> d.split(" ")[1]); //날짜 년월일 제외
+
+            Collections.sort(totalAXis); //시간 정렬
+
+            int k = 0;
+            int z = 0;
             try {
-                // file read
-                BufferedReader br = new BufferedReader(new FileReader(twoDaysHrvFile));
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double hrvDataRow = Double.parseDouble(columns[4]); // hrv data
-                    int hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
-
-                    String[] hrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = hrvTimeCheck[0] + ":" + hrvTimeCheck[1] + ":" + hrvTimeCheck[2];
-
-                    calcMinMax(hrv);
-
-                    // 데이터 저장
-                    twoDaysHrvTimeData.add(myHrvTimeRow);
-                    twoDaysHrvArrayData.add(hrvDataRow);
+                for(int i = 0; i <= totalIndex; i++){
+                    String time = totalAXis.get(i);
+                    if(k <= firstIndex){
+                        if(time == targetHrvTimeData.get(k)){
+                            Entry HrvDataEntry = new Entry((float)i, targetHrvArrayData.get(k).floatValue());
+                            targetEntries.add(HrvDataEntry);
+                            k++;
+                        }
+                    }
+                    if(z <= secondIndex){
+                        if(time == twoDaysHrvTimeData.get(z)){
+                            Entry HrvDataEntry = new Entry((float)i, twoDaysHrvArrayData.get(z).floatValue());
+                            twoDaysEntries.add(HrvDataEntry);
+                            z++;
+                        }
+                    }
                 }
-                br.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+            //Collections.sort(totalAXis); //시간 정렬
 
-            /*
-            X 축 타임 테이블을 위해 시작 시간과 종료 시간을 구함
-            */
-
-            // 기준일 배열의 시작과 끝의 시간 값
-            String[] startOfToday =  targetHrvTimeData.get(0).split(":");
-            String[] endOfToday = targetHrvTimeData.get(targetHrvTimeData.size() - 1).split(":");
-
-            // 이전일 배열의 시작과 끝의 시간 값
-            String[] startOfYesterday =  twoDaysHrvTimeData.get(0).split(":");
-            String[] endOfYesterday = twoDaysHrvTimeData.get(twoDaysHrvTimeData.size() - 1).split(":");
-
-            int intTargetStartHour = Integer.parseInt(startOfToday[0]);
-            int intTargetStartMinute = Integer.parseInt(startOfToday[1]);
-            int intTargetEndHour = Integer.parseInt(endOfToday[0]);
-            int intTargetEndMinute = Integer.parseInt(endOfToday[1]);
-
-            int intTwoDaysStartHour = Integer.parseInt(startOfYesterday[0]);
-            int intTwoDaysStartMinute = Integer.parseInt(startOfYesterday[1]);
-            int intTwoDaysEndHour = Integer.parseInt(endOfYesterday[0]);
-            int intTwoDaysEndMinute = Integer.parseInt(endOfYesterday[1]);
-
-//            Log.d("startOfToday", intTargetStartHour +":"+intTargetStartMinute);
-//            Log.d("endOfToday", intTargetEndHour +":"+intTargetEndMinute);
-//            Log.d("startOfYesterday", intTwoDaysStartHour +":"+intTwoDaysStartMinute);
-//            Log.d("endOfYesterday", intTwoDaysEndHour +":"+intTwoDaysEndMinute);
-
-            /*
-            제일 빠른 시작 시간과 제일 느린 시간을 저장하는 배열
-            시작 시간과 종료 시간의 차이 값을 알아내기 위함
-             */
-            int[] startTime = new int[2];
-            int[] endTime = new int[2];
-
-            int hourDifference = 0; // 시간 차이
-            int minuteDifference = 0; // 분 차이
-
-            int totalXValue = 0; // x value
-
-            // 시간 비교 LocalTime 변수
-            LocalTime targetStartTime = LocalTime.of(intTargetStartHour, intTargetStartMinute);
-            LocalTime targetEndTime = LocalTime.of(intTargetEndHour, intTargetEndMinute);
-
-            LocalTime twoDaysStartTime = LocalTime.of(intTwoDaysStartHour, intTwoDaysStartMinute);
-            LocalTime twoDaysEndTime = LocalTime.of(intTwoDaysEndHour, intTwoDaysEndMinute);
-
-            // 시작 시간 비교
-            if (targetStartTime.isBefore(twoDaysStartTime)){
-                // targetStartTime가 더 빠른 경우
-                startTime[0] = intTargetStartHour;
-                startTime[1] = intTargetStartMinute;
-            }else {
-                // twoDaysStartTime 더 빠른 경우
-                startTime[0] = intTwoDaysStartHour;
-                startTime[1] = intTwoDaysStartMinute;
-            }
-
-            // 종료 시간 비교
-            if (targetEndTime.isAfter(twoDaysEndTime)){
-                // targetEndTime 가 더 빠른 경우
-                endTime[0] = intTargetEndHour;
-                endTime[1] = intTargetEndMinute;
-            }else {
-                // twoDaysEndTime 가 더 느린 경우
-                endTime[0] = intTwoDaysEndHour;
-                endTime[1] = intTwoDaysEndMinute;
-            }
-
-//            Log.d("startTime", Arrays.toString(startTime));
-//            Log.d("endTime", Arrays.toString(endTime));
-
-            // 시간 차이 계산
-            LocalTime localStartTime = LocalTime.of(startTime[0], startTime[1]);
-            LocalTime localEndTime = LocalTime.of(endTime[0], endTime[1]);
-
-            Duration duration = Duration.between(localStartTime, localEndTime);
-
-            long totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-//            Log.d("minuteDifference", String.valueOf(minuteDifference));
-//            Log.d("hourDifference", String.valueOf(hourDifference));
-
-            // x축 개수
-            totalXValue = (hourDifference * 360) + (minuteDifference * 6);
-            // 시간값이 들어가는 테이블
-            ArrayList<String> timeTable = new ArrayList<>();
-
-            // 시간 시간(정수)
-            int intStartHour = startTime[0];
-            int intStartMinute = startTime[1];
-            int secondCnt = 0;
-
-            // 시간 시간(문자열)
-            String StringStartHour = String.valueOf(startTime[0]);
-            String StringStartMinute = String.valueOf(startTime[1]);
-
-
-            // x 시간 축
-            for(int i = 0; totalXValue > i ; i++) {
-                String timeHour = String.valueOf(intStartHour);
-                String timeMinute = String.valueOf(intStartMinute);
-                String time;
-
-                // hour, minute가 1의 자리 숫자인 경우 문자열 비교를 위해 앞에 0 추가
-                if (intStartHour < 10){
-                    timeHour = "0" + intStartHour;
-                }
-                if (intStartMinute < 10){
-                    timeMinute  = "0" + intStartMinute;
-                }
-
-                // timeTable에 time 값 추가
-                time = timeHour + ":" + timeMinute + ":" + secondCnt;
-                timeTable.add(time);
-                secondCnt++;
-
-                // 초 -> 분
-                if ( secondCnt == 6 ){
-                    if(intStartMinute < 9) {
-                        StringStartMinute = "0" + (intStartMinute + 1);
-                    }
-                    else {
-                        StringStartMinute = String.valueOf(intStartMinute + 1);
-                    }
-                    intStartMinute++;
-                    secondCnt = 0;
-                }
-
-                // 분 -> 시
-                if (StringStartMinute.equals("60")){
-                    if (intStartMinute < 9) {
-                        StringStartHour = "0" + (intStartHour + 1);
-                    }
-                    else {
-                        StringStartHour = String.valueOf(intStartHour + 1);
-                    }
-                    StringStartMinute = "00";
-                    intStartHour++;
-                    intStartMinute = 0;
-                }
-            }
-
-            int hrvTimeCount = 0;
-            int timeTableCount = 0;
-
-//            Log.d("timeTable", String.valueOf(timeTable));
-
-            // target(기준일) 그래프 시작 포인트
-            LocalTime localTargetTime = LocalTime.of(intTargetStartHour, intTargetStartMinute);
-
-            duration = Duration.between(localStartTime, localTargetTime);
-
-            totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            timeTableCount = (hourDifference * 360) + (minuteDifference * 6);
-
-//            Log.d("line", "oooooooooooooooooooooo");
-//            Log.d("HrvTime", Arrays.toString(startTime));
-//            Log.d("HrvSecond", String.valueOf(endTime));
-
-            // Target Graph
-            for( int i = 0 ; totalXValue - 1 > i ; i++) {
-                String[] hrvTime = targetHrvTimeData.get(hrvTimeCount).split(":");
-                String[] checkTimeTable = timeTable.get(timeTableCount).split(":");
-                String hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-
-//                Log.d("HrvTime", Arrays.toString(HrvTime));
-//                Log.d("HrvSecond", String.valueOf(HrvSecond));
-//                Log.d("checkTimeTable", Arrays.toString(checkTimeTable));
-
-                boolean check = false;
-
-                // 값이 있는 경우
-                if(hrvTime[0].equals(checkTimeTable[0])){ // hour
-                    if(hrvTime[1].equals(checkTimeTable[1])) { // minute
-                        if(hrvSecond.equals(checkTimeTable[2])) { // second
-
-                            Entry hrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(hrvTimeCount).floatValue());
-                            targetEntries.add(hrvDataEntry);
-
-//                            Log.d("check", String.valueOf(HrvDataEntry));
-
-                            hrvTimeCount += 1; // 값이 있으니까 +1
-                            check = true;
-                        }
-                    } else {
-                        // 분 값이 없는 경우 이전 값을 씀
-                        if(hrvTimeCount > 0) {
-                            Entry hrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(hrvTimeCount-1).floatValue());
-                            targetEntries.add(hrvDataEntry);
-                        }
-                    }
-                } else {
-                    // 시간 값이 없는 경우 이전 값을 씀
-                    if(hrvTimeCount > 0) {
-                        Entry hrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(hrvTimeCount-1).floatValue());
-                        targetEntries.add(hrvDataEntry);
-                    }
-                }
-
-                // 같은 초가 나오는 경우 현재 타임 테이블 값과 다음값 비교 (ex: 10 -> 19)
-                if (check  && hrvTimeCount < targetHrvArrayData.size()) {
-                    hrvTime = targetHrvTimeData.get(hrvTimeCount).split(":");
-                    hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-
-                    while (hrvSecond.equals(checkTimeTable[2])){
-                        Entry hrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(hrvTimeCount).floatValue());
-                        targetEntries.add(hrvDataEntry);
-
-                        hrvTimeCount += 1;
-                        // 마지막 값인지 확인
-                        hrvTime = targetHrvTimeData.get(hrvTimeCount).split(":");
-                        hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-                    }
-                }
-
-                timeTableCount += 1;
-
-                // 마지막 값 확인
-                if(targetHrvTimeData.size() - 10 < hrvTimeCount){
-                    break;
-                }
-            }
-
-            hrvTimeCount = 0;
-            timeTableCount = 0;
-
-            // twoDays(이전일) 그래프 시작 포인트
-            LocalTime localTwoDaysTime = LocalTime.of(intTwoDaysStartHour, intTwoDaysStartMinute);
-
-            duration = Duration.between(localStartTime, localTwoDaysTime);
-
-            totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            timeTableCount = (hourDifference * 360) + (minuteDifference * 6);
-
-//            Log.d("minuteDifference", String.valueOf(minuteDifference));
-//            Log.d("hourDifference", String.valueOf(hourDifference));
-//            Log.d("timeTableCount", String.valueOf(timeTableCount));
-
-            // twoDays Graph
-            for( int i = 0 ; totalXValue - 1 > i ; i++) {
-                String[] hrvTime = twoDaysHrvTimeData.get(hrvTimeCount).split(":");
-                String[] checkTimeTable = timeTable.get(timeTableCount).split(":");
-                String hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-//                Log.d("HrvTime", Arrays.toString(HrvTime));
-//                Log.d("HrvSecond", String.valueOf(HrvSecond));
-//                Log.d("checkTimeTable", Arrays.toString(checkTimeTable));
-
-                boolean check = false;
-
-                // 값이 있는 경우
-                if(hrvTime[0].equals(checkTimeTable[0])){ // hour
-                    if(hrvTime[1].equals(checkTimeTable[1])) { // minute
-                        if(hrvSecond.equals(checkTimeTable[2])) { // second
-
-                            Entry hrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(hrvTimeCount).floatValue());
-                            twoDaysEntries.add(hrvDataEntry);
-
-//                            Log.d("check", String.valueOf(HrvDataEntry));
-
-                            hrvTimeCount += 1; // 값이 있으니까 +1
-                            check = true;
-                        }
-                    } else {
-                        // 분 값이 없는 경우 이전 값을 씀
-                        if(hrvTimeCount > 0){
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(hrvTimeCount-1).floatValue());
-                            twoDaysEntries.add(HrvDataEntry);
-                        }
-                    }
-                } else {
-                    // 시간 값이 없는 경우 이전 값을 씀
-                    if(hrvTimeCount > 0){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(hrvTimeCount-1).floatValue());
-                        twoDaysEntries.add(HrvDataEntry);
-                    }
-                }
-
-                // 같은 초가 나오는 경우 현재 타임 테이블 값과 다음값 비교 (ex: 10 -> 19)
-                if (check  && hrvTimeCount < twoDaysHrvArrayData.size()) {
-                    hrvTime = twoDaysHrvTimeData.get(hrvTimeCount).split(":");
-                    hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-
-                    while (hrvSecond.equals(checkTimeTable[2])){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(hrvTimeCount).floatValue());
-                        twoDaysEntries.add(HrvDataEntry);
-
-                        hrvTimeCount += 1;
-                        // 마지막 값인지 확인
-                        hrvTime = twoDaysHrvTimeData.get(hrvTimeCount).split(":");
-                        hrvSecond = String.valueOf(hrvTime[2].charAt(0));
-                    }
-                }
-
-                timeTableCount += 1;
-
-                // 마지막 값 확인
-                if(twoDaysHrvTimeData.size() - 10 < hrvTimeCount){
-                    break;
-                }
-            }
-
-
-            timeTable.clear();
-
-            // 시간 시간(정수)
-            intStartHour = startTime[0];
-            intStartMinute = startTime[1];
-            secondCnt = 0;
-
-            // 시간 시간(문자열)
-            StringStartHour = String.valueOf(startTime[0]);
-            StringStartMinute = String.valueOf(startTime[1]);
-
-            // remove second
-            for(int i = 0; totalXValue > i ; i++) {
-                String time = StringStartHour+ ":" + StringStartMinute;
-
-                timeTable.add(time);
-                secondCnt++;
-
-                // 초 -> 분
-                if ( secondCnt == 6 ){
-                    if(intStartMinute < 9) {
-                        StringStartMinute = "0" + (intStartMinute + 1);
-                    }
-                    else {
-                        StringStartMinute = String.valueOf(intStartMinute + 1);
-                    }
-                    intStartMinute += 1;
-                    secondCnt = 0;
-                }
-
-                // 분 -> 시
-                if (StringStartMinute.equals("60")){
-                    if (intStartMinute < 9) {
-                        StringStartHour = "0" + (intStartHour + 1);
-                    }
-                    else {
-                        StringStartHour = String.valueOf(intStartHour + 1);
-                    }
-                    StringStartMinute = "00";
-                    intStartHour++;
-                    intStartMinute = 0;
-                }
-            }
+            // totalAXis.stream().map(d-> d.split(" ")[1]); //날짜 년월일 제외
 
             // 그래프 Set
-            LineDataSet targetDataSet = new LineDataSet(targetEntries, targetMonth+"-"+targetDay);
-            targetDataSet.setDrawCircles(false);
-            targetDataSet.setColor(Color.RED);
-            targetDataSet.setLineWidth(0.5f);
-            targetDataSet.setDrawValues(true);
+            LineDataSet targetDataSet = LineChartController.getLineData(targetEntries,targetMonth+"-"+targetDay,Color.RED);
 
             // 그래프 Set
-            LineDataSet twoDaysDataSet = new LineDataSet(twoDaysEntries, twoDaysHrvMonth+"-"+twoDaysHrvDay);
-            twoDaysDataSet.setDrawCircles(false);
-            twoDaysDataSet.setColor(Color.BLUE);
-            twoDaysDataSet.setLineWidth(0.5f);
-            twoDaysDataSet.setDrawValues(true);
+            LineDataSet twoDaysDataSet = LineChartController.getLineData(twoDaysEntries,twoDaysHrvMonth+"-"+twoDaysHrvDay,Color.BLUE);
 
             ArrayList<ILineDataSet> twoDaysHrvChartdataSets = new ArrayList<>();
             twoDaysHrvChartdataSets.add(twoDaysDataSet);
@@ -880,42 +473,12 @@ public class SummaryHRV extends Fragment {
 
             LineData twoDaysHrvChartData = new LineData(twoDaysHrvChartdataSets);
 
-            hrvChart.setData(twoDaysHrvChartData);
-            hrvChart.setNoDataText("");// 데이터가 없는 경우 차트에 표시되는 텍스트 설정
-            hrvChart.getXAxis().setEnabled(true);   // x축 활성화(true)
-            hrvChart.getLegend().setTextSize(15f);  // 범례 텍스트 크기 설정("Hrv" size)
-            hrvChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(timeTable));    // x축의 값 설정
-            hrvChart.setVisibleXRangeMaximum(500);  // 한 번에 보여지는 x축 최대 값
-            hrvChart.getXAxis().setGranularity(1f); // 축의 최소 간격
-            hrvChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM); // x축 위치
-            hrvChart.getXAxis().setDrawGridLines(false);    // 축의 그리드 선
-            hrvChart.getDescription().setEnabled(false);    // 차트 설명
-
-            hrvChart.getAxisLeft().setAxisMaximum(150f); // y 축 최대값
-            hrvChart.getAxisLeft().setAxisMinimum(0f); // y 축 최소값
-            hrvChart.getAxisRight().setEnabled(false);  // 참조 반환
-            hrvChart.setDrawMarkers(false); // 값 마커
-            hrvChart.setDragEnabled(true);  // 드래그 기능
-            hrvChart.setPinchZoom(false);   // 줌 기능
-            hrvChart.setDoubleTapToZoomEnabled(false);  // 더블 탭 줌 기능
-            hrvChart.setHighlightPerDragEnabled(false); // 드래그 시 하이라이트
-
-            hrvChart.getData().notifyDataChanged(); // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.notifyDataSetChanged();    // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.moveViewToX(0);    // 주어진 x값의 위치로 뷰 이동
-
-            hrvChart.invalidate(); // 차트 다시 그림
+            LineChartController.setChartOption(hrvChart,twoDaysHrvChartData,totalAXis);
 
             // 줌 인 상태에서 다른 그래프 봤을 경우 대비 줌 아웃
-            for(int i = 0 ; 20 > i ; i++) {
-                hrvChart.zoomOut();
-            }
+            LineChartController.setZoom(hrvChart);
 
-            maxHrv.setText(""+max);
-            minHrv.setText(""+min);
-            avgHrv.setText(""+avg);
-            diffMinHrv.setText("-"+(avg-min));
-            diffMaxHrv.setText("+"+(max-avg));
+            setHrvText();
 
         }
         else {
@@ -929,22 +492,19 @@ public class SummaryHRV extends Fragment {
         dateDisplay.setText(threeDaysHrvMonth + "-" + threeDaysHrvDay + " ~ " + targetMonth + "-" + targetDay);
 
         // 경로
-        String directoryName = "LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay;
-        File directory = new File(getActivity().getFilesDir(), directoryName);
+        File directory = getHrvDirectory("LOOKHEART/" + email + "/" + targetYear + "/" + targetMonth + "/" + targetDay);
 
         // 파일 경로와 이름
         File targetFile = new File(directory, "BpmData.csv");
 
         // 경로
-        directoryName = "LOOKHEART/" + email + "/" + twoDaysHrvYear + "/" + twoDaysHrvMonth + "/" + twoDaysHrvDay;
-        directory = new File(getActivity().getFilesDir(), directoryName);
+        directory = getHrvDirectory("LOOKHEART/" + email + "/" + twoDaysHrvYear + "/" + twoDaysHrvMonth + "/" + twoDaysHrvDay);
 
         // 파일 경로와 이름
         File twoDaysHrvFile = new File(directory, "BpmData.csv");
 
         // 경로
-        directoryName = "LOOKHEART/" + email + "/" + threeDaysHrvYear + "/" + threeDaysHrvMonth + "/" + threeDaysHrvDay;
-        directory = new File(getActivity().getFilesDir(), directoryName);
+        directory = getHrvDirectory("LOOKHEART/" + email + "/" + threeDaysHrvYear + "/" + threeDaysHrvMonth + "/" + threeDaysHrvDay);
 
         // 파일 경로와 이름
         File threeDaysHrvFile = new File(directory, "BpmData.csv");
@@ -975,611 +535,149 @@ public class SummaryHRV extends Fragment {
             // target(기준일) 데이터 저장
             try {
                 // file read
-                BufferedReader br = new BufferedReader(new FileReader(targetFile));
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double HrvDataRow = Double.parseDouble(columns[4]); // Hrv data
-                    int Hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
-
-                    String[] HrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = HrvTimeCheck[0] + ":" + HrvTimeCheck[1] + ":" + HrvTimeCheck[2];
-
-                    calcMinMax(Hrv);
-
-                    // 데이터 저장
-                    targetHrvTimeData.add(myHrvTimeRow);
-                    targetHrvArrayData.add(HrvDataRow);
-                }
-                br.close();
+                setHrvLoop(targetFile,targetHrvTimeData,targetHrvArrayData);
+                setHrvLoop(twoDaysHrvFile,twoDaysHrvTimeData,twoDaysHrvArrayData);
+                setHrvLoop(threeDaysHrvFile,threeDaysHrvTimeData,threeDaysHrvArrayData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // twoDays(이틀전) 데이터 저장
+            int firstIndex = targetHrvTimeData.size();
+            int secondIndex = twoDaysHrvTimeData.size();
+            int thirdIndex = threeDaysHrvTimeData.size() ;
+            int totalIndex = firstIndex + secondIndex + thirdIndex;
+
+            ArrayList<String> totalAXis = new ArrayList<>();
+
+            int j = 0;
+            int k = 0;
+            for(int i = 0; i < totalIndex; i++){
+                String Xlabel;
+                if(i < firstIndex){
+                    Xlabel =  targetHrvTimeData.get(i);
+                    totalAXis.add(Xlabel);
+                }else if(j < secondIndex){
+                    Xlabel =  twoDaysHrvTimeData.get(j);
+                    totalAXis.add(Xlabel);
+                    j++;
+                }else if(k < thirdIndex){
+                    Xlabel =  threeDaysHrvTimeData.get(k);
+                    totalAXis.add(Xlabel);
+                    k++;
+                }
+            }
+
+            Collections.sort(totalAXis, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return o1.compareTo(o2);
+                }
+            }); //시간 정렬
+
+            int a = 0;
+            int b = 0;
+            int z = 0;
             try {
-                // file read
-                BufferedReader br = new BufferedReader(new FileReader(twoDaysHrvFile));
-                String line;
+                for(int i = 0; i < totalIndex; i++){
+                    Entry HrvDataEntry;
+                    String time = totalAXis.get(i);
 
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double HrvDataRow = Double.parseDouble(columns[4]); // Hrv data
-                    int Hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
+                    if(b < secondIndex){
+                        if(twoDaysHrvTimeData.contains(time)){
+                            HrvDataEntry = new Entry((float)i, twoDaysHrvArrayData.get(b).floatValue());
+                            twoDaysEntries.add(HrvDataEntry);
+                            b++;
+                        }
+                    }
 
-                    String[] HrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = HrvTimeCheck[0] + ":" + HrvTimeCheck[1] + ":" + HrvTimeCheck[2];
+                    if(a < firstIndex){
+                        if(targetHrvTimeData.contains(time)){
+                            HrvDataEntry = new Entry((float)i, targetHrvArrayData.get(a).floatValue());
+                            targetEntries.add(HrvDataEntry);
+                            a++;
+                        }
+                    }
 
-                    calcMinMax(Hrv);
-
-                    // 데이터 저장
-                    twoDaysHrvTimeData.add(myHrvTimeRow);
-                    twoDaysHrvArrayData.add(HrvDataRow);
+                    if(z < thirdIndex){
+                        if(threeDaysHrvTimeData.contains(time)){
+                            HrvDataEntry = new Entry((float)i, threeDaysHrvArrayData.get(z).floatValue());
+                            threeDaysEntries.add(HrvDataEntry);
+                            z++;
+                        }
+                    }
                 }
-                br.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            // threeDays(엊그제) 데이터 저장
-            try {
-                // file read
-                BufferedReader br = new BufferedReader(new FileReader(threeDaysHrvFile));
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    String[] columns = line.split(","); // 데이터 구분
-                    Double HrvDataRow = Double.parseDouble(columns[4]); // Hrv data
-                    int Hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
-
-                    String[] HrvTimeCheck = columns[0].split(":"); // 시간 구분
-                    String myHrvTimeRow = HrvTimeCheck[0] + ":" + HrvTimeCheck[1] + ":" + HrvTimeCheck[2];
-
-                    calcMinMax(Hrv);
-
-                    // 데이터 저장
-                    threeDaysHrvTimeData.add(myHrvTimeRow);
-                    threeDaysHrvArrayData.add(HrvDataRow);
-                }
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /*
-            X 축 타임 테이블을 위해 시작 시간과 종료 시간을 구함
-            */
-
-            // 기준일 배열의 시작과 끝의 시간 값
-            String[] startOfToday =  targetHrvTimeData.get(0).split(":");
-            String[] endOfToday = targetHrvTimeData.get(targetHrvTimeData.size() - 1).split(":");
-
-            // 이틀전 배열의 시작과 끝의 시간 값
-            String[] startOfYesterday =  twoDaysHrvTimeData.get(0).split(":");
-            String[] endOfYesterday = twoDaysHrvTimeData.get(twoDaysHrvTimeData.size() - 1).split(":");
-
-            // 엊그제 배열의 시작과 끝의 시간 값
-            String[] startOfTwoDaysAgo =  threeDaysHrvTimeData.get(0).split(":");
-            String[] endOfTwoDaysAgo = threeDaysHrvTimeData.get(threeDaysHrvTimeData.size() - 1).split(":");
-
-            int intTargetStartHour = Integer.parseInt(startOfToday[0]);
-            int intTargetStartMinute = Integer.parseInt(startOfToday[1]);
-            int intTargetEndHour = Integer.parseInt(endOfToday[0]);
-            int intTargetEndMinute = Integer.parseInt(endOfToday[1]);
-
-            int intTwoDaysStartHour = Integer.parseInt(startOfYesterday[0]);
-            int intTwoDaysStartMinute = Integer.parseInt(startOfYesterday[1]);
-            int intTwoDaysEndHour = Integer.parseInt(endOfYesterday[0]);
-            int intTwoDaysEndMinute = Integer.parseInt(endOfYesterday[1]);
-
-            int intThreeDaysStartHour = Integer.parseInt(startOfTwoDaysAgo[0]);
-            int intThreeDaysStartMinute = Integer.parseInt(startOfTwoDaysAgo[1]);
-            int intThreeDaysEndHour = Integer.parseInt(endOfTwoDaysAgo[0]);
-            int intThreeDaysEndMinute = Integer.parseInt(endOfTwoDaysAgo[1]);
-
-                        /*
-            제일 빠른 시작 시간과 제일 느린 시간을 저장하는 배열
-            시작 시간과 종료 시간의 차이 값을 알아내기 위함
-             */
-
-            int[] startTime = new int[2];
-            int[] endTime = new int[2];
-
-            int hourDifference = 0; // 시간 차이
-            int minuteDifference = 0; // 분 차이
-
-            int totalXValue = 0; // x value
-
-            // 시간 비교 LocalTime 변수
-            LocalTime targetStartTime = LocalTime.of(intTargetStartHour, intTargetStartMinute);
-            LocalTime targetEndTime = LocalTime.of(intTargetEndHour, intTargetEndMinute);
-
-            LocalTime twoDaysStartTime = LocalTime.of(intTwoDaysStartHour, intTwoDaysStartMinute);
-            LocalTime twoDaysEndTime = LocalTime.of(intTwoDaysEndHour, intTwoDaysEndMinute);
-
-            LocalTime threeDaysStartTime = LocalTime.of(intThreeDaysStartHour, intThreeDaysStartMinute);
-            LocalTime threeDaysEndTime = LocalTime.of(intThreeDaysEndHour, intThreeDaysEndMinute);
-
-            // 시작 시간 비교
-            if (targetStartTime.isBefore(twoDaysStartTime)){
-                // targetStartTime가 더 빠른 경우
-                startTime[0] = intTargetStartHour;
-                startTime[1] = intTargetStartMinute;
-            }else {
-                // twoDaysStartTime 더 빠른 경우
-                startTime[0] = intTwoDaysStartHour;
-                startTime[1] = intTwoDaysStartMinute;
-            }
-
-            LocalTime checkTime = LocalTime.of(startTime[0], startTime[1]);
-
-            if (threeDaysStartTime.isBefore(checkTime)){
-                // threeDaysStartTime 더 빠른 경우
-                startTime[0] = intThreeDaysStartHour;
-                startTime[1] = intThreeDaysStartMinute;
-            }
-
-
-            // 종료 시간 비교
-            if (targetEndTime.isAfter(twoDaysEndTime)){
-                // targetEndTime 가 더 느린 경우
-                endTime[0] = intTargetEndHour;
-                endTime[1] = intTargetEndMinute;
-            }else {
-                // twoDaysEndTime 가 더 느린 경우
-                endTime[0] = intTwoDaysEndHour;
-                endTime[1] = intTwoDaysEndMinute;
-            }
-
-            checkTime = LocalTime.of(endTime[0], endTime[1]);
-
-            if (threeDaysEndTime.isAfter(checkTime)){
-                // threeDaysEndTime 가 더 느린 경우
-                endTime[0] = intThreeDaysEndHour;
-                endTime[1] = intThreeDaysEndMinute;
-            }
-
-            // 시간 차이 계산
-            LocalTime localStartTime = LocalTime.of(startTime[0], startTime[1]);
-            LocalTime localEndTime = LocalTime.of(endTime[0], endTime[1]);
-
-            Duration duration = Duration.between(localStartTime, localEndTime);
-
-            long totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            // x축 개수
-            totalXValue = (hourDifference * 360) + (minuteDifference * 6);
-            // 시간값이 들어가는 테이블
-            ArrayList<String> timeTable = new ArrayList<>();
-
-            // 시간 시간(정수)
-            int intStartHour = startTime[0];
-            int intStartMinute = startTime[1];
-            int secondCnt = 0;
-
-            // 시간 시간(문자열)
-            String StringStartHour = String.valueOf(startTime[0]);
-            String StringStartMinute = String.valueOf(startTime[1]);
-
-            // x 시간 축
-            for(int i = 0; totalXValue > i ; i++) {
-                String timeHour = String.valueOf(intStartHour);
-                String timeMinute = String.valueOf(intStartMinute);
-                String time;
-
-                // hour, minute가 1의 자리 숫자인 경우 문자열 비교를 위해 앞에 0 추가
-                if (intStartHour < 10){
-                    timeHour = "0" + intStartHour;
-                }
-                if (intStartMinute < 10){
-                    timeMinute  = "0" + intStartMinute;
-                }
-
-                // timeTable에 time 값 추가
-                time = timeHour + ":" + timeMinute + ":" + secondCnt;
-                timeTable.add(time);
-                secondCnt++;
-
-                // 초 -> 분
-                if ( secondCnt == 6 ){
-                    if(intStartMinute < 9) {
-                        StringStartMinute = "0" + (intStartMinute + 1);
-                    }
-                    else {
-                        StringStartMinute = String.valueOf(intStartMinute + 1);
-                    }
-                    intStartMinute++;
-                    secondCnt = 0;
-                }
-
-                // 분 -> 시
-                if (StringStartMinute.equals("60")){
-                    if (intStartMinute < 9) {
-                        StringStartHour = "0" + (intStartHour + 1);
-                    }
-                    else {
-                        StringStartHour = String.valueOf(intStartHour + 1);
-                    }
-                    StringStartMinute = "00";
-                    intStartHour++;
-                    intStartMinute = 0;
-                }
-            }
-
-            int HrvTimeCount = 0;
-            int timeTableCount = 0;
-
-            // target(기준일) 그래프 시작 포인트
-            LocalTime localTargetTime = LocalTime.of(intTargetStartHour, intTargetStartMinute);
-
-            duration = Duration.between(localStartTime, localTargetTime);
-
-            totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            timeTableCount = (hourDifference * 360) + (minuteDifference * 6);
-
-            // Target Graph
-            for( int i = 0 ; totalXValue - 1 > i ; i++) {
-                String[] HrvTime = targetHrvTimeData.get(HrvTimeCount).split(":");
-                String[] checkTimeTable = timeTable.get(timeTableCount).split(":");
-                String HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-//                Log.d("HrvTime", Arrays.toString(HrvTime));
-//                Log.d("HrvSecond", String.valueOf(HrvSecond));
-//                Log.d("checkTimeTable", Arrays.toString(checkTimeTable));
-
-                boolean check = false;
-
-                // 값이 있는 경우
-                if(HrvTime[0].equals(checkTimeTable[0])){ // hour
-                    if(HrvTime[1].equals(checkTimeTable[1])) { // minute
-                        if(HrvSecond.equals(checkTimeTable[2])) { // second
-
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(HrvTimeCount).floatValue());
-                            targetEntries.add(HrvDataEntry);
-
-//                            Log.d("check", String.valueOf(HrvDataEntry));
-
-                            HrvTimeCount += 1; // 값이 있으니까 +1
-                            check = true;
-                        }
-                    } else {
-                        // 분 값이 없는 경우 이전 값을 씀
-                        if(HrvTimeCount > 0) {
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(HrvTimeCount-1).floatValue());
-                            targetEntries.add(HrvDataEntry);
-                        }
-                    }
-                } else {
-                    // 시간 값이 없는 경우 이전 값을 씀
-                    if(HrvTimeCount > 0) {
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(HrvTimeCount-1).floatValue());
-                        targetEntries.add(HrvDataEntry);
-                    }
-                }
-
-                // 같은 초가 나오는 경우 현재 타임 테이블 값과 다음값 비교 (ex: 10 -> 19)
-                if (check  && HrvTimeCount < targetHrvArrayData.size()) {
-                    HrvTime = targetHrvTimeData.get(HrvTimeCount).split(":");
-                    HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                    while (HrvSecond.equals(checkTimeTable[2])){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, targetHrvArrayData.get(HrvTimeCount).floatValue());
-                        targetEntries.add(HrvDataEntry);
-
-                        HrvTimeCount += 1;
-                        // 마지막 값인지 확인
-                        HrvTime = targetHrvTimeData.get(HrvTimeCount).split(":");
-                        HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                        // 마지막 값 확인
-                        if(targetHrvTimeData.size() - 10 < HrvTimeCount){
-                            break;
-                        }
-
-                    }
-                }
-
-                timeTableCount += 1;
-
-                // 마지막 값 확인
-                if(targetHrvTimeData.size() - 10 < HrvTimeCount){
-                    break;
-                }
-            }
-
-            HrvTimeCount = 0;
-            timeTableCount = 0;
-
-            // twoDays(이전일) 그래프 시작 포인트
-            LocalTime localTwoDaysTime = LocalTime.of(intTwoDaysStartHour, intTwoDaysStartMinute);
-
-            duration = Duration.between(localStartTime, localTwoDaysTime);
-
-            totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            timeTableCount = (hourDifference * 360) + (minuteDifference * 6);
-
-//            Log.d("minuteDifference", String.valueOf(minuteDifference));
-//            Log.d("hourDifference", String.valueOf(hourDifference));
-//            Log.d("timeTableCount", String.valueOf(timeTableCount));
-
-            // twoDays Graph
-            for( int i = 0 ; totalXValue - 1 > i ; i++) {
-                String[] HrvTime = twoDaysHrvTimeData.get(HrvTimeCount).split(":");
-                String[] checkTimeTable = timeTable.get(timeTableCount).split(":");
-                String HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-//                Log.d("HrvTime", Arrays.toString(HrvTime));
-//                Log.d("HrvSecond", String.valueOf(HrvSecond));
-//                Log.d("checkTimeTable", Arrays.toString(checkTimeTable));
-
-                boolean check = false;
-
-                // 값이 있는 경우
-                if(HrvTime[0].equals(checkTimeTable[0])){ // hour
-                    if(HrvTime[1].equals(checkTimeTable[1])) { // minute
-                        if(HrvSecond.equals(checkTimeTable[2])) { // second
-
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(HrvTimeCount).floatValue());
-                            twoDaysEntries.add(HrvDataEntry);
-
-//                            Log.d("check", String.valueOf(HrvDataEntry));
-
-                            HrvTimeCount += 1; // 값이 있으니까 +1
-                            check = true;
-                        }
-                    } else {
-                        // 분 값이 없는 경우 이전 값을 씀
-                        if(HrvTimeCount > 0){
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(HrvTimeCount-1).floatValue());
-                            twoDaysEntries.add(HrvDataEntry);
-                        }
-                    }
-                } else {
-                    // 시간 값이 없는 경우 이전 값을 씀
-                    if(HrvTimeCount > 0){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(HrvTimeCount-1).floatValue());
-                        twoDaysEntries.add(HrvDataEntry);
-                    }
-                }
-
-                // 같은 초가 나오는 경우 현재 타임 테이블 값과 다음값 비교 (ex: 10 -> 19)
-                if (check  && HrvTimeCount < twoDaysHrvArrayData.size()) {
-                    HrvTime = twoDaysHrvTimeData.get(HrvTimeCount).split(":");
-                    HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                    while (HrvSecond.equals(checkTimeTable[2])){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, twoDaysHrvArrayData.get(HrvTimeCount).floatValue());
-                        twoDaysEntries.add(HrvDataEntry);
-
-                        HrvTimeCount += 1;
-                        // 마지막 값인지 확인
-                        HrvTime = twoDaysHrvTimeData.get(HrvTimeCount).split(":");
-                        HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                        // 마지막 값 확인
-                        if(twoDaysHrvTimeData.size() - 10 < HrvTimeCount){
-                            break;
-                        }
-                    }
-                }
-
-                timeTableCount += 1;
-
-                // 마지막 값 확인
-                if(twoDaysHrvTimeData.size() - 10 < HrvTimeCount){
-                    break;
-                }
-            }
-
-            HrvTimeCount = 0;
-            timeTableCount = 0;
-
-            // twoDays(이전일) 그래프 시작 포인트
-            LocalTime localThreeDaysTime = LocalTime.of(intThreeDaysStartHour, intThreeDaysStartMinute);
-
-            duration = Duration.between(localStartTime, localThreeDaysTime);
-
-            totalDiffInMinutes = duration.toMinutes();
-            minuteDifference = (int) (totalDiffInMinutes % 60); // 분 차이
-            hourDifference = (int) duration.toHours();  // 시간 차이
-
-            timeTableCount = (hourDifference * 360) + (minuteDifference * 6);
-
-//            Log.d("minuteDifference", String.valueOf(minuteDifference));
-//            Log.d("hourDifference", String.valueOf(hourDifference));
-//            Log.d("timeTableCount", String.valueOf(timeTableCount));
-
-            // threeDays Graph
-            for( int i = 0 ; totalXValue - 1 > i ; i++) {
-                String[] HrvTime = threeDaysHrvTimeData.get(HrvTimeCount).split(":");
-                String[] checkTimeTable = timeTable.get(timeTableCount).split(":");
-                String HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-//                Log.d("HrvTime", Arrays.toString(HrvTime));
-//                Log.d("HrvSecond", String.valueOf(HrvSecond));
-//                Log.d("checkTimeTable", Arrays.toString(checkTimeTable));
-
-                boolean check = false;
-
-                // 값이 있는 경우
-                if(HrvTime[0].equals(checkTimeTable[0])){ // hour
-                    if(HrvTime[1].equals(checkTimeTable[1])) { // minute
-                        if(HrvSecond.equals(checkTimeTable[2])) { // second
-
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, threeDaysHrvArrayData.get(HrvTimeCount).floatValue());
-                            threeDaysEntries.add(HrvDataEntry);
-
-//                            Log.d("check", String.valueOf(HrvDataEntry));
-
-                            HrvTimeCount += 1; // 값이 있으니까 +1
-                            check = true;
-                        }
-                    } else {
-                        // 분 값이 없는 경우 이전 값을 씀
-                        if(HrvTimeCount > 0){
-                            Entry HrvDataEntry = new Entry((float)timeTableCount, threeDaysHrvArrayData.get(HrvTimeCount-1).floatValue());
-                            threeDaysEntries.add(HrvDataEntry);
-                        }
-                    }
-                } else {
-                    // 시간 값이 없는 경우 이전 값을 씀
-                    if(HrvTimeCount > 0){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, threeDaysHrvArrayData.get(HrvTimeCount-1).floatValue());
-                        threeDaysEntries.add(HrvDataEntry);
-                    }
-                }
-
-                // 같은 초가 나오는 경우 현재 타임 테이블 값과 다음값 비교 (ex: 10 -> 19)
-                if (check  && HrvTimeCount < threeDaysHrvArrayData.size()) {
-                    HrvTime = threeDaysHrvTimeData.get(HrvTimeCount).split(":");
-                    HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                    while (HrvSecond.equals(checkTimeTable[2])){
-                        Entry HrvDataEntry = new Entry((float)timeTableCount, threeDaysHrvArrayData.get(HrvTimeCount).floatValue());
-                        threeDaysEntries.add(HrvDataEntry);
-
-                        HrvTimeCount += 1;
-                        // 마지막 값인지 확인
-                        HrvTime = threeDaysHrvTimeData.get(HrvTimeCount).split(":");
-                        HrvSecond = String.valueOf(HrvTime[2].charAt(0));
-
-                        // 마지막 값 확인
-                        if(threeDaysHrvTimeData.size() - 10 < HrvTimeCount){
-                            break;
-                        }
-
-                    }
-                }
-
-                timeTableCount += 1;
-
-                // 마지막 값 확인
-                if(threeDaysHrvTimeData.size() - 10 < HrvTimeCount){
-                    break;
-                }
-            }
-
-            timeTable.clear();
-
-            // 시간 시간(정수)
-            intStartHour = startTime[0];
-            intStartMinute = startTime[1];
-            secondCnt = 0;
-
-            // 시간 시간(문자열)
-            StringStartHour = String.valueOf(startTime[0]);
-            StringStartMinute = String.valueOf(startTime[1]);
-
-            // remove second
-            for(int i = 0; totalXValue > i ; i++) {
-                String time = StringStartHour+ ":" + StringStartMinute;
-
-                timeTable.add(time);
-                secondCnt++;
-
-                // 초 -> 분
-                if ( secondCnt == 6 ){
-                    if(intStartMinute < 9) {
-                        StringStartMinute = "0" + (intStartMinute + 1);
-                    }
-                    else {
-                        StringStartMinute = String.valueOf(intStartMinute + 1);
-                    }
-                    intStartMinute += 1;
-                    secondCnt = 0;
-                }
-
-                // 분 -> 시
-                if (StringStartMinute.equals("60")){
-                    if (intStartMinute < 9) {
-                        StringStartHour = "0" + (intStartHour + 1);
-                    }
-                    else {
-                        StringStartHour = String.valueOf(intStartHour + 1);
-                    }
-                    StringStartMinute = "00";
-                    intStartHour++;
-                    intStartMinute = 0;
-                }
-            }
+            // 그래프 Set
+            LineDataSet targetDataSet = LineChartController.getLineData(targetEntries,targetMonth+"-"+targetDay,Color.RED);
 
             // 그래프 Set
-            LineDataSet targetDataSet = new LineDataSet(targetEntries, targetMonth+"-"+targetDay);
-            targetDataSet.setDrawCircles(false);
-            targetDataSet.setColor(Color.RED);
-            targetDataSet.setLineWidth(0.5f);
-            targetDataSet.setDrawValues(true);
-
+            LineDataSet twoDaysDataSet = LineChartController.getLineData(twoDaysEntries,twoDaysHrvMonth+"-"+twoDaysHrvDay,Color.BLUE);
 
             // 그래프 Set
-            LineDataSet twoDaysDataSet = new LineDataSet(twoDaysEntries, twoDaysHrvMonth+"-"+twoDaysHrvDay);
-            twoDaysDataSet.setDrawCircles(false);
-            twoDaysDataSet.setColor(Color.BLUE);
-            twoDaysDataSet.setLineWidth(0.5f);
-            twoDaysDataSet.setDrawValues(true);
-
-            // 그래프 Set
-            LineDataSet threeDaysDataSet = new LineDataSet(threeDaysEntries, threeDaysHrvMonth+"-"+threeDaysHrvDay);
-            threeDaysDataSet.setDrawCircles(false);
-            threeDaysDataSet.setColor(Color.parseColor("#138A1E"));
-            threeDaysDataSet.setLineWidth(0.5f);
-            threeDaysDataSet.setDrawValues(true);
+            LineDataSet threeDaysDataSet = LineChartController.getLineData(threeDaysEntries,threeDaysHrvMonth+"-"+threeDaysHrvDay,Color.parseColor("#138A1E"));
 
             ArrayList<ILineDataSet> threeDaysHrvChartdataSets = new ArrayList<>();
             threeDaysHrvChartdataSets.add(threeDaysDataSet);
             threeDaysHrvChartdataSets.add(twoDaysDataSet);
             threeDaysHrvChartdataSets.add(targetDataSet);
 
-            LineData twoDaysHrvChartData = new LineData(threeDaysHrvChartdataSets);
+            LineData HrvChartData = new LineData(threeDaysHrvChartdataSets);
 
-            hrvChart.setData(twoDaysHrvChartData);
-            hrvChart.setNoDataText("");// 데이터가 없는 경우 차트에 표시되는 텍스트 설정
-            hrvChart.getXAxis().setEnabled(true);   // x축 활성화(true)
-            hrvChart.getLegend().setTextSize(15f);  // 범례 텍스트 크기 설정("Hrv" size)
-            hrvChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(timeTable));    // x축의 값 설정
-            hrvChart.setVisibleXRangeMaximum(500);  // 한 번에 보여지는 x축 최대 값
-            hrvChart.getXAxis().setGranularity(1f); // 축의 최소 간격
-            hrvChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM); // x축 위치
-            hrvChart.getXAxis().setDrawGridLines(false);    // 축의 그리드 선
-            hrvChart.getDescription().setEnabled(false);    // 차트 설명
-
-            hrvChart.getAxisLeft().setAxisMaximum(150f); // y 축 최대값
-            hrvChart.getAxisLeft().setAxisMinimum(0f); // y 축 최소값
-            hrvChart.getAxisRight().setEnabled(false);  // 참조 반환
-            hrvChart.setDrawMarkers(false); // 값 마커
-            hrvChart.setDragEnabled(true);  // 드래그 기능
-            hrvChart.setPinchZoom(false);   // 줌 기능
-            hrvChart.setDoubleTapToZoomEnabled(false);  // 더블 탭 줌 기능
-            hrvChart.setHighlightPerDragEnabled(false); // 드래그 시 하이라이트
-
-            hrvChart.getData().notifyDataChanged(); // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.notifyDataSetChanged();    // 차트에게 데이터가 변경되었음을 알림
-            hrvChart.moveViewToX(0);    // 주어진 x값의 위치로 뷰 이동
-
-            hrvChart.invalidate(); // 차트 다시 그림
+            LineChartController.setChartOption(hrvChart,HrvChartData,totalAXis);
 
             // 줌 인 상태에서 다른 그래프 봤을 경우 대비 줌 아웃
-            for(int i = 0 ; 20 > i ; i++) {
-                hrvChart.zoomOut();
-            }
+            LineChartController.setZoom(hrvChart);
 
-            maxHrv.setText(""+max);
-            minHrv.setText(""+min);
-            avgHrv.setText(""+avg);
-            diffMinHrv.setText("-"+(avg-min));
-            diffMaxHrv.setText("+"+(max-avg));
-
+            setHrvText();
         }
         else {
             // 파일이 없는 경우
         }
+    }
+
+    void setHrvLoop(File file,ArrayList<String> timeData,ArrayList<Double> arrayData) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] columns = line.split(","); // 데이터 구분
+            Double hrvDataRow = Double.parseDouble(columns[4]); // hrv data
+            int hrv = Integer.parseInt(columns[4]); // minMaxAvg 찾는 변수
+
+            String[] hrvTimeCheck = columns[0].split(":"); // 시간 구분
+            String myHrvTimeRow = hrvTimeCheck[0] + ":" + hrvTimeCheck[1]; // 초 단위 제거
+
+            calcMinMax(hrv);
+
+            // 데이터 저장
+            timeData.add(myHrvTimeRow);
+            arrayData.add(hrvDataRow);
+        }
+        br.close();
+    }
+
+    void setHrvText(){
+        maxHrv.setText(""+max);
+        minHrv.setText(""+min);
+        avgHrv.setText(""+avg);
+        diffMinHrv.setText("-"+(avg-min));
+        diffMaxHrv.setText("+"+(max-avg));
+    }
+
+    File getHrvDirectory(String name){
+        String directoryName = name;
+        return new File(getActivity().getFilesDir(), directoryName);
+    }
+
+    void Clear(){
+        avg = 0;
+        avgSum = 0;
+        avgCnt = 0;
+        max = 0;
+        min = 70;
     }
 
     public void currentTimeCheck() {
@@ -1630,15 +728,5 @@ public class SummaryHRV extends Fragment {
         threeDaysHrvYear = date.format(yearFormat);
         threeDaysHrvMonth = date.format(monthFormat);
         threeDaysHrvDay = date.format(dayFormat);
-
-//        Log.d("twoDaysHrvDate", twoDaysHrvDate);
-//        Log.d("twoDaysHrvYear", twoDaysHrvYear);
-//        Log.d("twoDaysHrvMonth", twoDaysHrvMonth);
-//        Log.d("twoDaysHrvDay", twoDaysHrvDay);
-//
-//        Log.d("threeDaysHrvDate", threeDaysHrvDate);
-//        Log.d("threeDaysHrvYear", threeDaysHrvYear);
-//        Log.d("threeDaysHrvMonth", threeDaysHrvMonth);
-//        Log.d("threeDaysHrvDay", threeDaysHrvDay);
     }
 }

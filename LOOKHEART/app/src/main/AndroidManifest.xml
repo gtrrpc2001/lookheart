@@ -47,6 +47,7 @@
         android:usesCleartextTraffic="true">
         <service
             android:name=".fragment.home.ForegroundService"
+            android:foregroundServiceType="location"
             android:enabled="true"
             android:exported="true">
         </service>

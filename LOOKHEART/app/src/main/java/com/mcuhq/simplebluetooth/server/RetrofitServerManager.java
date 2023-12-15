@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,8 +22,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitServerManager {
 
-    private static final String BASE_URL = "http://121.152.22.85:40081/"; // Real Address
-
+    private static final String BASE_URL = "http://121.152.22.85:40080/"; // Real Address
+//    private static final String BASE_URL = "http://121.152.22.85:40081/"; // TEST Address
     private static RetrofitServerManager instance;
     private static RetrofitService apiService;
 
@@ -455,8 +456,6 @@ public class RetrofitServerManager {
         });
     }
 
-
-
     public void sendEcgData(String email, String writeTime, String timezone, int bpm, StringBuilder ecgList, ServerTaskCallback callback) {
 
         String stringEcgList = ecgList.toString();
@@ -478,6 +477,28 @@ public class RetrofitServerManager {
         }
 
     }
+
+//    public void sendEcgData(String email, String writeTime, String timezone, int bpm, StringBuilder ecgList, ServerTaskCallback callback) {
+//
+//        String stringEcgList = ecgList.toString();
+//
+////        Log.i("ecg",String.valueOf(ecgList));
+//        try {
+//
+//            Map<String, Object> mapParam = new HashMap<>();
+//            mapParam.put("kind", "ecgByteInsert");
+//            mapParam.put("eq", email);
+//            mapParam.put("writetime", writeTime);
+//            mapParam.put("timezone", timezone);
+//            mapParam.put("bpm", bpm);
+//            mapParam.put("ecgPacket", stringEcgList);
+//
+//            // API 호출
+//            sendEcgDataToServer(mapParam, callback);
+//
+//        } catch (Exception e) {
+//        }
+//    }
 
     public void sendEcgDataToServer(Map<String, Object> data, ServerTaskCallback callback) {
 

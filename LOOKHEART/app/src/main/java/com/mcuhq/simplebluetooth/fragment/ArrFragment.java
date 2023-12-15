@@ -408,14 +408,14 @@ public class ArrFragment extends Fragment {
                 //peak mode setting
                 PeakController peakCtrl = new PeakController();
 
-                for(int i = 4 ; 500 > i ; i++) {
+                for(int i = 60 ; 500 > i ; i++) {
                     columns = line.split(","); // 데이터 구분
                     Double ecg = Double.parseDouble(columns[i]);
 
                     //peak mode 함수 설정하기
                     double peak = peakCtrl.getPeackData(ecg.intValue());
-
                     arrArrayData.add(peak);
+//                    arrArrayData.add(ecg);
                 }
 
                 // 그래프에 들어갈 데이터 저장

@@ -77,6 +77,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -330,7 +331,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     // 14개 씩 들어오는 ecg 데이터를 10개 씩 모아서 서버로 보내기 위한 변수 ( 140개 )
     private double[] ecgPacket = new double[14];
     private double[] peackPacket = new double[14];
-    private StringBuilder ecgPacketList;
+    private StringBuilder ecgPacketList = new StringBuilder();
     private int ecgPacketCnt = 0;
     private int ecgCnt;
     //endregion
@@ -569,7 +570,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
     private void initializeServicesAndUtilities() {
         serviceIntent = new Intent(safeGetActivity(), ForegroundService.class);
-        ecgPacketList = new StringBuilder();
+//        ecgPacketList = new StringBuilder();
         retrofitServerManager = RetrofitServerManager.getInstance();
         gpsTracker = new GpsTracker(safeGetActivity());
     }
@@ -912,9 +913,15 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
         }).start();
     }
 
+//    public void ecgAction(int bpm, StringBuilder ecgList) {
+//        sendEcgData(bpm, ecgList);
+//        ecgPacketList.clear();
+//        ecgPacketCnt = 0;
+//    }
     public void ecgAction(int bpm, StringBuilder ecgList) {
         sendEcgData(bpm, ecgList);
-        ecgPacketList.delete(0, ecgPacketList.length());
+        ecgPacketList = new StringBuilder();
+        leng = 0;
         ecgPacketCnt = 0;
     }
 
@@ -1076,6 +1083,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     }
 
     // 데이터 처리
+    int leng = 0;
     public void doBufProcess(byte[] buf) {
         try {
             if (buf.length >= 19) {
@@ -1103,6 +1111,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         ecgP = ecgP * 4;
 
                         // graph And Arr
+//                        dRecv[iRecvCnt] = ecgP;
                         dRecv[iRecvCnt] = peackCtrl.getPeackData(ecgP);
                         iRecvCnt++;
 
@@ -1131,7 +1140,10 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         ecgCnt++;
 
                     } // for
-
+//                    for(int i = leng; i < ecgPacket.length; i++){
+//                        ecgPacketList[i] = (int)ecgPacket[i];
+//                    }
+//                    leng += 13;
                     ecgPacketList.append(Arrays.toString(ecgPacket));
                     ecgPacketCnt++;
 
@@ -1337,6 +1349,8 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     ecgAction(intRealBPM, ecgPacketList);
                 }
 
+                handler2.post(this::addEntry);
+
             } // if
         } catch (Exception e) {
             e.printStackTrace();
@@ -1484,9 +1498,9 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         }
 
                         // 그래프
-                        if (iRecvCnt > 100 || tickTime() > 200) {
-                            handler2.post(() -> addEntry());
-                        }
+//                        if (iRecvCnt > 100 || tickTime() > 200) {
+//                            handler2.post(() -> addEntry());
+//                        }
 
                         if (lNow - lTick500ms >= 500) { // 0.5
                             handler2.post(() -> uiTick());
@@ -1669,6 +1683,26 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
             }
         });
     }
+
+//    public void sendEcgData(int bpm, StringBuilder ecgPacketList) {
+//
+//        String email = userDetailsSharedPref.getString("email", "NULL");
+//        String writeTime = currentUtcTime();
+//
+//        retrofitServerManager.sendEcgData(email, writeTime, utcOffsetAndCountry, bpm, ecgPacketList, new RetrofitServerManager.ServerTaskCallback() {
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                Log.i("sendECGData", result);
+//            }
+//
+//            @Override
+//            public void onFailure(Exception e) {
+//                Log.e("sendECGData", " send Err");
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 
     private void tenSecondAction() {
 
