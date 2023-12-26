@@ -22,6 +22,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitServerManager {
 
+    private String email;
     private static final String BASE_URL = "http://121.152.22.85:40080/"; // Real Address
 //    private static final String BASE_URL = "http://121.152.22.85:40081/"; // TEST Address
     private static RetrofitServerManager instance;
@@ -561,7 +562,7 @@ public class RetrofitServerManager {
 
 
 
-    public void sendEmergencyData(String email, String timezone, String writeTime, String address, ServerTaskCallback callback) {
+    public void sendEmergencyData(String email, String timezone, String writeTime, String address, String ecgData, ServerTaskCallback callback) {
 
         try {
 
@@ -570,7 +571,7 @@ public class RetrofitServerManager {
             mapParam.put("eq", email);
             mapParam.put("timezone", timezone);
             mapParam.put("writetime", writeTime);
-            mapParam.put("ecgPacket", "");
+            mapParam.put("ecgPacket", ecgData);
             mapParam.put("arrStatus", "");
             mapParam.put("bodystate", "1");
             mapParam.put("address", address);
@@ -632,4 +633,13 @@ public class RetrofitServerManager {
             }
         });
     }
+
+    public void setEmail(String eq) {
+        email = eq;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
 }

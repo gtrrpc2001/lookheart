@@ -68,7 +68,7 @@ import com.mcuhq.simplebluetooth.gps.GpsTracker;
 import com.mcuhq.simplebluetooth.noti.NotificationManager;
 import com.mcuhq.simplebluetooth.permission.PermissionManager;
 import com.mcuhq.simplebluetooth.R;
-import com.mcuhq.simplebluetooth.viewmodel.SharedViewModel;
+
 import com.mcuhq.simplebluetooth.server.RetrofitServerManager;
 import com.mcuhq.simplebluetooth.server.UserProfile;
 
@@ -98,7 +98,8 @@ import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import com.mcuhq.simplebluetooth.controller.PeakController;
+import com.library.lookheartLibrary.controller.PeakController;
+import com.library.lookheartLibrary.viewmodel.SharedViewModel;
 
 
 public class HomeFragment extends Fragment implements PermissionManager.PermissionCallback {
@@ -452,6 +453,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     //endregion
 
     PeakController peackCtrl = new PeakController();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -2092,7 +2094,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
             // 발견 디바이스의 이름을 가지고 비교
             @SuppressLint("MissingPermission") String name = result.getDevice().getName();
             if (name != null) {
-                if (name.equals("ECG")) {
+                if (name.equals("KHJ")) {
                     // 연결 시도
                     if(safeGetActivity() != null && !firstBleConnect) {
                         bluetoothGatt = result.getDevice().connectGatt(getActivityOrThrow().getApplicationContext(), true, btleGattCallback);
@@ -2405,6 +2407,11 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
             AlertDialog alertDialog = builder.create();
 
+            // ECG Packet
+            String strArrEcgData = Arrays.toString(dRecvLast);
+            strArrEcgData = strArrEcgData.replace("[", "").replace("]", "");
+            String finalStrArrEcgData = strArrEcgData;
+
             CountDownTimer countDownTimer = new CountDownTimer(11000, 1000) {
                 public void onTick(long millisUntilFinished) {
                     btnOk.setText(getResources().getString(R.string.ok) + "(" + millisUntilFinished / 1000 + ")");
@@ -2415,7 +2422,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     btnOk.setText(getResources().getString(R.string.sendEmergencyAlert));
                     String writeTime = currentUtcTime();
                     String address = getAddress();
-                    retrofitServerManager.sendEmergencyData(email, utcOffsetAndCountry, writeTime, address, new RetrofitServerManager.ServerTaskCallback() {
+                    retrofitServerManager.sendEmergencyData(email, utcOffsetAndCountry, writeTime, address, finalStrArrEcgData, new RetrofitServerManager.ServerTaskCallback() {
                         @Override
                         public void onSuccess(String result) {
                             Log.i("sendEmergencyData", result);

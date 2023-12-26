@@ -1,6 +1,8 @@
 package com.mcuhq.simplebluetooth.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -13,14 +15,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.mcuhq.simplebluetooth.fragment.ArrFragment;
+import com.library.lookheartLibrary.fragment.ArrFragment;
 import com.mcuhq.simplebluetooth.fragment.home.HomeFragment;
 import com.mcuhq.simplebluetooth.fragment.ProfileFragment;
 import com.mcuhq.simplebluetooth.R;
-import com.mcuhq.simplebluetooth.viewmodel.SharedViewModel;
-import com.mcuhq.simplebluetooth.fragment.SummaryFragment;
+import com.library.lookheartLibrary.fragment.SummaryFragment;
+import com.library.lookheartLibrary.viewmodel.SharedViewModel;
 
 public class Activity_Main extends AppCompatActivity {
+    String email = "";
     SharedViewModel viewModel;
     BottomNavigationView bottomNav;
     HomeFragment homeFragment = new HomeFragment();
@@ -33,6 +36,8 @@ public class Activity_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences emailSharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
+        email = emailSharedPreferences.getString("email", "null");
         // 화면 자동 꺼짐 방지
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -82,9 +87,10 @@ public class Activity_Main extends AppCompatActivity {
                         break;
                     case R.id.bottom_arr:
                         if(arrF == null) {
-                            arrF = new ArrFragment();
+                            arrF = new ArrFragment(email);
                             fragmentManager.beginTransaction().add(R.id.main_frame, arrF).commit();
                         }
+
 
                         if(home != null) fragmentManager.beginTransaction().hide(home).commit();
                         if(summary != null) fragmentManager.beginTransaction().hide(summary).commit();

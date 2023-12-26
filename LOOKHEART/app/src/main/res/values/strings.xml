@@ -166,6 +166,8 @@
     <string name="typeSlowArr">Slow heart rhythm</string>
     <string name="typeHeavyArr">Heavy I.H.R.</string>
 
+    <string name="noArrData">No data available</string>
+
     <!--    ProfileFragment    -->
     <string name="logout">LOGOUT</string>
     <string name="logoutHelp">Do you want to log out?</string>

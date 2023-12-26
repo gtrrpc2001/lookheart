@@ -12,7 +12,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.mcuhq.simplebluetooth.R;
-import com.mcuhq.simplebluetooth.viewmodel.SharedViewModel;
+import com.library.lookheartLibrary.viewmodel.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

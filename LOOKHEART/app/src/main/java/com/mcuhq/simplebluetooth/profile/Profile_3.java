@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mcuhq.simplebluetooth.fragment.ProfileFragment;
 import com.mcuhq.simplebluetooth.R;
 import com.mcuhq.simplebluetooth.server.RetrofitServerManager;
-import com.mcuhq.simplebluetooth.viewmodel.SharedViewModel;
+import com.library.lookheartLibrary.viewmodel.SharedViewModel;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
