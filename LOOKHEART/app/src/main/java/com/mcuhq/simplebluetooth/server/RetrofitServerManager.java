@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,11 +21,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import com.library.lookheartLibrary.server.UserProfileManager;
+import com.library.lookheartLibrary.server.UserProfile;
+
 public class RetrofitServerManager {
 
     private String email;
     private static final String BASE_URL = "http://121.152.22.85:40080/"; // Real Address
 //    private static final String BASE_URL = "http://121.152.22.85:40081/"; // TEST Address
+
     private static RetrofitServerManager instance;
     private static RetrofitService apiService;
 
@@ -280,30 +285,33 @@ public class RetrofitServerManager {
             callback.onFailure(e);
         }
     }
-    public void setProfile(String email, String name, String number, String gender, String height, String weight, String age, String birthday, String sleep, String wakeup,
-                           String targetBpm, String targetStep, String targetDistance, String targetCal, String targetECal, ServerTaskCallback callback) {
+    public void setProfile(UserProfile userProfile, ServerTaskCallback callback) {
+
         try {
             Map<String, Object> mapParam = new HashMap<>();
             mapParam.put("kind", "setProfile");
 
-            mapParam.put("eq", email);
-            mapParam.put("eqname", name);
-            mapParam.put("email", email);
-            mapParam.put("phone", "01012345678");
-            mapParam.put("sex", gender);
-            mapParam.put("height", height);
-            mapParam.put("weight", weight);
-            mapParam.put("age", age);
-            mapParam.put("birth", birthday);
-            mapParam.put("sleeptime", "23");
-            mapParam.put("uptime", "7");
-            mapParam.put("bpm", "90");
-            mapParam.put("step", "3000");
-            mapParam.put("distanceKM", "5");
-            mapParam.put("calexe", "500");
-            mapParam.put("cal", "3000");
+            mapParam.put("eq", userProfile.getEmail());
+            mapParam.put("eqname", userProfile.getName());
+            mapParam.put("email", userProfile.getEmail());
+            mapParam.put("phone", userProfile.getPhone());
+            mapParam.put("sex", userProfile.getGender());
+            mapParam.put("height", userProfile.getHeight());
+            mapParam.put("weight", userProfile.getWeight());
+            mapParam.put("age", userProfile.getAge());
+            mapParam.put("birth", userProfile.getBirthday());
+            mapParam.put("sleeptime", userProfile.getSleepStart());
+            mapParam.put("uptime", userProfile.getSleepEnd());
+            mapParam.put("bpm", userProfile.getActivityBPM());
+            mapParam.put("step", userProfile.getDailyStep());
+            mapParam.put("distanceKM", userProfile.getDailyDistance());
+            mapParam.put("calexe", userProfile.getDailyActivityCalorie());
+            mapParam.put("cal", userProfile.getDailyCalorie());
             mapParam.put("alarm_sms", "0");
             mapParam.put("differtime", "0");
+
+            System.out.println(userProfile.getDailyActivityCalorie());
+            System.out.println(userProfile.getDailyCalorie());
 
             // API 호출
             setProfileFromAPI(mapParam, callback);
@@ -356,8 +364,19 @@ public class RetrofitServerManager {
             @Override
             public void onSuccess(List<UserProfile> result) {
                 try {
+                    ArrayList<String> guardianPhoneNumber = new ArrayList<>();
+
+                    for (UserProfile userProfile : result)
+                        guardianPhoneNumber.add(userProfile.getGuardian());
+
+                    // ArrayList -> Array
+                    String[] phoneNumberArray = new String[guardianPhoneNumber.size()];
+                    guardianPhoneNumber.toArray(phoneNumberArray);
+
                     if (!result.isEmpty()) {
+
                         UserProfileManager.getInstance().setUserProfile(result.get(0));
+                        UserProfileManager.getInstance().setGuardianNumbers(phoneNumberArray);
                         callback.userData(UserProfileManager.getInstance().getUserProfile());  // 콜백 호출
                     }
                 }catch (Exception ignored) {
@@ -519,6 +538,40 @@ public class RetrofitServerManager {
         });
     }
 
+    public void getArrCnt(String eq, String startDate, String endDate, ServerTaskCallback callback)  {
+
+        try {
+
+            Map<String, Object> mapParam = new HashMap<>();
+            mapParam.put("eq", eq);
+            mapParam.put("startDate", startDate);
+            mapParam.put("endDate", endDate);
+
+            // API 호출
+            getArrCntFromAPI(mapParam, callback);
+
+        } catch (Exception e) {
+            callback.onFailure(e);  // 콜백 호출
+        }
+    }
+
+    public void getArrCntFromAPI(Map<String, Object> data, ServerTaskCallback callback) {
+
+        initializeApiService();
+
+        Call<String> call = apiService.getArrCnt(data.get("eq").toString(), data.get("startDate").toString(), data.get("endDate").toString());
+        executeCall(call, new APICallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                callback.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
 
     public void sendArrData(String email, String timezone, String writeTime, String arrData, String arrStatus, ServerTaskCallback callback) {
 

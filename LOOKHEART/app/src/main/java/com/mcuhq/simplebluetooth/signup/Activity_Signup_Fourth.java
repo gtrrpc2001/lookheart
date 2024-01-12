@@ -489,13 +489,15 @@ public class Activity_Signup_Fourth extends AppCompatActivity {
         editor.putString("o_distance", "5"); // 일일 목표 걸음거리
 
         // 기본 설정 알람
-        editor.putBoolean("s_emergency", true); // 응급 상황
-        editor.putBoolean("s_arr", true); // 비정상 맥박
-        editor.putBoolean("s_drop", true); // 전극 떨어짐
-        editor.putBoolean("s_muscle", false); // 근전도
-        editor.putBoolean("s_slowarr", false); // 서맥
-        editor.putBoolean("s_fastarr", false); // 빈맥
-        editor.putBoolean("s_irregular", false); // 불규칙 맥박
+        editor.putBoolean("HeartAttackFlag", true); // 응급 상황
+        editor.putBoolean("ArrFlag", false); // 비정상 맥박
+        editor.putBoolean("NonContactFlag", true); // 전극 떨어짐
+        editor.putBoolean("MyoFlag", false); // 근전도
+        editor.putBoolean("SlowArrFlag", false); // 서맥
+        editor.putBoolean("FastArrFlag", false); // 빈맥
+        editor.putBoolean("HeavyArrFlag", false); // 불규칙 맥박
+        editor.putBoolean("HourlyArrFlag", false);
+        editor.putBoolean("TotalArrFlag", false);
 
         editor.apply(); // 비동기 저장
     }

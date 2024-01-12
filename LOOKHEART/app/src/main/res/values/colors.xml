@@ -32,4 +32,7 @@
 
     <color name="LightGrey">#A9A9A9</color>
     <color name="WHITE">#FFFFFFFF</color>
+
+    <color name="buttonNormalColor">#00ff0000</color>
+    <color name="swiftLightGray">#d3d3d3</color>
 </resources>

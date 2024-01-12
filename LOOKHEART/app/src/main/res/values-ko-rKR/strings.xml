@@ -47,7 +47,7 @@
     <string name="eCalValue">0 kcal</string>
     <string name="step">걸음수</string>
     <string name="stepValue">0 걸음</string>
-    <string name="temperature">전극온도</string>
+    <string name="temperature">피부온도</string>
     <string name="temperatureValue">- °C</string>
     <string name="distance">걸음거리</string>
     <string name="distanceValue">0.000 km</string>
@@ -136,13 +136,13 @@
     <string name="profile2_bpmInfo">성인 평균 활동 기준은 bpm 90입니다.</string>
     <string name="profile2_steps">일일 목표 걸음수</string>
     <string name="profile2_tCal">일일 목표 소비칼로리</string>
-    <string name="profile3_arrInfo1">비정상맥박이 기준 횟수 이상 발생 시</string>
+    <string name="profile3_arrInfo1">비정상맥박이 기준 횟수 이상 발생 시\n보호자에게 sms 알림문자를 전송합니다.</string>
     <string name="profile3_arrInfo2">보호자에게 sms 알림문자를 전송합니다.</string>
     <string name="profile3_title">앱 푸쉬 알림</string>
     <string name="profile3_emergency">응급상황</string>
     <string name="profile3_myo">근전도</string>
     <string name="profile3_nonContact">전극떨어짐</string>
-    <string name="profile3_guardianTitle">보호자 SMS 알림</string>
+    <string name="profile3_guardianTitle">보호자 알림</string>
     <string name="profile3_guardianNoti">보호자 알림 기능</string>
     <string name="profile3_arrNumber">알림발생 기준 횟수</string>
     <string name="profile3_time">회</string>
@@ -222,4 +222,8 @@
     <string name="distanceM2">m</string>
     <string name="summaryBpm_low">bpm</string>
     <string name="noArrData">데이터가 없습니다</string>
+    <string name="totalArr">비정상맥박(통합)</string>
+    <string name="hourlyArr">비정상맥박(시간)</string>
+    <string name="guardian">보호자</string>
+    <string name="functionMessage">기능 준비중입니다.</string>
 </resources>

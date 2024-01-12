@@ -64,25 +64,23 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.mcuhq.simplebluetooth.base.MyTimeZone;
 import com.mcuhq.simplebluetooth.gps.GpsTracker;
 import com.mcuhq.simplebluetooth.noti.NotificationManager;
 import com.mcuhq.simplebluetooth.permission.PermissionManager;
 import com.mcuhq.simplebluetooth.R;
 
 import com.mcuhq.simplebluetooth.server.RetrofitServerManager;
-import com.mcuhq.simplebluetooth.server.UserProfile;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -100,7 +98,10 @@ import java.util.UUID;
 
 import com.library.lookheartLibrary.controller.PeakController;
 import com.library.lookheartLibrary.viewmodel.SharedViewModel;
-
+import com.library.lookheartLibrary.controller.dateController;
+import com.library.lookheartLibrary.server.UserProfile;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class HomeFragment extends Fragment implements PermissionManager.PermissionCallback {
 
@@ -225,6 +226,8 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     private boolean setTachycardiaNotiFlag = false;
     private boolean setBradycardiaNotiFlag = false;
     private boolean setAtrialFibrillationNotiFlag = false;
+    private boolean hourlyArrNotificationFlag = false;
+    private boolean totalArrNotificationFlag = false;
     private boolean HeartAttackCheck = false;
     //endregion
 
@@ -306,7 +309,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     private int allstep;
     private double distance;
     private double wdistance;
-    private int arrCnt;
+    private int arrCnt = 0;
     private double dCal;
     private double dExeCal;
 
@@ -452,7 +455,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     private Boolean ecgCheckTest = false;
     //endregion
 
-    PeakController peackCtrl = new PeakController();
+    PeakController peakCtrl = new PeakController();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -465,6 +468,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
         setupBluetooth();
         initializeUIComponents();
+        permissionCheck();
         initializeServicesAndUtilities();
 
         startContinuousTimeUpdates(); // current date And time update, localData Save func
@@ -473,14 +477,11 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
         timeZone();
         notiCheck();
 
-        permissionCheck();
-
-        startForegroundService();
         setupBackPressHandler();
         setViewModel();
 
 
-        setupTestButton(); // TEST
+//        setupTestButton(); // TEST
 
         return view;
     }
@@ -495,8 +496,10 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                 }
                 ecgCntTest++;
                 ecgCheckTest = !ecgCheckTest;
+                hourlyArrEvent(20);
             }
         });
+
     }
 
     private void initializeMemberVariables() {
@@ -571,7 +574,6 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     }
 
     private void initializeServicesAndUtilities() {
-        serviceIntent = new Intent(safeGetActivity(), ForegroundService.class);
 //        ecgPacketList = new StringBuilder();
         retrofitServerManager = RetrofitServerManager.getInstance();
         gpsTracker = new GpsTracker(safeGetActivity());
@@ -600,6 +602,9 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
         viewModel.getFastArr().observe(getViewLifecycleOwner(), check -> setTachycardiaNotiFlag = check);
         viewModel.getSlowarr().observe(getViewLifecycleOwner(), check -> setBradycardiaNotiFlag = check);
         viewModel.getIrregular().observe(getViewLifecycleOwner(), check -> setAtrialFibrillationNotiFlag = check);
+        viewModel.getHourlyArr().observe(getViewLifecycleOwner(), check -> hourlyArrNotificationFlag = check);
+        viewModel.getTotalArr().observe(getViewLifecycleOwner(), check -> totalArrNotificationFlag = check);
+
     }
 
     public void setupBackPressHandler() {
@@ -825,6 +830,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                             shouldNotify(previousArrCnt, currentArrCnt, 20) ||
                             shouldNotify(previousArrCnt, currentArrCnt, 30) ||
                             shouldNotify(previousArrCnt, currentArrCnt, 50) ){
+
                         runOnActivityUiThread(() -> hourlyArrEvent(currentArrCnt));
                     }
                     previousArrCnt = currentArrCnt; // 현재 값을 이전 값으로 업데이트
@@ -1104,17 +1110,18 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     bluetoothData[2] = (bluetoothData[2] + 186) / 10.0;
                     bluetoothData[2] = bluetoothData[2] + 0.5;
 
-
                     // ecg data = buf[6] ~ buf[19]
-
                     for (int i = 6; i <= 19; i++) {
 
                         int ecgP = buf[i] & 0xFF;
                         ecgP = ecgP * 4;
 
                         // graph And Arr
-//                        dRecv[iRecvCnt] = ecgP;
-                        dRecv[iRecvCnt] = peackCtrl.getPeackData(ecgP);
+                        if (peakCtrl.getEcgToPeakDataFlag()) // peak
+                            dRecv[iRecvCnt] = peakCtrl.changeEcgData((double) ecgP);
+                        else    // ecg
+                            dRecv[iRecvCnt] = ecgP;
+
                         iRecvCnt++;
 
                         dRecvLast[iRecvLastCnt] = ecgP;
@@ -1142,10 +1149,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         ecgCnt++;
 
                     } // for
-//                    for(int i = leng; i < ecgPacket.length; i++){
-//                        ecgPacketList[i] = (int)ecgPacket[i];
-//                    }
-//                    leng += 13;
+
                     ecgPacketList.append(Arrays.toString(ecgPacket));
                     ecgPacketCnt++;
 
@@ -1203,7 +1207,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         }
                         if ((step / 10) == EVENT_SLOW_ARR) {
 
-                            if (bluetoothData[1] > 3) {
+                            if (bluetoothData[1] >= 3) { // bpm >= 3
                                 arr = EVENT_ARR;
                                 arrCnt++;
                                 tenSecondArrCnt++;
@@ -1234,19 +1238,24 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                         } else if (notificationManager.getNotiPermissionCheck() && arrTypeString != null) {
                             switch (arrCnt) {
                                 case 50:
-                                    notificationManager.sendArrNotification(ARR_50, ARR_NOTIFICATION_ID, currentTime);
+                                    if (totalArrNotificationFlag)
+                                        notificationManager.sendArrNotification(ARR_50, ARR_NOTIFICATION_ID, currentTime);
                                     break;
                                 case 100:
-                                    notificationManager.sendArrNotification(ARR_100, ARR_NOTIFICATION_ID, currentTime);
+                                    if (totalArrNotificationFlag)
+                                        notificationManager.sendArrNotification(ARR_100, ARR_NOTIFICATION_ID, currentTime);
                                     break;
                                 case 200:
-                                    notificationManager.sendArrNotification(ARR_200, ARR_NOTIFICATION_ID, currentTime);
+                                    if (totalArrNotificationFlag)
+                                        notificationManager.sendArrNotification(ARR_200, ARR_NOTIFICATION_ID, currentTime);
                                     break;
                                 case 300:
-                                    notificationManager.sendArrNotification(ARR_300, ARR_NOTIFICATION_ID, currentTime);
+                                    if (totalArrNotificationFlag)
+                                        notificationManager.sendArrNotification(ARR_300, ARR_NOTIFICATION_ID, currentTime);
                                     break;
                                 default:
-                                    notificationManager.sendArrNotification(arrTypeString, ARR_NOTIFICATION_ID, currentTime);
+                                    if (setArrNotiFlag)
+                                        notificationManager.sendArrNotification(arrTypeString, ARR_NOTIFICATION_ID, currentTime);
                                     break;
                             }
                         } // notifications
@@ -1821,29 +1830,10 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
     public void loadUserProfile() {
         String getEmail = userDetailsSharedPref.getString("email", "NULL");
-        Log.e("getEmail", getEmail);
         try {
             retrofitServerManager.getProfile(getEmail, new RetrofitServerManager.UserDataCallback() {
                 @Override
                 public void userData(UserProfile user) {
-
-                    // 로컬 저장
-                    userDetailsEditor.putString("gender", user.getGender());
-                    userDetailsEditor.putString("birthday", user.getBirthday());
-                    userDetailsEditor.putString("age", user.getAge());
-                    userDetailsEditor.putString("name", user.getName());
-                    userDetailsEditor.putString("number", user.getPhone());
-                    userDetailsEditor.putString("weight", user.getWeight());
-                    userDetailsEditor.putString("height", user.getHeight());
-                    userDetailsEditor.putString("sleep1", user.getSleepStart());
-                    userDetailsEditor.putString("sleep2", user.getSleepEnd());
-
-                    userDetailsEditor.putString("current_date", user.getJoinDate());
-                    userDetailsEditor.putString("o_cal", user.getDailyCalorie());
-                    userDetailsEditor.putString("o_ecal", user.getDailyActivityCalorie());
-                    userDetailsEditor.putString("o_step", user.getDailyStep());
-                    userDetailsEditor.putString("o_distance", user.getDailyDistance());
-                    userDetailsEditor.commit();
 
                     iGender = user.getGender().equals("남자") ? 1 : 2;
                     iAge = Integer.parseInt(user.getAge());
@@ -1853,54 +1843,28 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     sleep = Integer.parseInt(user.getSleepStart());
                     wakeup = Integer.parseInt(user.getSleepEnd());
 
-                    eCalBPM = Integer.parseInt(user.getActivityBPM());
+                    eCalBPM = Integer.parseInt(user.getActivityBPM()); // activity BPM
 
-                    Log.i("loadUserProfile", "----------------- UserProfile -----------------");
-                    Log.i("UserProfile", "iGender : " + iGender);
-                    Log.i("UserProfile", "iAge : " + iAge);
-                    Log.i("UserProfile", "userName : " + userName);
-                    Log.i("UserProfile", "disheight : " + disheight);
-                    Log.i("UserProfile", "dWeight : " + dWeight);
-                    Log.i("UserProfile", "sleep : " + sleep);
-                    Log.i("UserProfile", "wakeup : " + wakeup);
-                    Log.i("UserProfile", "JoinDate : " + user.getJoinDate());
-                    Log.i("UserProfile", "Tcal : " + user.getDailyCalorie());
-                    Log.i("UserProfile", "Ecal : " + user.getDailyActivityCalorie());
-                    Log.i("UserProfile", "Step : " + user.getDailyStep());
-                    Log.i("UserProfile", "Distance : " + user.getDailyDistance());
+                    peakCtrl.setEcgToPeakDataFlag(user.getEcgFlag().equals("0"));  // peak(0) : true, ecg(1) : false
+
+                    getArrCnt();
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-
                     toast(getResources().getString(R.string.serverErr));
                     e.printStackTrace();
 
-                    // 기본(내부) 정보 사용
-                    String bGender = userDetailsSharedPref.getString("gender", "남자");
-                    if (bGender.equals("남자"))
-                        iGender = 1;
-                    else
-                        iGender = 2;
-
-                    eCalBPM = Integer.parseInt(userDetailsSharedPref.getString("o_bpm", "90"));
-                    iAge= Integer.parseInt(userDetailsSharedPref.getString("age", "40"));
-                    userName = userDetailsSharedPref.getString("name", "관리자");
-                    dWeight = Integer.parseInt(userDetailsSharedPref.getString("weight", "60"));
-                    disheight = Integer.parseInt(userDetailsSharedPref.getString("height", "170"));
-                    sleep = Integer.parseInt(userDetailsSharedPref.getString("sleep1", "23"));
-                    wakeup = Integer.parseInt(userDetailsSharedPref.getString("sleep2", "7"));
-
-                    Log.e("loadUserProfile", "----------------- UserProfile onFailure-----------------");
-                    Log.i("UserProfile", "bGender : " + bGender + "iGender : " + iGender);
-                    Log.i("UserProfile", "iAge : " + iAge);
-                    Log.i("UserProfile", "userName : " + userName);
-                    Log.i("UserProfile", "disheight : " + disheight);
-                    Log.i("UserProfile", "dWeight : " + dWeight);
-                    Log.i("UserProfile", "sleep : " + sleep);
-                    Log.i("UserProfile", "wakeup : " + wakeup);
-
+                    iGender = 1;
+                    eCalBPM = 90;
+                    iAge= 40;
+                    userName = "admin";
+                    dWeight = 60;
+                    disheight = 170;
+                    sleep = 23;
+                    wakeup = 7;
                 }
+
             });
 
         } catch (Exception e) {
@@ -2094,7 +2058,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
             // 발견 디바이스의 이름을 가지고 비교
             @SuppressLint("MissingPermission") String name = result.getDevice().getName();
             if (name != null) {
-                if (name.equals("KHJ")) {
+                if (name.equals("ECG")) {
                     // 연결 시도
                     if(safeGetActivity() != null && !firstBleConnect) {
                         bluetoothGatt = result.getDevice().connectGatt(getActivityOrThrow().getApplicationContext(), true, btleGattCallback);
@@ -2316,6 +2280,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     }
 
     private void hourlyArrEvent(int arrCnt) {
+        if (!hourlyArrNotificationFlag) return;
 
         String title = null;
         String message = null;
@@ -2451,7 +2416,8 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
                     mediaPlayer.release();
                     HeartAttackCheck = false;
 
-                    sendTx("c\n");
+                    if (btnOk.getText() != getResources().getString(R.string.sendEmergencyAlert))
+                        sendTx("c\n");
 
                     alertDialog.dismiss();
                 }
@@ -2546,6 +2512,28 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
         guardianAlertDialog.show();
     }
 
+    private void getArrCnt() {
+
+        String endDate = dateController.dateCalculate(currentDate, 1, true);
+        retrofitServerManager.getArrCnt(email, currentDate, endDate, new RetrofitServerManager.ServerTaskCallback() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+//                    arrCnt = Integer.parseInt(object.getString("arrCnt")) + arrCnt;
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+//                arrCnt = 0;
+                e.printStackTrace();
+            }
+        });
+    }
+
     private void saveGuardianToServer(String email, String writeTime, ArrayList<String> guardian) {
 
         retrofitServerManager.setGuardian(email, utcOffsetAndCountry, writeTime, guardian, new RetrofitServerManager.ServerTaskCallback() {
@@ -2606,21 +2594,19 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     }
 
     public void notiCheck() {
-        try {
+        setHeartAttackNotiFlag = userDetailsSharedPref.getBoolean("HeartAttackFlag", true);
+        setArrNotiFlag = userDetailsSharedPref.getBoolean("ArrFlag", false);
+        setMyoNotiFlag = userDetailsSharedPref.getBoolean("MyoFlag", false);
+        setNonContactNotiFlag = userDetailsSharedPref.getBoolean("NonContactFlag", true);
+        setTachycardiaNotiFlag = userDetailsSharedPref.getBoolean("FastArrFlag", false);
+        setBradycardiaNotiFlag = userDetailsSharedPref.getBoolean("SlowArrFlag", false);
+        setAtrialFibrillationNotiFlag = userDetailsSharedPref.getBoolean("HeavyArrFlag", false);
+        hourlyArrNotificationFlag = userDetailsSharedPref.getBoolean("HourlyArrFlag", false);
+        totalArrNotificationFlag = userDetailsSharedPref.getBoolean("TotalArrFlag", false);
 
-            setHeartAttackNotiFlag = userDetailsSharedPref.getBoolean("s_emergency", true);
-            setArrNotiFlag = userDetailsSharedPref.getBoolean("s_arr", true);
-            setMyoNotiFlag = userDetailsSharedPref.getBoolean("s_muscle", false);
-            setNonContactNotiFlag = userDetailsSharedPref.getBoolean("s_drop", true);
-            setTachycardiaNotiFlag = userDetailsSharedPref.getBoolean("s_fastarr", false);
-            setBradycardiaNotiFlag = userDetailsSharedPref.getBoolean("s_slowarr", false);
-            setAtrialFibrillationNotiFlag = userDetailsSharedPref.getBoolean("s_irregular", false);
+        System.out.println("totalArrNotificationFlag : " + totalArrNotificationFlag);
+        System.out.println("hourlyArrNotificationFlag : " + hourlyArrNotificationFlag);
 
-            userDetailsEditor.putBoolean("profile2check", false);
-            userDetailsEditor.apply();
-
-        } catch (Exception ignored) {
-        }
     }
 
     public void statusCheck(){
@@ -2692,31 +2678,7 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
     }
 
     public void timeZone(){
-        // 국가 코드
-        Locale current = getActivityOrThrow().getResources().getConfiguration().getLocales().get(0);
-        currentCountry = current.getCountry();
-
-        // 현재 시스템의 기본 타임 존
-        TimeZone currentTimeZone = TimeZone.getDefault();
-
-        // 타임 존의 아이디
-        String timeZoneId = currentTimeZone.getID();
-
-        ZoneId zoneId = ZoneId.of(timeZoneId);
-        ZoneOffset offset = LocalDateTime.now().atZone(zoneId).getOffset();
-
-        String utcTime = String.valueOf(offset);
-
-        String firstChar = String.valueOf(utcTime.charAt(0));
-
-        if (firstChar.equals("+") || firstChar.equals("-")){
-            utcOffset = utcTime;
-        }
-        else {
-            utcOffset = "+" + utcTime;
-        }
-
-        utcOffsetAndCountry = utcOffset + "/" + currentCountry;
+        utcOffsetAndCountry = MyTimeZone.getInstance().getTimeZone(getActivityOrThrow());
     }
 
     public String currentUtcTime(){
@@ -2816,6 +2778,9 @@ public class HomeFragment extends Fragment implements PermissionManager.Permissi
 
     private void onAllPermissionsGranted() {
         notificationManager = NotificationManager.getInstance(safeGetActivity());
+        serviceIntent = new Intent(safeGetActivity(), ForegroundService.class);
+
+        startForegroundService();
         BleConnectCheck();
     }
 

@@ -71,7 +71,7 @@
     <string name="eCalValue">0 千卡</string>
     <string name="step">"步数 "</string>
     <string name="stepValue">0 步伐</string>
-    <string name="temperature">电极温度</string>
+    <string name="temperature">皮肤温度</string>
     <string name="temperatureValue">- 摄氏度</string>
     <string name="distance">步长</string>
     <string name="distanceM">距离（米）</string>
@@ -149,9 +149,9 @@
     <string name="profile3_emergency">紧急报警</string>
     <string name="profile3_myo">肌电图</string>
     <string name="profile3_nonContact">电极脱落</string>
-    <string name="profile3_guardianTitle">短信通知监护人</string>
+    <string name="profile3_guardianTitle">监护人警报</string>
     <string name="profile3_guardianNoti">通知监护人功能</string>
-    <string name="profile3_arrInfo1">脉搏异常超过上限值，</string>
+    <string name="profile3_arrInfo1">脉搏异常超过上限值，\n立即短信通知监护人</string>
     <string name="profile3_arrInfo2">立即短信通知监护人</string>
     <string name="profile3_arrNumber">发出通知标准次数</string>
     <string name="profile3_time">次</string>
@@ -222,4 +222,8 @@
     <string name="distanceM2">米</string>
     <string name="summaryBpm_low">心率</string>
     <string name="noArrData">没有数据</string>
+    <string name="totalArr">异常脉搏(总计)</string>
+    <string name="hourlyArr">异常脉搏(每小时)</string>
+    <string name="guardian">保护者</string>
+    <string name="functionMessage">功能正在准备中。</string>
 </resources>

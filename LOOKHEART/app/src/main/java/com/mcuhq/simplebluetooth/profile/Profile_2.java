@@ -18,13 +18,20 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mcuhq.simplebluetooth.R;
 import com.mcuhq.simplebluetooth.server.RetrofitServerManager;
 import com.library.lookheartLibrary.viewmodel.SharedViewModel;
-
+import com.library.lookheartLibrary.server.UserProfileManager;
+import com.library.lookheartLibrary.server.UserProfile;
 public class Profile_2 extends Fragment {
 
-    SharedViewModel viewModel;
+    private final static int BPM_PLUS = 0, BPM_MINUS = 1;
+    private final static int STEP_PLUS = 2, STEP_MINUS = 3;
+    private final static int DISTANCE_PLUS = 4, DISTANCE_MINUS = 5;
+    private final static int ACTIVITY_CAL_PLUS = 6, ACTIVITY_CAL_MINUS = 7;
+    private final static int TOTAL_CAL_PLUS = 8, TOTAL_CAL_MINUS = 9;
 
-    RetrofitServerManager retrofitServerManager;
-
+    private View view;
+    private SharedViewModel viewModel;
+    private RetrofitServerManager retrofitServerManager;
+    private UserProfile userProfile;
     private SharedPreferences userDetailsSharedPref;
     private SharedPreferences.Editor userDetailsEditor;
 
@@ -34,191 +41,21 @@ public class Profile_2 extends Fragment {
 
     private EditText profile2_bpm,profile2_step,profile2_distance,profile2_ecal,profile2_cal;
 
-    private int bpm = 90, step = 2000, distance = 5, ecal = 500, cal = 3000;
-    private boolean profile2check = false;
-    private String email;
+    private String bpm = "90", step = "2000", distance = "5", eCal = "500", cal = "3000";
 
-    ScrollView sv;
-
-
+    private ScrollView sv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_profile2, container, false);
+        view = inflater.inflate(R.layout.activity_profile2, container, false);
 
-        sv = view.findViewById(R.id.scrollView2);
-        retrofitServerManager = RetrofitServerManager.getInstance();
+        init();
 
-        SharedPreferences emailSharedPreferences = getActivity().getSharedPreferences("User", Context.MODE_PRIVATE);
-        email = emailSharedPreferences.getString("email", "null");
+        findViewById();
 
-        userDetailsSharedPref = getActivity().getSharedPreferences(email, Context.MODE_PRIVATE);
-        userDetailsEditor = userDetailsSharedPref.edit();
+        setUI();
 
-        profile2_bpm_m = view.findViewById(R.id.profile2_bpm_m);
-        profile2_bpm_p = view.findViewById(R.id.profile2_bpm_p);
-        profile2_step_m = view.findViewById(R.id.profile2_step_m);
-        profile2_step_p = view.findViewById(R.id.profile2_step_p);
-        profile2_distance_m = view.findViewById(R.id.profile2_distance_m);
-        profile2_distance_p = view.findViewById(R.id.profile2_distance_p);
-        profile2_ecal_m = view.findViewById(R.id.profile2_ecal_m);
-        profile2_ecal_p = view.findViewById(R.id.profile2_ecal_p);
-        profile2_cal_m = view.findViewById(R.id.profile2_cal_m);
-        profile2_cal_p = view.findViewById(R.id.profile2_cal_p);
-        profile2_save = view.findViewById(R.id.profile2_save);
-
-        profile2_bpm = view.findViewById(R.id.profile2_bpm);
-        profile2_step = view.findViewById(R.id.profile2_step);
-        profile2_distance = view.findViewById(R.id.profile2_distance);
-        profile2_ecal = view.findViewById(R.id.profile2_ecal);
-        profile2_cal = view.findViewById(R.id.profile2_cal);
-
-        Bundle args = getArguments();
-
-        //SharedPreferences에서 개인정보 불러오기
-        String savedText1 = userDetailsSharedPref.getString("o_bpm", String.valueOf(bpm));
-        String savedText2 = userDetailsSharedPref.getString("o_step", String.valueOf(step));
-        String savedText3 = userDetailsSharedPref.getString("o_distance", String.valueOf(distance));
-        String savedText4 = userDetailsSharedPref.getString("o_ecal", String.valueOf(ecal));
-        String savedText5 = userDetailsSharedPref.getString("o_cal", String.valueOf(cal));
-        profile2check = userDetailsSharedPref.getBoolean("profile2check",false);
-
-
-        profile2_bpm.setText(savedText1);
-        profile2_step.setText(savedText2);
-        profile2_distance.setText(savedText3);
-        profile2_ecal.setText(savedText4);
-        profile2_cal.setText(savedText5);
-
-
-        // 값을 int로 변환합니다.
-        final int[] o_bpm = {Integer.parseInt(savedText1)};
-        final int[] o_step = {Integer.parseInt(savedText2)};
-        final int[] o_distance = {Integer.parseInt(savedText3)};
-        final int[] o_ecal = {Integer.parseInt(savedText4)};
-        final int[] o_cal = {Integer.parseInt(savedText5)};
-
-        // TextView에 int 값으로 설정합니다.
-        profile2_bpm.setText(String.valueOf(o_bpm[0]));
-        profile2_step.setText(String.valueOf(o_step[0]));
-        profile2_distance.setText(String.valueOf(o_distance[0]));
-        profile2_ecal.setText(String.valueOf(o_ecal[0]));
-        profile2_cal.setText(String.valueOf(o_cal[0]));
-
-
-        profile2_bpm_p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_bpm[0]++;
-                profile2_bpm.setText(String.valueOf(o_bpm[0]));
-            }
-        });
-
-        profile2_bpm_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_bpm[0]--;
-                profile2_bpm.setText(String.valueOf(o_bpm[0]));
-            }
-        });
-
-        profile2_step_p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_step[0]++;
-                profile2_step.setText(String.valueOf(o_step[0]));
-            }
-        });
-
-        profile2_step_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_step[0]--;
-                profile2_step.setText(String.valueOf(o_step[0]));
-            }
-        });
-
-        profile2_distance_p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_distance[0]++;
-                profile2_distance.setText(String.valueOf(o_distance[0]));
-            }
-        });
-
-        profile2_distance_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_distance[0]--;
-                profile2_distance.setText(String.valueOf(o_distance[0]));
-            }
-        });
-
-        profile2_ecal_p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_ecal[0]++;
-                profile2_ecal.setText(String.valueOf(o_ecal[0]));
-            }
-        });
-
-        profile2_ecal_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_ecal[0]--;
-                profile2_ecal.setText(String.valueOf(o_ecal[0]));
-            }
-        });
-
-        profile2_cal_p.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_cal[0]++;
-                profile2_cal.setText(String.valueOf(o_cal[0]));
-            }
-        });
-
-        profile2_cal_m.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                o_cal[0]--;
-                profile2_cal.setText(String.valueOf(o_cal[0]));
-            }
-        });
-
-
-        profile2_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String textToSave1 = profile2_bpm.getText().toString();
-                String textToSave2 = profile2_step.getText().toString();
-                String textToSave3 = profile2_distance.getText().toString();
-                String textToSave4 = profile2_ecal.getText().toString();
-                String textToSave5 = profile2_cal.getText().toString();
-
-                userDetailsEditor.putString("o_bpm", textToSave1);
-                userDetailsEditor.putString("o_step", textToSave2);
-                userDetailsEditor.putString("o_distance", textToSave3);
-                userDetailsEditor.putString("o_ecal", textToSave4);
-                userDetailsEditor.putString("o_cal", textToSave5);
-                userDetailsEditor.putBoolean("profile2check",true);
-                userDetailsEditor.apply();
-
-                saveProfileData();
-
-                viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-
-                viewModel.setBpm(textToSave1);
-                viewModel.setTCalText(textToSave5);
-                viewModel.setECalText(textToSave4);
-                viewModel.setDistance(textToSave3);
-                viewModel.setStep(textToSave2);
-
-                // 저장한 후, 필요한 작업 수행 (예: 토스트 메시지 표시 등)
-//                Toast.makeText(getActivity(), getResources().getString(R.string.saveData), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        setButton();
 
         //입력할때 키보드에 대한 높이조절
         profile2_bpm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -263,44 +100,122 @@ public class Profile_2 extends Fragment {
         });
 
 
-
-
         return view;
     }
 
-    public void KeyboardUp(int size) {
-        sv.postDelayed(new Runnable() {
+    private void setButton() {
+        setOnClickListener(profile2_bpm_p, profile2_bpm_m, BPM_PLUS);
+        setOnClickListener(profile2_step_p, profile2_step_m, STEP_PLUS);
+        setOnClickListener(profile2_distance_p, profile2_distance_m, DISTANCE_PLUS);
+        setOnClickListener(profile2_ecal_p, profile2_ecal_m, ACTIVITY_CAL_PLUS);
+        setOnClickListener(profile2_cal_p, profile2_cal_m, TOTAL_CAL_PLUS);
+
+        // save button
+        profile2_save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                sv.smoothScrollTo(0, size);
+            public void onClick(View v) {
+
+                bpm = profile2_bpm.getText().toString();
+                step = profile2_step.getText().toString();
+                distance = profile2_distance.getText().toString();
+                eCal = profile2_ecal.getText().toString();
+                cal = profile2_cal.getText().toString();
+
+                saveProfileData();
+                setViewModel();
+
             }
-        }, 200);
+        });
     }
 
+    private void setOnClickListener(Button plusButton, Button minusButton, int tag) {
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonEvent(tag);
+            }
+        });
 
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonEvent(tag + 1);
+            }
+        });
+    }
 
-    public void saveProfileData(){
+    private void buttonEvent(int tag) {
+        switch (tag) {
+            case BPM_PLUS:
+            case BPM_MINUS:
+                bpm = tag == BPM_PLUS ? String.valueOf(Integer.parseInt(bpm) + 1) : String.valueOf(Integer.parseInt(bpm) - 1);
+                profile2_bpm.setText(bpm);
+                break;
 
-        String name = userDetailsSharedPref.getString("name", "null");
-        String number = userDetailsSharedPref.getString("number", "null");
-        String birthday = userDetailsSharedPref.getString("birthday", "null");
-        String age = userDetailsSharedPref.getString("age", "null");
-        String gender = userDetailsSharedPref.getString("gender", "null");
-        String height = userDetailsSharedPref.getString("height", "null");
-        String weight = userDetailsSharedPref.getString("weight", "null");
-        String sleep1 = userDetailsSharedPref.getString("sleep1", "null");
-        String sleep2 = userDetailsSharedPref.getString("sleep2", "null");
+            case STEP_PLUS:
+            case STEP_MINUS:
+                step = tag == STEP_PLUS ? String.valueOf(Integer.parseInt(step) + 1) : String.valueOf(Integer.parseInt(step) - 1);
+                profile2_step.setText(step);
+                break;
 
-        String bpm = profile2_bpm.getText().toString();
-        String step = profile2_step.getText().toString();
-        String distance = profile2_distance.getText().toString();
-        String eCal = profile2_ecal.getText().toString();
-        String cal = profile2_cal.getText().toString();
+            case DISTANCE_PLUS:
+            case DISTANCE_MINUS:
+                distance = tag == DISTANCE_PLUS ? String.valueOf(Integer.parseInt(distance) + 1) : String.valueOf(Integer.parseInt(distance) - 1);
+                profile2_distance.setText(distance);
+                break;
 
+            case ACTIVITY_CAL_PLUS:
+            case ACTIVITY_CAL_MINUS:
+                eCal = tag == ACTIVITY_CAL_PLUS ? String.valueOf(Integer.parseInt(eCal) + 1) : String.valueOf(Integer.parseInt(eCal) - 1);
+                profile2_ecal.setText(eCal);
+                break;
+
+            case TOTAL_CAL_PLUS:
+            case TOTAL_CAL_MINUS:
+                cal = tag == TOTAL_CAL_PLUS ? String.valueOf(Integer.parseInt(cal) + 1) : String.valueOf(Integer.parseInt(cal) - 1);
+                profile2_cal.setText(cal);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void init() {
+        retrofitServerManager = RetrofitServerManager.getInstance();
+        userProfile = UserProfileManager.getInstance().getUserProfile();
+
+        String email = userProfile.getEmail();
+        userDetailsSharedPref = getActivity().getSharedPreferences(email, Context.MODE_PRIVATE);
+        userDetailsEditor = userDetailsSharedPref.edit();
+
+        bpm = userProfile.getActivityBPM();
+        step = userProfile.getDailyStep();
+        distance = userProfile.getDailyDistance();
+        eCal = userProfile.getDailyActivityCalorie();
+        cal = userProfile.getDailyCalorie();
+    }
+
+    private void setUI() {
+
+        profile2_bpm.setText(bpm);
+        profile2_step.setText(step);
+        profile2_distance.setText(distance);
+        profile2_ecal.setText(eCal);
+        profile2_cal.setText(cal);
+
+    }
+
+    private void saveProfileData(){
+
+        userProfile.setActivityBPM(bpm);
+        userProfile.setDailyStep(step);
+        userProfile.setDailyDistance(distance);
+        userProfile.setDailyActivityCalorie(eCal);
+        userProfile.setDailyCalorie(cal);
 
         try {
-            retrofitServerManager.setProfile(email, name, number, gender, height, weight, age, birthday, sleep1, sleep2,
-                    bpm, step, distance, cal, eCal, new RetrofitServerManager.ServerTaskCallback() {
+            retrofitServerManager.setProfile(userProfile, new RetrofitServerManager.ServerTaskCallback() {
                         @Override
                         public void onSuccess(String result) {
                             Log.i("save",result);
@@ -319,6 +234,45 @@ public class Profile_2 extends Fragment {
         }catch (Exception e){
 
         }
+    }
 
+    private void setViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.setBpm(bpm);
+        viewModel.setDistance(distance);
+        viewModel.setStep(step);
+        viewModel.setECalText(eCal);
+        viewModel.setTCalText(cal);
+    }
+
+    private void findViewById() {
+        sv = view.findViewById(R.id.scrollView2);
+
+        profile2_bpm_m = view.findViewById(R.id.profile2_bpm_m);
+        profile2_bpm_p = view.findViewById(R.id.profile2_bpm_p);
+        profile2_step_m = view.findViewById(R.id.profile2_step_m);
+        profile2_step_p = view.findViewById(R.id.profile2_step_p);
+        profile2_distance_m = view.findViewById(R.id.profile2_distance_m);
+        profile2_distance_p = view.findViewById(R.id.profile2_distance_p);
+        profile2_ecal_m = view.findViewById(R.id.profile2_ecal_m);
+        profile2_ecal_p = view.findViewById(R.id.profile2_ecal_p);
+        profile2_cal_m = view.findViewById(R.id.profile2_cal_m);
+        profile2_cal_p = view.findViewById(R.id.profile2_cal_p);
+        profile2_save = view.findViewById(R.id.profile2_save);
+
+        profile2_bpm = view.findViewById(R.id.profile2_bpm);
+        profile2_step = view.findViewById(R.id.profile2_step);
+        profile2_distance = view.findViewById(R.id.profile2_distance);
+        profile2_ecal = view.findViewById(R.id.profile2_ecal);
+        profile2_cal = view.findViewById(R.id.profile2_cal);
+    }
+
+    private void KeyboardUp(int size) {
+        sv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sv.smoothScrollTo(0, size);
+            }
+        }, 200);
     }
 }

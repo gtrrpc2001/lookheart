@@ -202,10 +202,10 @@
     <string name="profile3_emergency">Emergency alert</string>
     <string name="profile3_myo">Myo-activity</string>
     <string name="profile3_nonContact">Electrode detached</string>
-    <string name="profile3_guardianTitle">Guardian SMS Notification</string>
+    <string name="profile3_guardianTitle">Guardian Notification</string>
     <string name="profile3_guardianNoti">Guardian notification</string>
 
-    <string name="profile3_arrInfo1">When abnormal pulse occurs more than the standard number,</string>
+    <string name="profile3_arrInfo1">When abnormal pulse occurs more than the standard number,\nan SMS notification is sent to the guardian.</string>
     <string name="profile3_arrInfo2">an SMS notification is sent to the guardian.</string>
     <string name="profile3_arrNumber">Number of I.H.R.</string>
     <string name="profile3_time">time</string>
@@ -298,6 +298,10 @@
     <string name="bottomSummary">Summary</string>
     <string name="bottomArr">IHR</string>
     <string name="bottomProfile">Profile</string>
+    <string name="totalArr">I.H.R.(Total)</string>
+    <string name="hourlyArr">I.H.R.(Hourly)</string>
+    <string name="guardian">Guardian</string>
+    <string name="functionMessage">The function is under preparation</string>
 
 
 </resources>

@@ -9,6 +9,8 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
+import com.library.lookheartLibrary.server.UserProfile;
+
 public interface RetrofitService {
 
     // --------------------------- GET --------------------------- //
@@ -28,7 +30,9 @@ public interface RetrofitService {
     @GET("msl/Profile")
     Call<List<UserProfile>> getProfileData(@Query("empid") String empid);
 
-
+    // getArrCnt
+    @GET("mslecgarr/arrCount")
+    Call<String> getArrCnt(@Query("eq") String eq, @Query("startDate") String startDate, @Query("endDate") String endDate);
 
 
     // --------------------------- POST --------------------------- //

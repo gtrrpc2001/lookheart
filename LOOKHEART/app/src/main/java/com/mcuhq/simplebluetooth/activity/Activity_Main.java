@@ -22,13 +22,36 @@ import com.mcuhq.simplebluetooth.R;
 import com.library.lookheartLibrary.fragment.SummaryFragment;
 import com.library.lookheartLibrary.viewmodel.SharedViewModel;
 
+import java.util.ArrayList;
+
 public class Activity_Main extends AppCompatActivity {
-    String email = "";
-    SharedViewModel viewModel;
+
+    private enum FragmentType {
+        HOME("Home"),
+        SUMMARY("Summary"),
+        ARR("Arr"),
+        PROFILE("Profile");
+
+        private final String type;
+
+        FragmentType(String type) {
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
+
+    String email;
     BottomNavigationView bottomNav;
-    HomeFragment homeFragment = new HomeFragment();
-    private Fragment home, summary, arrF, workout, profile;
+    private Fragment home, profile;
     FragmentManager fragmentManager;
+
+    private ArrFragment arrFragment;
+    private SummaryFragment summaryFragment;
+
+    private ArrayList<Fragment> fragmentsList = new ArrayList<>();
 
     @SuppressLint("BatteryLife")
     @Override
@@ -36,6 +59,13 @@ public class Activity_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        init();
+
+        setButtonEvent();
+
+    }
+
+    private void init() {
         SharedPreferences emailSharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
         email = emailSharedPreferences.getString("email", "null");
         // 화면 자동 꺼짐 방지
@@ -43,78 +73,39 @@ public class Activity_Main extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_navigation);
         fragmentManager = getSupportFragmentManager();
+    }
+
+    private void setButtonEvent() {
 
         // Start Fragment
         home = new HomeFragment();
-        fragmentManager.beginTransaction().replace(R.id.main_frame, home).commit(); //FrameLayout에 fragment.xml 띄우기
+        fragmentManager.beginTransaction().replace(R.id.main_frame, home).commit();
+        fragmentsList.add(home);
 
-        // 바텀 네비게이션 버튼 클릭 시 프래그먼트 전환
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                String title = (String) item.getTitle();
                 int id = item.getItemId();
 
                 switch (id) {
                     case R.id.bottom_home:
-                        if(home == null) {
-                            home = new HomeFragment();
-                            fragmentManager.beginTransaction().add(R.id.main_frame, home).commit();
-                        }
-
-                        if(home != null) fragmentManager.beginTransaction().show(home).commit();
-                        if(summary != null) fragmentManager.beginTransaction().hide(summary).commit();
-                        if(arrF != null) fragmentManager.beginTransaction().hide(arrF).commit();
-                        if(workout != null) fragmentManager.beginTransaction().hide(workout).commit();
-                        if(profile != null) fragmentManager.beginTransaction().hide(profile).commit();
-
+                        home = (Fragment) getFragment(home, FragmentType.HOME);
+                        setFragment(home, FragmentType.HOME);
                         break;
                     case R.id.bottom_summary:
-                        if(summary == null) {
-                            summary = new SummaryFragment();
-                            fragmentManager.beginTransaction().add(R.id.main_frame, summary).commit();
-                        }
-
-                        if(home != null) fragmentManager.beginTransaction().hide(home).commit();
-                        if(summary != null) fragmentManager.beginTransaction().show(summary).commit();
-                        if(arrF != null) fragmentManager.beginTransaction().hide(arrF).commit();
-                        if(workout != null) fragmentManager.beginTransaction().hide(workout).commit();
-                        if(profile != null) fragmentManager.beginTransaction().hide(profile).commit();
-
-                        viewModel = new ViewModelProvider(Activity_Main.this).get(SharedViewModel.class);
-                        viewModel.setSummaryRefreshCheck(true);
-
+                        summaryFragment = (SummaryFragment) getFragment(summaryFragment, FragmentType.SUMMARY);
+                        setFragment(summaryFragment, FragmentType.SUMMARY);
                         break;
                     case R.id.bottom_arr:
-                        if(arrF == null) {
-                            arrF = new ArrFragment(email);
-                            fragmentManager.beginTransaction().add(R.id.main_frame, arrF).commit();
-                        }
-
-
-                        if(home != null) fragmentManager.beginTransaction().hide(home).commit();
-                        if(summary != null) fragmentManager.beginTransaction().hide(summary).commit();
-                        if(arrF != null) fragmentManager.beginTransaction().show(arrF).commit();
-                        if(workout != null) fragmentManager.beginTransaction().hide(workout).commit();
-                        if(profile != null) fragmentManager.beginTransaction().hide(profile).commit();
-
-                        viewModel = new ViewModelProvider(Activity_Main.this).get(SharedViewModel.class);
-                        viewModel.setArrRefreshCheck(true);
-
+                        if (arrFragment != null)
+                            arrFragment.updateArrList();
+                        arrFragment = (ArrFragment) getFragment(arrFragment, FragmentType.ARR);
+                        setFragment(arrFragment, FragmentType.ARR);
                         break;
 
                     case R.id.bottom_profile:
-                        if(profile == null) {
-                            profile = new ProfileFragment();
-                            fragmentManager.beginTransaction().add(R.id.main_frame, profile).commit();
-                        }
-
-                        if(home != null) fragmentManager.beginTransaction().hide(home).commit();
-                        if(summary != null) fragmentManager.beginTransaction().hide(summary).commit();
-                        if(arrF != null) fragmentManager.beginTransaction().hide(arrF).commit();
-                        if(workout != null) fragmentManager.beginTransaction().hide(workout).commit();
-                        if(profile != null) fragmentManager.beginTransaction().show(profile).commit();
-
+                        profile = (Fragment) getFragment(profile, FragmentType.PROFILE);
+                        setFragment(profile, FragmentType.PROFILE);
                         break;
                 }
 
@@ -122,5 +113,42 @@ public class Activity_Main extends AppCompatActivity {
 
             }
         });
+    }
+
+    private Object getFragment(Fragment fragment, FragmentType type) {
+        if (fragment == null) {
+            fragment = getTypeFragment(type);
+            fragmentManager.beginTransaction().add(R.id.main_frame, fragment).commit();
+            fragmentsList.add(fragment);
+            return fragment;
+        }
+        return fragment;
+    }
+
+    private void setFragment(Fragment fragment, FragmentType type) {
+
+        for (Fragment eventFragment : fragmentsList) {
+            if (fragment == eventFragment) {
+                fragmentManager.beginTransaction().show(eventFragment).commit();
+            } else {
+                if (eventFragment != null)
+                    fragmentManager.beginTransaction().hide(eventFragment).commit();
+            }
+        }
+    }
+
+    private Fragment getTypeFragment(FragmentType type) {
+        switch (type) {
+            case HOME:
+                return new HomeFragment();
+            case SUMMARY:
+                return new SummaryFragment();
+            case ARR:
+                return new ArrFragment(email);
+            case PROFILE:
+                return new ProfileFragment();
+            default:
+                return null;
+        }
     }
 }

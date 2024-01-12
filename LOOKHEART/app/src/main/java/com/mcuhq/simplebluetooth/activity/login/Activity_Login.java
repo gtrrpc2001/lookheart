@@ -1,5 +1,6 @@
 package com.mcuhq.simplebluetooth.activity.login;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,8 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.mcuhq.simplebluetooth.activity.Activity_Main;
 import com.mcuhq.simplebluetooth.permission.PermissionManager;
@@ -112,7 +115,6 @@ public class Activity_Login extends AppCompatActivity {
         SharedPreferences.Editor editor = autoLoginSP.edit();
 
         autoLogin = autoLoginSP.getBoolean("autologin", false);
-
 
         if (autoLogin) {
             Intent intent = new Intent(Activity_Login.this, Activity_Main.class);

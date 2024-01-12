@@ -71,7 +71,7 @@
                     android:textColor="@color/darkGray"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/box1"
+                    android:background="@drawable/profile_button_background"
                     android:paddingLeft="5dp"/>
 
                 <TextView
@@ -95,7 +95,7 @@
                     android:textColor="@color/darkGray"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/box1"
+                    android:background="@drawable/profile_button_background"
                     android:paddingLeft="5dp" />
 
                 <LinearLayout
@@ -133,7 +133,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="10dp"
                         android:orientation="horizontal"
-                        android:background="@drawable/box1">
+                        android:background="@drawable/profile_button_background">
 
                         <ImageButton
                             android:id="@+id/profile1_calendar"
@@ -183,7 +183,7 @@
                         android:layout_marginRight="20dp"
                         android:paddingLeft="5dp"
                         android:textStyle="bold"
-                        android:background="@drawable/box1"/>
+                        android:background="@drawable/profile_button_background"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -222,7 +222,7 @@
                         android:textSize="16dp"
                         android:paddingLeft="5dp"
                         android:textStyle="bold"
-                        android:background="@drawable/box1" />
+                        android:background="@drawable/profile_button_background" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -253,7 +253,7 @@
                         android:textSize="16dp"
                         android:textStyle="bold"
                         android:textColor="@color/darkGray"
-                        android:background="@drawable/box1" />
+                        android:background="@drawable/profile_button_background" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -284,7 +284,7 @@
                         android:textSize="16dp"
                         android:textStyle="bold"
                         android:textColor="@color/darkGray"
-                        android:background="@drawable/box1" />
+                        android:background="@drawable/profile_button_background" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -326,7 +326,7 @@
                             android:textSize="16dp"
                             android:textStyle="bold"
                             android:textColor="@color/darkGray"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:paddingLeft="5dp"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -360,7 +360,7 @@
                             android:paddingBottom="5dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="20dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:textSize="16dp"
                             android:textStyle="bold"
                             android:textColor="@color/darkGray"

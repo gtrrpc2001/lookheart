@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
@@ -53,7 +55,7 @@ public class ForegroundService extends Service {
 
     public void initializeNotification(){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, FOREGROUND_SERVICE);
-        builder.setSmallIcon(R.mipmap.ic_launcher_round);
+        builder.setSmallIcon(R.mipmap.ic_msl_user_round);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.bigText(getResources().getString(R.string.serviceRunning));
         style.setBigContentTitle(null);
@@ -73,6 +75,11 @@ public class ForegroundService extends Service {
         Notification notification = builder.build();
 
         startForeground(2017, notification);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+//            startForeground(2017, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION);
+//        else
+//            startForeground(2017, notification);
+
     }
 
 

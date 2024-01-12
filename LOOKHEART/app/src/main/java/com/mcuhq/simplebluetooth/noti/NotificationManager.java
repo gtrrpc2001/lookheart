@@ -98,12 +98,14 @@ public class NotificationManager {
         }
 
         notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.notiTime) + currentTime);
-        notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
         return notifyBuilder;
     }
 
     private NotificationCompat.Builder getArrNotificationBuilder(String noti, String currentTime) {
         NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(fragmentActivity, PRIMARY_ARR_CHANNEL_ID);
+
+        System.out.println(noti);
 
         switch (noti){
             case ARR:
@@ -121,29 +123,29 @@ public class NotificationManager {
             case ARR_50:
                 notifyBuilder.setContentTitle(fragmentActivity.getResources().getString(R.string.arrCnt50));
                 notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.arrCnt50Text));
-                notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+                notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
                 return notifyBuilder;
             case ARR_100:
                 notifyBuilder.setContentTitle(fragmentActivity.getResources().getString(R.string.arrCnt100));
                 notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.arrCnt100Text));
-                notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+                notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
                 return notifyBuilder;
             case ARR_200:
                 notifyBuilder.setContentTitle(fragmentActivity.getResources().getString(R.string.arrCnt200));
                 notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.arrCnt200Text));
-                notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+                notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
                 return notifyBuilder;
             case ARR_300:
                 notifyBuilder.setContentTitle(fragmentActivity.getResources().getString(R.string.arrCnt300));
                 notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.arrCnt300Text));
-                notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+                notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
                 return notifyBuilder;
             default:
                 return notifyBuilder;
         }
 
         notifyBuilder.setContentText(fragmentActivity.getResources().getString(R.string.notiTime) + currentTime);
-        notifyBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        notifyBuilder.setSmallIcon(R.mipmap.ic_msl_user_round);
         return notifyBuilder;
     }
 

@@ -31,6 +31,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mcuhq.simplebluetooth.R;
 import com.mcuhq.simplebluetooth.server.RetrofitServerManager;
 import com.library.lookheartLibrary.viewmodel.SharedViewModel;
+import com.library.lookheartLibrary.server.UserProfile;
+import com.library.lookheartLibrary.server.UserProfileManager;
 
 public class Profile_1 extends Fragment {
 
@@ -63,6 +65,9 @@ public class Profile_1 extends Fragment {
 
 
     int age;
+
+    private UserProfile userProfile;
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class Profile_1 extends Fragment {
 
         sv = view.findViewById(R.id.scrollView1);
         retrofitServerManager = RetrofitServerManager.getInstance();
+        userProfile = UserProfileManager.getInstance().getUserProfile();
 
         SharedPreferences emailSharedPreferences = getActivity().getSharedPreferences("User", Context.MODE_PRIVATE);
         email = emailSharedPreferences.getString("email", "null");
@@ -84,7 +90,7 @@ public class Profile_1 extends Fragment {
         ageTextView = view.findViewById(R.id.profile1_age);
 
         // 이미 저장된 생년월일이 있을 경우, TextView에 나이 표시
-        String savedBirthday = userDetailsSharedPref.getString("birthday", "");
+        String savedBirthday = userProfile.getBirthday();
         ageTextView.setText(calculateAge(savedBirthday));
 
         // DatePickerDialog의 리스너를 초기화합니다.
@@ -182,14 +188,14 @@ public class Profile_1 extends Fragment {
         String savedText8 = userDetailsSharedPref.getString("sleep2", "7");
         profile1check = userDetailsSharedPref.getBoolean("profile1check",false);
 
-        profile1_name.setText(savedText1);
-        profile1_number.setText(savedText2);
-        profile1_birth.setText(savedText3);
-        profile1_height.setText(savedText4);
-        profile1_weight.setText(savedText5);
-        profile1_gender.setText(savedText6);
-        profile1_sleep1.setText(savedText7);
-        profile1_sleep2.setText(savedText8);
+        profile1_name.setText(userProfile.getName());
+        profile1_number.setText(userProfile.getPhone());
+        profile1_birth.setText(userProfile.getBirthday());
+        profile1_height.setText(userProfile.getBirthday());
+        profile1_weight.setText(userProfile.getWeight());
+        profile1_gender.setText(userProfile.getGender());
+        profile1_sleep1.setText(userProfile.getSleepStart());
+        profile1_sleep2.setText(userProfile.getSleepEnd());
 
 
         //개인정보 저장버튼
@@ -336,25 +342,30 @@ public class Profile_1 extends Fragment {
 
     public void saveProfileData(){
 
+        UserProfile userProfile = UserProfileManager.getInstance().getUserProfile();
+
         String name = profile1_name.getText().toString();
-        String number = profile1_number.getText().toString();
+        String phoneNumber = profile1_number.getText().toString();
         String birthday = profile1_birth.getText().toString();
         String gender = profile1_gender.getText().toString();
         String height = profile1_height.getText().toString();
         String weight = profile1_weight.getText().toString();
         String age = calculateAge(birthday);
-        String sleep1 = profile1_sleep1.getText().toString();
-        String sleep2 = profile1_sleep2.getText().toString();
+        String sleep = profile1_sleep1.getText().toString();
+        String wakeup = profile1_sleep2.getText().toString();
 
-        String bpm = userDetailsSharedPref.getString("o_bpm", "90");
-        String step = userDetailsSharedPref.getString("o_step", "3000");
-        String distance = userDetailsSharedPref.getString("o_distance", "5");
-        String eCal = userDetailsSharedPref.getString("o_ecal", "500");
-        String cal = userDetailsSharedPref.getString("o_cal", "2000");
+        userProfile.setName(name);
+        userProfile.setPhone(phoneNumber);
+        userProfile.setBirthday(birthday);
+        userProfile.setGender(gender);
+        userProfile.setHeight(height);
+        userProfile.setWeight(weight);
+        userProfile.setAge(age);
+        userProfile.setSleepStart(sleep);
+        userProfile.setSleepEnd(wakeup);
 
         try {
-            retrofitServerManager.setProfile(email, name, number, gender, height, weight, age, birthday, sleep1, sleep2,
-                    bpm, step, distance, cal, eCal, new RetrofitServerManager.ServerTaskCallback() {
+            retrofitServerManager.setProfile(userProfile, new RetrofitServerManager.ServerTaskCallback() {
                 @Override
                 public void onSuccess(String result) {
                     Log.i("save",result);

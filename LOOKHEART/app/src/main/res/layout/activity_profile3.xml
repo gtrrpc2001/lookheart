@@ -8,15 +8,13 @@
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +39,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
@@ -61,30 +59,34 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
 
                             <Button
                                 android:id="@+id/profile3_emergency_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="#00ff0000"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:gravity="center|center"
-                                android:text="@string/profile3_off" />
+                                android:background="#00ff0000"
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:gravity="center"
+                                android:layout_margin="5dp" />
 
                             <Button
                                 android:id="@+id/profile3_emergency_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:background="#00ff0000"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="@string/profile3_on"/>
+                                android:layout_margin="5dp"
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -103,35 +105,139 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_arr_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_off" />
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_arr_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/hourlyArr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hourlyArr" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/profile_button_background"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/hourlyArr_off"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="#00ff0000"
+                                android:gravity="center"
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
+
+                            <Button
+                                android:id="@+id/hourlyArr_on"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:background="#00ff0000"
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/totalArr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/totalArr" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/profile_button_background"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/totalArr_off"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="#00ff0000"
+                                android:gravity="center"
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
+
+                            <Button
+                                android:id="@+id/totalArr_on"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="#00ff0000"
+                                android:gravity="center"
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
@@ -151,29 +257,33 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_muscle_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_off" />
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_muscle_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:background="#00ff0000"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -192,35 +302,40 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_drop_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_off" />
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_drop_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
@@ -240,29 +355,33 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_fastarr_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:background="#00ff0000"
-                                android:text="@string/profile3_off"/>
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_fastarr_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -281,35 +400,39 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_slowarr_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_off" />
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_slowarr_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="70dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="5dp"
@@ -329,29 +452,33 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/box1"
+                            android:background="@drawable/profile_button_background"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/profile3_irregular_off"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_off" />
+                                android:text="@string/profile3_off"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
 
                             <Button
                                 android:id="@+id/profile3_irregular_on"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:background="#00ff0000"
                                 android:gravity="center"
-                                android:text="@string/profile3_on" />
+                                android:text="@string/profile3_on"
+                                android:textSize="12dp"
+                                android:layout_margin="5dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -359,215 +486,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"></LinearLayout>
+                        android:orientation="vertical"/>
+
                 </LinearLayout>
 
-                <LinearLayout
+                <Button
+                    android:id="@+id/profile_changepw"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
+                    android:layout_height="40dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/profile_button_press"
+                    android:text="@string/ChangePw"
+                    android:textColor="@color/white"/>
 
-                    <TextView
-                        android:id="@+id/textView32"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="@string/profile3_guardianTitle"
-                        android:textSize="18dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:id="@+id/textView40"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/LightGrey"
-                        android:text="@string/profile3_arrInfo1" />
-
-                    <TextView
-                        android:id="@+id/textView45"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/LightGrey"
-                        android:text="@string/profile3_arrInfo2" />
-                </LinearLayout>
-
-                <LinearLayout
+                <Button
+                    android:id="@+id/profile_logout_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView46"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/profile3_guardianNoti" />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/box1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/profile3_guard_off"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="#00ff0000"
-                            android:gravity="center"
-                            android:text="@string/profile3_off"/>
-
-                        <Button
-                            android:id="@+id/profile3_guard_on"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="#00ff0000"
-                            android:gravity="center"
-                            android:text="@string/profile3_on" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView47"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profile3_arrNumber" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/box1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/profile3_arrcnt_m"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_gravity="center"
-                            android:background="@drawable/profile_minus"
-                            android:textColor="@color/WHITE"
-                            android:textSize="15dp" />
-
-                        <EditText
-                            android:id="@+id/profile3_arrcnt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:background="@null"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/textView30"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="10dp"
-                            android:text="@string/profile3_time"
-                            android:textColor="@color/LightGrey" />
-
-                        <Button
-                            android:id="@+id/profile3_arrcnt_p"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_gravity="center"
-                            android:background="@drawable/profile_plus"
-                            android:textColor="@color/WHITE"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView48"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/profile3_guardianNumber1" />
-
-                    <EditText
-                        android:id="@+id/profile3_guard_num1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/box1"
-                        android:inputType="number"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView50"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/profile3_guardianNumber2" />
-
-                    <EditText
-                        android:id="@+id/profile3_guard_num2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/box1"
-                        android:inputType="number"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/profile3_save"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="80dp"
-                        android:layout_marginBottom="60dp"
-                        android:background="@drawable/profile_save"
-                        android:text="@string/profile_save"
-                        android:textColor="@color/WHITE" />
-
-<!--                    <View-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="100dp"/>-->
-                </LinearLayout>
-
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/profile_button_background"
+                    android:text="@string/logout"
+                    android:textColor="@color/darkGray"/>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
